@@ -73,24 +73,22 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
 
     // Jetpack Compose
-    implementation("androidx.compose.ui:ui:1.6.7")
-    implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.activity:activity-compose:1.3.0")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.activity.compose)
 
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     // Lifecycle
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // Hilt for Dependency Injection
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
 }
 
-fun kapt(s: String) {
-    var correctErrorTypes = true
-}
+
