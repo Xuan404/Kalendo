@@ -43,7 +43,7 @@ private val darkScheme = darkColorScheme(
 )
 
 @Composable
-fun AppTheme(
+fun KalendoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     //dynamicColor: Boolean = true,
@@ -73,7 +73,8 @@ fun AppTheme(
     }
 
   MaterialTheme(
-    colorScheme = colorScheme,
+    //colorScheme = colorScheme,
+    colorScheme = darkScheme,
     typography = AppTypography,
     content = content
   )
