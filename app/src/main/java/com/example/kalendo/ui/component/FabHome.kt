@@ -65,51 +65,55 @@ fun AnimatedFAB(
         contentAlignment = Alignment.BottomEnd,
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
-        // Secondary button
-        AnimatedVisibility(
-            visible = expanded,
-            enter = fadeIn(),
-            exit = fadeOut()
+        Column(
+            horizontalAlignment = Alignment.End
         ) {
-            FloatingActionButton(
-                onClick = onSecondaryClick,
-                containerColor = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .padding(bottom = 72.dp, end = 16.dp)
-                    .size(56.dp)
+            // Tertiary button
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
-                Icon(imageVector = Icons.Default.DateRange, contentDescription = "Secondary Action")
+                FloatingActionButton(
+                    onClick = onTertiaryClick,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(56.dp)
+                ) {
+                    Icon(imageVector = Icons.Default.Email, contentDescription = "Tertiary Action")
+                }
             }
-        }
 
-        // Tertiary button
-        AnimatedVisibility(
-            visible = expanded,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            FloatingActionButton(
-                onClick = onTertiaryClick,
-                containerColor = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .padding(bottom = 128.dp, end = 16.dp)
-                    .size(56.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Secondary button
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
-                Icon(imageVector = Icons.Default.Email, contentDescription = "Tertiary Action")
+                FloatingActionButton(
+                    onClick = onSecondaryClick,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(56.dp)
+                ) {
+                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "Secondary Action")
+                }
             }
-        }
 
-        // Main FAB
-        FloatingActionButton(
-            onClick = { expanded = !expanded },
-            containerColor = fab,
-            contentColor = Color.White,
-            modifier = Modifier.size(56.dp)
-        ) {
-            Icon(
-                imageVector = if (expanded) Icons.Default.Close else Icons.Default.Add,
-                contentDescription = if (expanded) "Close" else "Add"
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Main FAB
+            FloatingActionButton(
+                onClick = { expanded = !expanded },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = Color.White,
+                modifier = Modifier.size(56.dp)
+            ) {
+                Icon(
+                    imageVector = if (expanded) Icons.Default.Close else Icons.Default.Add,
+                    contentDescription = if (expanded) "Close" else "Add"
+                )
+            }
         }
     }
 }
