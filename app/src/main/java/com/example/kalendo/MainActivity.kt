@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kalendo.ui.theme.KalendoTheme
+import com.example.kalendo.ui.view.MainScreenContent
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,29 +20,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KalendoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                KalendoTheme {
+                    MainScreenContent()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MainScreenContentPreview() {
     KalendoTheme {
-        Greeting("Android")
+        MainScreenContent()
     }
 }
