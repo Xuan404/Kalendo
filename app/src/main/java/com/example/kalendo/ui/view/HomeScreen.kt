@@ -23,34 +23,15 @@ fun MainScreenContent() {
         Scaffold(
             topBar = {
                 MyTopAppBar(
-                    title = "May",
+                    title = "Kalendo",
                     onNavigationIconClick = { /* Handle navigation icon click */ },
-                    actions = {
-                        IconButton(onClick = { /* Handle search icon click */ }) {
-                            Icon(Icons.Default.Search, contentDescription = "Search")
-                        }
-                        IconButton(onClick = { /* Handle profile icon click */ }) {
-                            Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
-                        }
-                    },
-                    onDateSelected = { selectedMonth ->
-                        // Handle date selection
-                    }
+                    actions = {}
                 )
             },
-//            floatingActionButtonPosition = FabPosition.End,
-//            floatingActionButton = {
-//                AnimatedFAB(
-//                    onAddClick = { /* Handle primary action */ },
-//                    onSecondaryClick = { /* Handle secondary action */ },
-//                    onTertiaryClick = { /* Handle tertiary action */ }
-//                )
-//            },
             content = { innerPadding ->
                 SampleContent(modifier = Modifier.padding(innerPadding))
             }
         )
-
         FabHome(
             onAddClick = { /* Handle primary action */ },
             onSecondaryClick = { /* Handle secondary action */ },
