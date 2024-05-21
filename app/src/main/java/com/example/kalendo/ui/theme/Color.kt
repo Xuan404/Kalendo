@@ -13,6 +13,9 @@ val backgroundLight = Color(0xFF131314)
 val onBackgroundLight = Color(0xFFE4E2E2)
 val surfaceLight = Color(0xFF131314)
 val onSurfaceLight = Color(0xFFE5E2E2)
+val surfaceVariantLight = Color(0xFF384A56)
+
+
 
 // Toolbar background, button background.
 val primaryDark = Color(0xFF162329)
@@ -29,6 +32,10 @@ val onBackgroundDark = Color(0xFFE0E4E7)
 //Card backgrounds, dialog backgrounds.
 val surfaceDark = Color(0xFF162329)
 val onSurfaceDark = Color(0xFFE0E4E7)
+// Other surface
+val surfaceVariantDark = Color(0xFF384A56)
+
+
 
 // Extra colors (for Courses/Tasks)
 val courseColor1 = Color(0xFFE54F41)
@@ -42,7 +49,7 @@ val courseColor8 = Color(0xFFAE5FC1)
 val courseColor9 = Color(0xFFD98479)
 val courseColor0 = Color(0xFF5598CF)
 val defaultColor = Color(0xFF808080)
-val fab = Color(0xFF384A56)
+
 
 
 
