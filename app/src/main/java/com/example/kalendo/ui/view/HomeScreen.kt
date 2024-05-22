@@ -3,15 +3,12 @@ package com.example.kalendo.ui.view
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kalendo.ui.component.FabHome
-import com.example.kalendo.ui.component.MyTopAppBar
+import com.example.kalendo.ui.component.TopAppBarHome
 import com.example.kalendo.ui.component.SampleContent
 import com.example.kalendo.ui.theme.KalendoTheme
 
@@ -22,7 +19,7 @@ fun MainScreenContent() {
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
-                MyTopAppBar(
+                TopAppBarHome(
                     title = "Kalendo",
                     onNavigationIconClick = { /* Handle navigation icon click */ },
                     actions = {}
