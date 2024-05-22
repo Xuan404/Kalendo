@@ -2,6 +2,8 @@ package com.example.kalendo.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -38,13 +40,13 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(50)
+                    animationSpec = tween(100)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(50)
+                    animationSpec = tween(100)
                 )
             }
         ){
@@ -55,18 +57,23 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(50)
+                    animationSpec = tween(100)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(50)
+                    animationSpec = tween(100)
                 )
             }
         ){
             NoteScreenContent(navController = navController)
         }
+
+
+
+
+
     }
     
 }
@@ -88,8 +95,13 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
 //            NoteScreenContent(navController = navController)
 //        }
 
+
+
 //        composable(
 //            route = NavRoute.HomeScreen.toString(),
+//            enterTransition = { slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(70)) },
+//            popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(70)) }
+//
 //        ) {
 //            HomeScreenContent(navController = navController)
 //        }
