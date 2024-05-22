@@ -35,7 +35,7 @@ fun TopAppBarNote(
         },
         navigationIcon = {
             IconButton(onClick = {
-                //onNavigationIconClick
+                onNavigationIconClick?.invoke()
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.back),

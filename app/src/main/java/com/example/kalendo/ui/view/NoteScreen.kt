@@ -22,7 +22,7 @@ fun NoteScreenContent(navController: NavController) {
             topBar = {
                 TopAppBarNote(
                     title = "Notes",
-                    onNavigationIconClick = {},
+                    onNavigationIconClick = {navController.popBackStack()},
                     actions = {}
                 )
             },

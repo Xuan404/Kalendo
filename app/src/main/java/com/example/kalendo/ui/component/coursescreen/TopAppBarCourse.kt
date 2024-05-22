@@ -33,11 +33,13 @@ fun TopAppBarCourse(
             titleContentColor = MaterialTheme.colorScheme.onPrimary
         ),
         title = {
-            
+
             Text(text = title)
         },
         navigationIcon = {
-            IconButton(onClick = { /* Do nothing for preview */ }) {
+            IconButton(onClick = {
+                onNavigationIconClick?.invoke()
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = "Add Course",

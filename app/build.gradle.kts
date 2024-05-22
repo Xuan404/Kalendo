@@ -86,7 +86,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    // Navigation
     implementation (libs.navigation.compose)
+    implementation ("com.google.accompanist:accompanist-navigation-animation:0.23.1")
 
     // Hilt for Dependency Injection
     implementation(libs.dagger.hilt.android)

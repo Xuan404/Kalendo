@@ -20,7 +20,7 @@ fun CourseScreenContent(navController:NavController) {
             topBar = {
                 TopAppBarCourse(
                     title = "Courses",
-                    onNavigationIconClick = {},
+                    onNavigationIconClick = {navController.popBackStack()},
                     actions = {}
                 )
             },
