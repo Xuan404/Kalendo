@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.kalendo.navigation.KalendoNavGraph
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.ui.view.HomeScreenContent
 
@@ -16,7 +18,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             KalendoTheme {
                 KalendoTheme {
-                    HomeScreenContent()
+                    val navController = rememberNavController()
+                    KalendoNavGraph(navController = navController)
+                    //HomeScreenContent(navController = NavCon)
                 }
             }
         }
@@ -28,6 +32,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreenContentPreview() {
     KalendoTheme {
-        HomeScreenContent()
+        val navController = rememberNavController()
+        KalendoNavGraph(navController = navController)
     }
 }

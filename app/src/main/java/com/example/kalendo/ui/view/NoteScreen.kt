@@ -7,19 +7,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.kalendo.navigation.NavRoute
 import com.example.kalendo.ui.component.notescreen.ContentNote
 import com.example.kalendo.ui.component.notescreen.TopAppBarNote
 import com.example.kalendo.ui.theme.KalendoTheme
 
 @Composable
-fun NoteScreenContent() {
+fun NoteScreenContent(navController: NavController) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
                 TopAppBarNote(
-                    title = "Courses",
-                    onNavigationIconClick = { /* Handle navigation icon click */ },
+                    title = "Notes",
+                    onNavigationIconClick = {},
                     actions = {}
                 )
             },
@@ -31,10 +34,10 @@ fun NoteScreenContent() {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun NoteScreenContentPreview() {
-    KalendoTheme {
-        NoteScreenContent()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun NoteScreenContentPreview() {
+//    KalendoTheme {
+//        NoteScreenContent(navController)
+//    }
+//}

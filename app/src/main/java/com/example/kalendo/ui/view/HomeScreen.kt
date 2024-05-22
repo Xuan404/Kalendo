@@ -7,6 +7,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.example.kalendo.navigation.NavRoute
 import com.example.kalendo.ui.component.homescreen.FabHome
 import com.example.kalendo.ui.component.homescreen.TopAppBarHome
 import com.example.kalendo.ui.component.homescreen.ContentHome
@@ -14,7 +16,7 @@ import com.example.kalendo.ui.theme.KalendoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenContent() {
+fun HomeScreenContent(navController: NavController) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -31,17 +33,17 @@ fun HomeScreenContent() {
         )
         FabHome(
             onAddClick = { /* Handle primary action */ },
-            onSecondaryClick = { /* Handle secondary action */ },
-            onTertiaryClick = { /* Handle tertiary action */ }
+            onSecondaryClick = { navController.navigate(NavRoute.NoteScreen.toString()) },
+            onTertiaryClick = { navController.navigate(NavRoute.CourseScreen.toString()) }
         )
     }
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenContentPreview() {
-    KalendoTheme {
-        HomeScreenContent()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenContentPreview() {
+//    KalendoTheme {
+//        HomeScreenContent(navController = NavContro)
+//    }
+//}

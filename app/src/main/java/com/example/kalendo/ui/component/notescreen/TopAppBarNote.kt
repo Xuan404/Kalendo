@@ -34,7 +34,9 @@ fun TopAppBarNote(
             Text(text = title)
         },
         navigationIcon = {
-            IconButton(onClick = { /* Do nothing for preview */ }) {
+            IconButton(onClick = {
+                //onNavigationIconClick
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = "Add Course",
@@ -45,15 +47,15 @@ fun TopAppBarNote(
         actions = {
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add_course),
-                    contentDescription = "Add Notes",
+                    painter = painterResource(id = R.drawable.grid_rectangle),
+                    contentDescription = "Grid Rectangle",
                     modifier = Modifier.padding(8.dp)
                 )
             }
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.grid_rectangle),
-                    contentDescription = "Grid Rectangle",
+                    painter = painterResource(id = R.drawable.add_course),
+                    contentDescription = "Add Notes",
                     modifier = Modifier.padding(8.dp)
                 )
             }
@@ -67,7 +69,7 @@ fun TopAppBarNote(
 fun MyTopAppBarPreview() {
     KalendoTheme {
         TopAppBarNote(
-            title = "Courses",
+            title = "Note",
         )
     }
 }
