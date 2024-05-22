@@ -1,4 +1,4 @@
-package com.example.kalendo.ui.component
+package com.example.kalendo.ui.component.homescreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.RowScope

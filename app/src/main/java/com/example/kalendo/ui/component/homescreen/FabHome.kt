@@ -1,4 +1,4 @@
-package com.example.kalendo.ui.component
+package com.example.kalendo.ui.component.homescreen
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -8,6 +8,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -60,6 +61,7 @@ fun FabHome(
             AnimatedVisibility(
                 visible = expanded,
                 enter = fadeIn(animationSpec = tween(delayMillis = 175)),
+                exit = fadeOut(animationSpec = tween(0)) // Instantly disappear
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -97,6 +99,7 @@ fun FabHome(
             AnimatedVisibility(
                 visible = expanded,
                 enter = fadeIn(animationSpec = tween(delayMillis = 100)),
+                exit = fadeOut(animationSpec = tween(0)) // Instantly disappear
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

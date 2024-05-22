@@ -4,15 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kalendo.ui.theme.KalendoTheme
-import com.example.kalendo.ui.view.MainScreenContent
+import com.example.kalendo.ui.view.HomeScreenContent
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             KalendoTheme {
                 KalendoTheme {
-                    MainScreenContent()
+                    HomeScreenContent()
                 }
             }
         }
@@ -33,6 +28,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreenContentPreview() {
     KalendoTheme {
-        MainScreenContent()
+        HomeScreenContent()
     }
 }
