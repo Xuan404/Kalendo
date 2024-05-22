@@ -88,7 +88,8 @@ dependencies {
 
     // Navigation
     implementation (libs.navigation.compose)
-    implementation ("com.google.accompanist:accompanist-navigation-animation:0.23.1")
+    implementation("androidx.compose.ui:ui:1.5.0-beta01")
+    implementation("androidx.navigation:navigation-compose:2.7.0-beta01")
 
     // Hilt for Dependency Injection
     implementation(libs.dagger.hilt.android)
