@@ -13,6 +13,7 @@ import com.example.kalendo.ui.component.editscreen.TopAppBarEdit
 import com.example.kalendo.ui.component.notescreen.ContentNote
 import com.example.kalendo.ui.component.notescreen.TopAppBarNote
 import com.example.kalendo.ui.theme.KalendoTheme
+import com.example.kalendo.util.Strings
 
 @Composable
 fun EditScreenContent() {
@@ -21,7 +22,7 @@ fun EditScreenContent() {
         Scaffold(
             topBar = {
                 TopAppBarEdit(
-                    title = "Edit",
+                    title = Strings.EDIT_SCREEN_TITLE,
                     //onNavigationIconClick = {navController.popBackStack()},
                     actions = {}
                 )

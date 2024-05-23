@@ -13,6 +13,7 @@ import com.example.kalendo.ui.component.homescreen.FabHome
 import com.example.kalendo.ui.component.homescreen.TopAppBarHome
 import com.example.kalendo.ui.component.homescreen.ContentHome
 import com.example.kalendo.ui.theme.KalendoTheme
+import com.example.kalendo.util.Strings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,7 +23,7 @@ fun HomeScreenContent(navController: NavController) {
         Scaffold(
             topBar = {
                 TopAppBarHome(
-                    title = "Kalendo",
+                    title = Strings.APP_NAME,
                     onNavigationIconClick = { /* Handle navigation icon click */ },
                     actions = {}
                 )

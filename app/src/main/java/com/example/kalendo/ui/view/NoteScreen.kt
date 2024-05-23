@@ -13,6 +13,7 @@ import com.example.kalendo.navigation.NavRoute
 import com.example.kalendo.ui.component.notescreen.ContentNote
 import com.example.kalendo.ui.component.notescreen.TopAppBarNote
 import com.example.kalendo.ui.theme.KalendoTheme
+import com.example.kalendo.util.Strings
 
 @Composable
 fun NoteScreenContent(navController: NavController) {
@@ -21,7 +22,7 @@ fun NoteScreenContent(navController: NavController) {
         Scaffold(
             topBar = {
                 TopAppBarNote(
-                    title = "Notes",
+                    title = Strings.NOTES_SCREEN_TITLE,
                     onNavigationIconClick = {navController.popBackStack()},
                     actions = {}
                 )

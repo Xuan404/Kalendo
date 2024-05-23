@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
 import com.example.kalendo.ui.theme.KalendoTheme
+import com.example.kalendo.util.Strings
 
 
 // Animated FAB with inflation animation and '+' rotation
@@ -57,7 +58,7 @@ fun FabHome(
             modifier = Modifier.padding(26.dp)
         ) {
             // Tertiary button
-            val tertiaryScale by animateFloatAsState(if (expanded) 1f else 0f)
+            val tertiaryScale by animateFloatAsState(if (expanded) 1f else 0f, label = "")
             AnimatedVisibility(
                 visible = expanded,
                 enter = fadeIn(animationSpec = tween(delayMillis = 175)),
@@ -70,7 +71,7 @@ fun FabHome(
                         .padding(bottom = 8.dp)
                 ) {
                     Text(
-                        text = "Courses",
+                        text = Strings.FAB_TERTIARY_BUTTON,
                         fontSize = 15.sp,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(end = 25.dp)
@@ -80,7 +81,7 @@ fun FabHome(
                         containerColor = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier
                             .size(40.dp)
-                            .offset(x = -8.dp)
+                            .offset(x = (-8).dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.courses),
@@ -95,7 +96,7 @@ fun FabHome(
             Spacer(modifier = Modifier.height(10.dp))
 
             // Secondary button
-            val secondaryScale by animateFloatAsState(if (expanded) 1f else 0f)
+            val secondaryScale by animateFloatAsState(if (expanded) 1f else 0f, label = "")
             AnimatedVisibility(
                 visible = expanded,
                 enter = fadeIn(animationSpec = tween(delayMillis = 100)),
@@ -109,7 +110,7 @@ fun FabHome(
                 ) {
 
                     Text(
-                        text = "Notes",
+                        text = Strings.FAB_SECONDARY_BUTTON,
                         fontSize = 15.sp,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(end = 25.dp)
@@ -119,7 +120,7 @@ fun FabHome(
                         containerColor = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier
                             .size(40.dp)
-                            .offset(x = -8.dp)
+                            .offset(x = (-8).dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.notes),
@@ -134,7 +135,7 @@ fun FabHome(
             Spacer(modifier = Modifier.height(10.dp))
 
             // Main FAB
-            val rotation by animateFloatAsState(targetValue = if (expanded) 135f else 0f)
+            val rotation by animateFloatAsState(targetValue = if (expanded) 135f else 0f,label = "" )
             FloatingActionButton(
                 onClick = { expanded = !expanded },
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,

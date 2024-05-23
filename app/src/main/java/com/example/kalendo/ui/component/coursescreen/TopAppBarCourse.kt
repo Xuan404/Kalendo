@@ -42,7 +42,7 @@ fun TopAppBarCourse(
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.back),
-                    contentDescription = "Add Course",
+                    contentDescription = "Back Button",
                     modifier = Modifier.padding(8.dp)
                 )
             }

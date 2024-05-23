@@ -17,6 +17,7 @@ import com.example.kalendo.ui.theme.courseColor1
 import com.example.kalendo.ui.theme.courseColor2
 import com.example.kalendo.ui.theme.courseColor3
 import com.example.kalendo.ui.theme.courseColor5
+import com.example.kalendo.util.Strings
 
 @Composable
 fun CourseScreenContent(navController:NavController, courses: MutableList<CourseModel> = mutableListOf()) {
@@ -25,7 +26,7 @@ fun CourseScreenContent(navController:NavController, courses: MutableList<Course
         Scaffold(
             topBar = {
                 TopAppBarCourse(
-                    title = "Courses",
+                    title = Strings.COURSES_SCREEN_TITLE,
                     onNavigationIconClick = {navController.popBackStack()},
                     actions = {}
                 )
