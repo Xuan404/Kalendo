@@ -40,13 +40,13 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(100)
+                    animationSpec = tween(150)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(100)
+                    animationSpec = tween(400)
                 )
             }
         ){
@@ -57,13 +57,13 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(100)
+                    animationSpec = tween(150)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(100)
+                    animationSpec = tween(400)
                 )
             }
         ){
