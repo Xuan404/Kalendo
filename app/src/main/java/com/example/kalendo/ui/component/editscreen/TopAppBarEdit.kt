@@ -1,4 +1,4 @@
-package com.example.kalendo.ui.component.notescreen
+package com.example.kalendo.ui.component.editscreen
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -19,7 +19,7 @@ import com.example.kalendo.ui.theme.KalendoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarNote(
+fun TopAppBarEdit(
     title: String,
     onNavigationIconClick: (() -> Unit)? = null,
     actions: @Composable (RowScope.() -> Unit)? = null
@@ -47,15 +47,22 @@ fun TopAppBarNote(
         actions = {
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.grid_rectangle),
+                    painter = painterResource(id = R.drawable.refresh),
+                    contentDescription = "Refresh",
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+            IconButton(onClick = { /* Do nothing for preview */ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.sort),
                     contentDescription = "Grid Rectangle",
                     modifier = Modifier.padding(8.dp)
                 )
             }
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add_course),
-                    contentDescription = "Add Notes",
+                    painter = painterResource(id = R.drawable.add_component),
+                    contentDescription = "Add Component",
                     modifier = Modifier.padding(8.dp)
                 )
             }
@@ -68,12 +75,9 @@ fun TopAppBarNote(
 @Composable
 fun MyTopAppBarPreview() {
     KalendoTheme {
-        TopAppBarNote(
-            title = "Note",
+        TopAppBarEdit(
+            title = "Edit",
         )
     }
 }
-
-
-
 
