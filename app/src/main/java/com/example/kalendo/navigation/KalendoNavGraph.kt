@@ -27,10 +27,10 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
             route = NavRoute.HomeScreen.toString(),
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(0)
                 )
-            }
+            },
 
         ){
             HomeScreenContent(navController = navController)

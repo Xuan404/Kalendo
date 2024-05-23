@@ -17,11 +17,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KalendoTheme {
-                KalendoTheme {
-                    val navController = rememberNavController()
-                    KalendoNavGraph(navController = navController)
-                    //HomeScreenContent(navController = NavCon)
-                }
+
+                val navController = rememberNavController()
+                KalendoNavGraph(navController = navController)
+                //HomeScreenContent(navController = NavCon)
+
             }
         }
     }
