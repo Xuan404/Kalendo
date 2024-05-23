@@ -32,8 +32,8 @@ fun TopAppBarHome(
         actions = {
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.grid_linear),
-                    contentDescription = "Grid Linear",
+                    painter = painterResource(id = R.drawable.calender),
+                    contentDescription = "Calender",
                     modifier = Modifier.padding(8.dp)
                 )
             }
