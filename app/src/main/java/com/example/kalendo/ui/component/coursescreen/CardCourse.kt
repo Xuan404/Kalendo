@@ -31,7 +31,7 @@ fun CardCourse(course: CourseModel) {
             .height(100.dp)
             .fillMaxWidth()
             .padding(10.dp)
-            .border(2.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(25.dp)),
+            .border(0.5.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(25.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
@@ -50,11 +50,17 @@ fun CardCourse(course: CourseModel) {
                     tint = course.color
                 )
                 Spacer(modifier = Modifier.width(20.dp))
-                Text(text = course.title, fontSize = 18.sp)
+                Text(
+                    text = course.title,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     }
 }
+
+
 @Preview(showBackground = true)
 @Composable
 fun CardPreview() {

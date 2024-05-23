@@ -30,7 +30,7 @@ val onTertiaryDark = Color(0xFFE0E4E7)
 val backgroundDark = Color(0xFF0B0E15)
 val onBackgroundDark = Color(0xFFE0E4E7)
 //Card backgrounds, dialog backgrounds.
-val surfaceDark = Color(0xFF162329)
+val surfaceDark = Color(0xFF0F141A)
 val onSurfaceDark = Color(0xFFE0E4E7)
 // Other surface
 val surfaceVariantDark = Color(0xFF384A56)
