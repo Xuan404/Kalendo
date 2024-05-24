@@ -91,6 +91,9 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.5.0-beta01")
     implementation("androidx.navigation:navigation-compose:2.7.0-beta01")
 
+    //JSON
+    implementation ("com.google.code.gson:gson:2.10.1")
+
     // Hilt for Dependency Injection
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)

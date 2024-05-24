@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.kalendo.navigation.NavRoute
 import com.example.kalendo.ui.component.notescreen.ContentNote
 import com.example.kalendo.ui.component.notescreen.TopAppBarNote
@@ -35,10 +36,11 @@ fun NoteScreenContent(navController: NavController) {
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun NoteScreenContentPreview() {
-//    KalendoTheme {
-//        NoteScreenContent(navController)
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun NoteScreenContentPreview() {
+    KalendoTheme {
+        val navController = rememberNavController()
+        NoteScreenContent(navController)
+    }
+}

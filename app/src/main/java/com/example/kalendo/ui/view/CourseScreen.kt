@@ -22,6 +22,19 @@ import com.example.kalendo.util.Strings
 @Composable
 fun CourseScreenContent(navController:NavController, courses: MutableList<CourseModel> = mutableListOf()) {
 
+    //Test Data
+    val courses = mutableListOf(
+        CourseModel(title = "CMPUT 300", color = courseColor1),
+        CourseModel(title = "CMPUT 301", color = courseColor5),
+        CourseModel(title = "CMPUT 367", color = courseColor3),
+        CourseModel(title = "CMPUT 300", color = courseColor1),
+        CourseModel(title = "CMPUT 301", color = courseColor5),
+        CourseModel(title = "CMPUT 367", color = courseColor3),
+        CourseModel(title = "CMPUT 300", color = courseColor1),
+        CourseModel(title = "CMPUT 301", color = courseColor5),
+        CourseModel(title = "CMPUT 367", color = courseColor3)
+    )
+
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
