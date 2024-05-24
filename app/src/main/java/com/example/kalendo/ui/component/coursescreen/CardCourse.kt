@@ -2,6 +2,7 @@ package com.example.kalendo.ui.component.coursescreen
 
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -23,13 +24,14 @@ import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.ui.theme.courseColor1
 
 @Composable
-fun CardCourse(course: CourseModel) {
+fun CardCourse(course: CourseModel, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
         modifier = Modifier
             .height(100.dp)
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(10.dp)
             .border(0.5.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(25.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -61,10 +63,10 @@ fun CardCourse(course: CourseModel) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    KalendoTheme {
-        CardCourse(course = CourseModel(title = "CMPUT 300", color = courseColor1))
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CardPreview() {
+//    KalendoTheme {
+//        CardCourse(course = CourseModel(title = "CMPUT 300", color = courseColor1))
+//    }
+//}

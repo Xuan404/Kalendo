@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.kalendo.ui.component.editscreen.ContentEdit
 import com.example.kalendo.ui.component.editscreen.TopAppBarEdit
 import com.example.kalendo.ui.component.notescreen.ContentNote
@@ -16,14 +17,14 @@ import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.util.Strings
 
 @Composable
-fun EditScreenContent() {
+fun EditScreenContent(navController: NavController, taskJson: String?) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
                 TopAppBarEdit(
                     title = Strings.EDIT_SCREEN_TITLE,
-                    //onNavigationIconClick = {navController.popBackStack()},
+                    onNavigationIconClick = {navController.popBackStack()},
                     actions = {}
                 )
             },
@@ -37,8 +38,9 @@ fun EditScreenContent() {
 
 @Preview(showBackground = true)
 @Composable
-fun NoteScreenContentPreview() {
+fun EditScreenContentPreview() {
     KalendoTheme {
-        EditScreenContent()
+        val navController = rememberNavController()
+        EditScreenContent(navController = navController, "Hello")
     }
 }

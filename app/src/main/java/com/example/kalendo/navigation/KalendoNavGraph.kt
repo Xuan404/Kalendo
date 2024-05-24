@@ -1,6 +1,8 @@
 package com.example.kalendo.navigation
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -10,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.kalendo.ui.view.CourseScreenContent
+import com.example.kalendo.ui.view.EditScreenContent
 import com.example.kalendo.ui.view.HomeScreenContent
 import com.example.kalendo.ui.view.NoteScreenContent
 
@@ -25,16 +28,11 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
 
         composable(
             route = NavRoute.HomeScreen.toString(),
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(0)
-                )
-            },
 
         ){
             HomeScreenContent(navController = navController)
         }
+
         composable(
             route = NavRoute.CourseScreen.toString(),
             enterTransition = {
@@ -44,14 +42,22 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
                 )
             },
             exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(400)
-                )
+                if (navController.currentDestination?.route == NavRoute.HomeScreen.toString()) {
+                    // Closing Course Screen
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(400)
+                    )
+
+                } else {
+                    // Closing Edit Screen
+                    null
+                }
             }
         ){
             CourseScreenContent(navController = navController)
         }
+
         composable(
             route = NavRoute.NoteScreen.toString(),
             enterTransition = {
@@ -68,6 +74,26 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
             }
         ){
             NoteScreenContent(navController = navController)
+        }
+
+        composable(
+            route ="edit/{courseJson}",
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(150)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(400)
+                )
+            }
+
+        ) { backStackEntry ->
+            val courseJson = backStackEntry.arguments?.getString("courseJson")
+            EditScreenContent(navController, courseJson)
         }
 
 

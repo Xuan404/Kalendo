@@ -14,7 +14,6 @@ import com.example.kalendo.ui.component.coursescreen.ContentCourse
 import com.example.kalendo.ui.component.coursescreen.TopAppBarCourse
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.ui.theme.courseColor1
-import com.example.kalendo.ui.theme.courseColor2
 import com.example.kalendo.ui.theme.courseColor3
 import com.example.kalendo.ui.theme.courseColor5
 import com.example.kalendo.util.Strings
@@ -45,7 +44,11 @@ fun CourseScreenContent(navController:NavController, courses: MutableList<Course
                 )
             },
             content = { innerPadding ->
-                ContentCourse(modifier = Modifier.padding(innerPadding), courses = courses)
+                ContentCourse(
+                    modifier = Modifier.padding(innerPadding),
+                    courses = courses, // contains the courses to be displayed
+                    navController = navController
+                )
             }
         )
     }
