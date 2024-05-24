@@ -9,15 +9,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.kalendo.data.model.CourseModel
 import com.example.kalendo.ui.component.editscreen.ContentEdit
 import com.example.kalendo.ui.component.editscreen.TopAppBarEdit
 import com.example.kalendo.ui.component.notescreen.ContentNote
 import com.example.kalendo.ui.component.notescreen.TopAppBarNote
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.util.Strings
+import com.google.gson.Gson
 
 @Composable
-fun EditScreenContent(navController: NavController, taskJson: String?) {
+fun EditScreenContent(navController: NavController, courseJson: String?) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -29,7 +31,7 @@ fun EditScreenContent(navController: NavController, taskJson: String?) {
                 )
             },
             content = { innerPadding ->
-                ContentEdit(modifier = Modifier.padding(innerPadding))
+                ContentEdit(modifier = Modifier.padding(innerPadding), courseJson)
             }
         )
     }
@@ -41,6 +43,8 @@ fun EditScreenContent(navController: NavController, taskJson: String?) {
 fun EditScreenContentPreview() {
     KalendoTheme {
         val navController = rememberNavController()
-        EditScreenContent(navController = navController, "Hello")
+        EditScreenContent(
+            navController = navController,
+            courseJson = "{\"color\":-7389491232768000,\"tasks\":[],\"title\":\"CMPUT 367\"}" )
     }
 }

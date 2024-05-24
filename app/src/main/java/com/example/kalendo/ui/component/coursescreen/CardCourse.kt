@@ -63,10 +63,10 @@ fun CardCourse(course: CourseModel, onClick: () -> Unit) {
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun CardPreview() {
-//    KalendoTheme {
-//        CardCourse(course = CourseModel(title = "CMPUT 300", color = courseColor1))
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun CardPreview() {
+    KalendoTheme {
+        CardCourse(course = CourseModel(title = "CMPUT 300", color = courseColor1),  onClick = {})
+    }
+}

@@ -93,6 +93,9 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
 
         ) { backStackEntry ->
             val courseJson = backStackEntry.arguments?.getString("courseJson")
+            if (courseJson != null) {
+                Log.i("NavJson", courseJson)
+            }
             EditScreenContent(navController, courseJson)
         }
 
