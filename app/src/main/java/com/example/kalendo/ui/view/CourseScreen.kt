@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.kalendo.data.model.CourseModel
+import com.example.kalendo.domain.model.CourseModel
 import com.example.kalendo.ui.component.coursescreen.ContentCourse
 import com.example.kalendo.ui.component.coursescreen.TopAppBarCourse
 import com.example.kalendo.ui.theme.KalendoTheme
@@ -20,19 +20,6 @@ import com.example.kalendo.util.Strings
 
 @Composable
 fun CourseScreenContent(navController:NavController, courses: MutableList<CourseModel> = mutableListOf()) {
-
-    //Test Data
-    val courses = mutableListOf(
-        CourseModel(title = "CMPUT 300", color = courseColor1),
-        CourseModel(title = "CMPUT 301", color = courseColor5),
-        CourseModel(title = "CMPUT 367", color = courseColor3),
-        CourseModel(title = "CMPUT 300", color = courseColor1),
-        CourseModel(title = "CMPUT 301", color = courseColor5),
-        CourseModel(title = "CMPUT 367", color = courseColor3),
-        CourseModel(title = "CMPUT 300", color = courseColor1),
-        CourseModel(title = "CMPUT 301", color = courseColor5),
-        CourseModel(title = "CMPUT 367", color = courseColor3)
-    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -60,6 +47,7 @@ fun CourseScreenContent(navController:NavController, courses: MutableList<Course
 fun CourseScreenContentPreview() {
     KalendoTheme {
         val navController = rememberNavController()
+        //Dummy Data
         val courses = mutableListOf(
             CourseModel(title = "CMPUT 300", color = courseColor1),
             CourseModel(title = "CMPUT 301", color = courseColor5),
@@ -74,3 +62,4 @@ fun CourseScreenContentPreview() {
         CourseScreenContent(navController = navController, courses = courses)
     }
 }
+

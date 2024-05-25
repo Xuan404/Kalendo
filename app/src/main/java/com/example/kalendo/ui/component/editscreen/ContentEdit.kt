@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
-import com.example.kalendo.data.model.CourseModel
+import com.example.kalendo.domain.model.CourseModel
 import com.example.kalendo.ui.theme.defaultColor
 import com.google.gson.Gson
 

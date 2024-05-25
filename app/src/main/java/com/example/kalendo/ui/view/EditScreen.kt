@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.kalendo.data.model.CourseModel
+import com.example.kalendo.domain.model.CourseModel
 import com.example.kalendo.ui.component.editscreen.ContentEdit
 import com.example.kalendo.ui.component.editscreen.TopAppBarEdit
 import com.example.kalendo.ui.component.notescreen.ContentNote

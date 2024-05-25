@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.kalendo.data.model.CourseModel
+import com.example.kalendo.domain.model.CourseModel
 import com.google.gson.Gson
 
 @Composable

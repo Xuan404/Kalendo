@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
-import com.example.kalendo.data.model.CourseModel
+import com.example.kalendo.domain.model.CourseModel
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.ui.theme.courseColor1
 

@@ -1,4 +1,4 @@
-package com.example.kalendo.data.model
+package com.example.kalendo.domain.model
 
 import androidx.compose.ui.graphics.Color
 
