@@ -10,5 +10,4 @@ data class CourseEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val color: Color,
-    val tasks: MutableList<AssignmentModel> = mutableListOf()
 )
