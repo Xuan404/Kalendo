@@ -97,6 +97,7 @@ dependencies {
     // Hilt for Dependency Injection
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
+    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 }
 
 
