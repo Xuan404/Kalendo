@@ -9,14 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.kalendo.domain.model.CourseModel
 import com.example.kalendo.ui.component.editscreen.ContentEdit
 import com.example.kalendo.ui.component.editscreen.TopAppBarEdit
-import com.example.kalendo.ui.component.notescreen.ContentNote
-import com.example.kalendo.ui.component.notescreen.TopAppBarNote
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.util.Strings
-import com.google.gson.Gson
 
 @Composable
 fun EditScreenContent(navController: NavController, courseJson: String?) {
