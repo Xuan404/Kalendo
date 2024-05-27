@@ -10,7 +10,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kalendo.navigation.KalendoNavGraph
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.ui.view.HomeScreenContent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
