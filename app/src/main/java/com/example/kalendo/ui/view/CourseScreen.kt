@@ -21,6 +21,8 @@ import com.example.kalendo.util.Strings
 @Composable
 fun CourseScreenContent(navController:NavController, courses: MutableList<CourseModel> = mutableListOf()) {
 
+    val courses = DummyData() // Delete this later on
+
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
@@ -47,19 +49,23 @@ fun CourseScreenContent(navController:NavController, courses: MutableList<Course
 fun CourseScreenContentPreview() {
     KalendoTheme {
         val navController = rememberNavController()
-        //Dummy Data
-        val courses = mutableListOf(
-            CourseModel(title = "CMPUT 300", color = courseColor1),
-            CourseModel(title = "CMPUT 301", color = courseColor5),
-            CourseModel(title = "CMPUT 367", color = courseColor3),
-            CourseModel(title = "CMPUT 300", color = courseColor1),
-            CourseModel(title = "CMPUT 301", color = courseColor5),
-            CourseModel(title = "CMPUT 367", color = courseColor3),
-            CourseModel(title = "CMPUT 300", color = courseColor1),
-            CourseModel(title = "CMPUT 301", color = courseColor5),
-            CourseModel(title = "CMPUT 367", color = courseColor3)
-        )
+        val courses = DummyData()
         CourseScreenContent(navController = navController, courses = courses)
     }
 }
 
+fun DummyData(): MutableList<CourseModel> {
+    val courses = mutableListOf(
+        CourseModel(title = "CMPUT 300", color = courseColor1),
+        CourseModel(title = "CMPUT 301", color = courseColor5),
+        CourseModel(title = "CMPUT 367", color = courseColor3),
+        CourseModel(title = "CMPUT 300", color = courseColor1),
+        CourseModel(title = "CMPUT 301", color = courseColor5),
+        CourseModel(title = "CMPUT 367", color = courseColor3),
+        CourseModel(title = "CMPUT 300", color = courseColor1),
+        CourseModel(title = "CMPUT 301", color = courseColor5),
+        CourseModel(title = "CMPUT 367", color = courseColor3)
+    )
+
+    return courses
+}

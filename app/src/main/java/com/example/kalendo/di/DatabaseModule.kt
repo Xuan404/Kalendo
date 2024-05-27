@@ -41,6 +41,8 @@ object DatabaseModule {
     }
 }
 
+
+// Might now need this part
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {

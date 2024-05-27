@@ -10,14 +10,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 class Converters {
-//    @TypeConverter
-//    fun fromColor(color: Color): Int {
-//        return color.toArgb()
-//    }
-//    @TypeConverter
-//    fun toColor(argb: Int): Color {
-//        return Color(argb)
-//    }
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
     fun fromLocalTime(localTime: LocalTime): String {
