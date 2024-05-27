@@ -1,13 +1,15 @@
 package com.example.kalendo.data.local.entity
 
-import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.kalendo.domain.model.AssignmentModel
 
 @Entity(tableName = "courses")
 data class CourseEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val title: String,
-    val color: Color,
-)
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    var title: String,
+    var color: Int
+) {
+    constructor() : this(0, "", 0)
+}
+
+
