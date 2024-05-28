@@ -13,28 +13,46 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DatabaseModule {
-
+//object DatabaseModule {
 //    @Provides
 //    @Singleton
-//    fun provideDatabase(appContext: Context): AppDatabase {
+//    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
 //        return Room.databaseBuilder(
 //            appContext,
 //            AppDatabase::class.java,
-//            "app_database"
+//            "actual_database"
 //        ).build()
 //    }
+//
+//    @Provides
+//    fun provideCourseDao(database: AppDatabase): CourseDao {
+//        return database.courseDao()
+//    }
+//
+//    @Provides
+//    fun provideAssignmentDao(database: AppDatabase): AssignmentDao {
+//        return database.assignmentDao()
+//    }
+//
+//}
 
-    // For Production Stage only, comment out this in the final version
+
+// For Production/Testing purpose only
+object DatabaseModule {
+
     @Provides
     @Singleton
-    fun provideDatabase(appContext: Context): AppDatabase {
-        return AppDatabase.getDatabase(appContext)
+    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        val scope = CoroutineScope(SupervisorJob())
+        return AppDatabase.getDatabase(appContext, scope)
     }
 
     @Provides
@@ -46,23 +64,4 @@ object DatabaseModule {
     fun provideAssignmentDao(database: AppDatabase): AssignmentDao {
         return database.assignmentDao()
     }
-}
-
-
-// Might now need this part
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindCourseRepository(
-        courseRepositoryImpl: CourseRepositoryImpl
-    ): CourseRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindAssignmentRepository(
-        assignmentRepositoryImpl: AssignmentRepositoryImpl
-    ): AssignmentRepository
 }

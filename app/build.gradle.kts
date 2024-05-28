@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -88,16 +89,16 @@ dependencies {
 
     // Navigation
     implementation (libs.navigation.compose)
-    implementation("androidx.compose.ui:ui:1.5.0-beta01")
-    implementation("androidx.navigation:navigation-compose:2.7.0-beta01")
+    implementation(libs.androidx.ui.v150beta01)
+    implementation(libs.androidx.navigation.compose.v270beta01)
 
     //JSON
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (libs.gson)
 
     // Hilt for Dependency Injection
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
-    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation (libs.androidx.hilt.navigation.compose)
 }
 
 

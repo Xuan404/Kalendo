@@ -14,7 +14,7 @@ import com.google.gson.Gson
 @Composable
 fun ContentCourse(
     modifier: Modifier = Modifier,
-    courses: MutableList<CourseModel> = mutableListOf(),
+    courses: List<CourseModel> = emptyList(),
     navController: NavController
 ) {
     val gson = Gson()

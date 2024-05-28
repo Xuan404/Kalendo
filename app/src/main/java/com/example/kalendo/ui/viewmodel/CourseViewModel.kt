@@ -1,5 +1,6 @@
 package com.example.kalendo.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,7 @@ class CourseViewModel @Inject constructor(
     val courses = MutableLiveData<List<CourseModel>>()
 
     init {
+        //Log.i("DatabaseCourse", courses.toString())
         getAllCourses()
     }
 
