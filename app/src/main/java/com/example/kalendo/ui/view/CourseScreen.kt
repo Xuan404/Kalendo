@@ -21,7 +21,7 @@ import com.example.kalendo.util.Strings
 @Composable
 fun CourseScreenContent(navController:NavController, courses: MutableList<CourseModel> = mutableListOf()) {
 
-    val courses = DummyData() // Delete this later on
+    //val courses = DummyData() // Delete this later on
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(

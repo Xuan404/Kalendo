@@ -20,14 +20,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+//    @Provides
+//    @Singleton
+//    fun provideDatabase(appContext: Context): AppDatabase {
+//        return Room.databaseBuilder(
+//            appContext,
+//            AppDatabase::class.java,
+//            "app_database"
+//        ).build()
+//    }
+
+    // For Production Stage only, comment out this in the final version
     @Provides
     @Singleton
     fun provideDatabase(appContext: Context): AppDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
+        return AppDatabase.getDatabase(appContext)
     }
 
     @Provides
