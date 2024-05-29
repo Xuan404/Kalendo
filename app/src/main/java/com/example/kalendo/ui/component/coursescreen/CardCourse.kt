@@ -32,7 +32,7 @@ fun CardCourse(course: CourseModel, onClick: () -> Unit) {
             .height(100.dp)
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(10.dp)
+            .padding(5.dp)
             .border(0.5.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(25.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {

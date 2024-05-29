@@ -43,8 +43,8 @@ import java.util.Date
 @Composable
 fun CardEdit(assignment: AssignmentModel, onClick: () -> Unit) {
     Card(
-        shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
         modifier = Modifier
             .padding(0.dp)
             .fillMaxWidth(),

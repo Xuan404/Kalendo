@@ -116,11 +116,11 @@ fun BottomPart(modifier: Modifier = Modifier, assignments: List<AssignmentModel>
         ) {
             items(assignments) { assignment ->
                 CardEdit(assignment = assignment){}
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 15.dp),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.primary
-                )
+//                HorizontalDivider(
+//                    modifier = Modifier.padding(horizontal = 15.dp),
+//                    thickness = 1.dp,
+//                    color = MaterialTheme.colorScheme.primary
+//                )
 
             }
 
