@@ -27,6 +27,7 @@ lifecycle = "2.8.0"
 
 navigation = "2.7.7"
 runtimeLivedata = "1.6.7"
+adapters = "3.2.0-alpha11"
 
 
 [libraries]
@@ -83,6 +84,7 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+androidx-adapters = { group = "androidx.databinding", name = "adapters", version.ref = "adapters" }
 
 
 [plugins]

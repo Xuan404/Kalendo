@@ -33,12 +33,11 @@ fun CourseScreenContent(
     //courses: MutableList<CourseModel> = mutableListOf(),
     viewModel: CourseViewModel = hiltViewModel()
 ) {
-    //val courses = DummyData() // Delete this later on
 
     val courses by viewModel.courses.observeAsState(emptyList()) //observes the courses LiveData from the ViewModel and updates the UI when the data changes.
-    Log.i("DatabaseCourse", courses.toString())
+    //Log.i("DatabaseCourse", courses.toString())
 
-    // Will need to use this when i start adding the edit functionalities
+    // Will need to use this when I start adding the edit functionalities
     var courseTitle by remember { mutableStateOf("") } // defines a state variable to store the current input for the course title.
     var courseColor by remember { mutableStateOf(Color.Black) } // Add a color picker if needed // line defines a state variable to store the current input for the course color.
 
@@ -63,31 +62,31 @@ fun CourseScreenContent(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun CourseScreenContentPreview() {
-    KalendoTheme {
-        val navController = rememberNavController()
-        val courses = DummyData()
-        CourseScreenContent(
-            navController = navController,
-            //courses = courses
-        )
-    }
-}
-
-fun DummyData(): MutableList<CourseModel> {
-    val courses = mutableListOf(
-        CourseModel(title = "CMPUT 300", color = courseColor1),
-        CourseModel(title = "CMPUT 301", color = courseColor5),
-        CourseModel(title = "CMPUT 367", color = courseColor3),
-        CourseModel(title = "CMPUT 300", color = courseColor1),
-        CourseModel(title = "CMPUT 301", color = courseColor5),
-        CourseModel(title = "CMPUT 367", color = courseColor3),
-        CourseModel(title = "CMPUT 300", color = courseColor1),
-        CourseModel(title = "CMPUT 301", color = courseColor5),
-        CourseModel(title = "CMPUT 367", color = courseColor3)
-    )
-
-    return courses
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CourseScreenContentPreview() {
+//    KalendoTheme {
+//        val navController = rememberNavController()
+//        val courses = DummyData()
+//        CourseScreenContent(
+//            navController = navController,
+//            //courses = courses
+//        )
+//    }
+//}
+//
+//fun DummyData(): MutableList<CourseModel> {
+//    val courses = mutableListOf(
+//        CourseModel(title = "CMPUT 300", color = courseColor1),
+//        CourseModel(title = "CMPUT 301", color = courseColor5),
+//        CourseModel(title = "CMPUT 367", color = courseColor3),
+//        CourseModel(title = "CMPUT 300", color = courseColor1),
+//        CourseModel(title = "CMPUT 301", color = courseColor5),
+//        CourseModel(title = "CMPUT 367", color = courseColor3),
+//        CourseModel(title = "CMPUT 300", color = courseColor1),
+//        CourseModel(title = "CMPUT 301", color = courseColor5),
+//        CourseModel(title = "CMPUT 367", color = courseColor3)
+//    )
+//
+//    return courses
+//}

@@ -2,6 +2,7 @@ package com.example.kalendo.data.local.database
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -18,6 +19,7 @@ import com.example.kalendo.data.mapper.Converters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Date
 
@@ -65,12 +67,13 @@ abstract class AppDatabase : RoomDatabase() {
             courseDao.insert(course6)
 
             // Insert dummy assignments
-            val assignment1 = AssignmentEntity(courseId = 1, title = "Quiz 8", date = Date(), time = LocalTime.now(), isDeadline = true)
-            val assignment3 = AssignmentEntity(courseId = 1, title = "Quiz 9", date = Date(), time = LocalTime.now(), isDeadline = false)
-            val assignment2 = AssignmentEntity(courseId = 2, title = "Lab 1", date = Date(), time = LocalTime.now(), isDeadline = false)
+            val assignment1 = AssignmentEntity(courseId = 1, title = "Quiz 8", date = LocalDate.now(), time = LocalTime.now(), isDeadline = true)
+            val assignment3 = AssignmentEntity(courseId = 1, title = "Quiz 9", date = LocalDate.now(), time = LocalTime.now(), isDeadline = false)
+            val assignment2 = AssignmentEntity(courseId = 2, title = "Lab 1", date = LocalDate.now(), time = LocalTime.now(), isDeadline = false)
             assignmentDao.insert(assignment1)
             assignmentDao.insert(assignment2)
             assignmentDao.insert(assignment3)
+            Log.i("DatabaseAssignment", assignment1.toString())
         }
     }
 
@@ -83,7 +86,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "dummy_database5"
+                    "dummy_database8"
                 )
                     .addCallback(AppDatabaseCallback(scope))
                     .build()

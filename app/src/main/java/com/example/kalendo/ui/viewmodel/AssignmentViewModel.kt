@@ -7,6 +7,7 @@ import com.example.kalendo.domain.model.AssignmentModel
 import com.example.kalendo.domain.repository.AssignmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Date
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class AssignmentViewModel @Inject constructor(
         }
     }
 
-    fun addAssignment(courseId: Int, title: String, date: Date, time: LocalTime, isDeadline: Boolean) {
+    fun addAssignment(courseId: Int, title: String, date: LocalDate, time: LocalTime, isDeadline: Boolean) {
         viewModelScope.launch {
             assignmentRepository.insertAssignment(AssignmentModel(courseId = courseId, title = title, date = date, time = time, isDeadline = isDeadline))
             getAssignmentsForCourse(courseId) // Refresh the list

@@ -1,16 +1,19 @@
 package com.example.kalendo.ui.component.editscreen
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,16 +27,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
+import com.example.kalendo.domain.model.AssignmentModel
 import com.example.kalendo.domain.model.CourseModel
-import com.example.kalendo.ui.theme.defaultColor
 import com.google.gson.Gson
 
 @Composable
-fun ContentEdit(modifier: Modifier = Modifier, courseJson: String?) {
+fun ContentEdit(
+    modifier: Modifier = Modifier,
+    courseJson: String?,
+    assignments: List<AssignmentModel>
+) {
 
     // Deserialize the Object
     val gson = Gson()
     val course = courseJson?.let { gson.fromJson(it, CourseModel::class.java) }
+    Log.i("DatabaseCourse", courseJson.toString())
 
     Box(
         modifier = modifier
@@ -51,7 +59,8 @@ fun ContentEdit(modifier: Modifier = Modifier, courseJson: String?) {
                 color = MaterialTheme.colorScheme.onBackground
             )
             BottomPart(
-                modifier = Modifier.weight(6f)
+                modifier = Modifier.weight(6f),
+                assignments = assignments
             )
         }
     }
@@ -92,24 +101,29 @@ fun TopPart(modifier: Modifier = Modifier,
 }
 
 
-
-// Work on this after making the viewmodel**************
 @Composable
-fun BottomPart(modifier: Modifier = Modifier) {
+fun BottomPart(modifier: Modifier = Modifier, assignments: List<AssignmentModel>) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        // Get the list of assignments and pass it here
+        LazyColumn(
+            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = modifier
+
         ) {
-            Text(
-                text = "Hello",
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 24.sp
-            )
+            items(assignments) { assignment ->
+                CardEdit(assignment = assignment){}
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 15.dp),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+            }
+
         }
     }
 
