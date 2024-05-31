@@ -1,5 +1,6 @@
 package com.example.kalendo.ui.component.coursescreen
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -24,12 +26,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,23 +42,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.R
+import com.example.kalendo.data.local.dao.CourseDao
+import com.example.kalendo.data.local.database.AppDatabase
+import com.example.kalendo.data.local.entity.CourseEntity
+import com.example.kalendo.data.repository.CourseRepositoryImpl
 import com.example.kalendo.ui.theme.defaultColor
+import com.example.kalendo.ui.viewmodel.CourseViewModel
 import com.example.kalendo.util.ColorItem
 import com.example.kalendo.util.CourseColorLabel
 
 
 @Composable
-fun FullScreenDialogCourse(onDismiss: () -> Unit) {
+fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDismiss: () -> Unit) {
 
-    var text by remember { mutableStateOf("") }
-
-    var color by remember { mutableStateOf<Color?>(null) }
-
+    // For the first Outlined Text Field
+    var courseTitle by remember { mutableStateOf("") } // Item to be sent to database
+    // For the second Outlined Text Field
     val focusRequester = remember { FocusRequester() }
-
+    var color by remember { mutableStateOf<Color?>(defaultColor) }
     var dialogVisible by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf<ColorItem?>(null) }
+    var selectedItem by remember { mutableStateOf<ColorItem?>(null) } // color value to be send to database
+    // Invalid Input Alert Dialog
+    var showAlertDialog by remember { mutableStateOf(false) }
+    var showAlertMessage by remember { mutableStateOf("") }
+    // Toast message after successfull ROOM insert
+    val context = LocalContext.current
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -63,6 +78,7 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
     ) {
 
         // Used for proper ui interaction for the second Outlined Text Field
+        // These variables need to be inside the dialog func otherwise it won't work
         val focusManager = LocalFocusManager.current
         var secondTextFieldFocused by remember { mutableStateOf(false) }
         LaunchedEffect(secondTextFieldFocused) {
@@ -109,8 +125,27 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                     Spacer(modifier = Modifier.weight(10f))
                     Button(
                         onClick = {
-                            // Handle the text submission
-                            onDismiss()
+
+                            if (courseTitle.length > 15){
+                                showAlertDialog = true
+                                showAlertMessage = "Course Title must be less than 15 characters"
+                            } else if (courseTitle == "" ) {
+                                showAlertDialog = true
+                                showAlertMessage = "Course Title cannot be empty"
+                            } else if( selectedItem == null){
+                                showAlertDialog = true
+                                showAlertMessage = "Please select a Color Label"
+                            } else {
+                                //save to room database and show a toast message then dismiss
+                                //insertCourse = true
+                                viewModel.addCourse(courseTitle, selectedItem!!.color)
+                                Toast.makeText(context, "Added Course Successfully", Toast.LENGTH_SHORT).show()
+                                onDismiss()
+                            }
+
+
+
+
                         },
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
@@ -132,10 +167,12 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                     color = MaterialTheme.colorScheme.primary
                 )
 
+                Spacer(modifier = Modifier.weight(1f))
+
                 // Body Part
                 OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
+                    value = courseTitle,
+                    onValueChange = { courseTitle = it },
                     label = {
                         Text(
                             text = "Course Title",
@@ -150,29 +187,13 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(25.dp)
+                        .padding(horizontal = 25.dp)
                 )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                Spacer(modifier = Modifier.weight(0.5f))
 
                 OutlinedTextField(
-                    value = color?.toString() ?: "", //
+                    value = selectedItem?.name ?: "", //
                     onValueChange = { },
                     label = {
                         Text(
@@ -182,12 +203,14 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                         )
                     },
                     leadingIcon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.course_label),
-                            contentDescription = null,
-                            modifier = Modifier.size(14.dp),
-                            tint = defaultColor
-                        )
+                        color?.let {
+                            Icon(
+                                painter = painterResource(id = R.drawable.course_label),
+                                contentDescription = null,
+                                modifier = Modifier.size(14.dp),
+                                tint = it
+                            )
+                        }
                     },
                     trailingIcon = {
                         Icon(
@@ -203,15 +226,13 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(25.dp)
+                        .padding(horizontal = 25.dp)
                         .focusRequester(focusRequester)
                         .onFocusChanged { focusState ->
                             secondTextFieldFocused = focusState.isFocused
                         }
                 )
-
-
-
+                Spacer(modifier = Modifier.weight(10f))
 
                 if (dialogVisible) {
                     Dialog(onDismissRequest = {
@@ -224,7 +245,7 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                         }
 
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(20.dp),
                             color = MaterialTheme.colorScheme.primary
                         ) {
                             Column(
@@ -234,26 +255,23 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                             ) {
                                 Text(
                                     text = "Select a Color",
-                                    modifier = Modifier.padding(bottom = 16.dp)
+                                    modifier = Modifier.padding(bottom = 16.dp),
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 20.sp
                                 )
+                                Spacer(modifier = Modifier.height(8.dp))
                                 CourseColorLabel.colorItems.forEach { item ->
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clickable {
                                                 selectedItem = item
+                                                color = item.color
+                                                focusManager.clearFocus()
                                                 dialogVisible = false
                                             }
                                             .padding(vertical = 8.dp)
                                     ) {
-//                                        Box( //
-//                                            modifier = Modifier
-//                                                .size(24.dp)
-//                                                .background(
-//                                                    item.color,
-//                                                    shape = RoundedCornerShape(4.dp)
-//                                                )
-//                                        )
                                         Icon(
                                             painter = painterResource(id = R.drawable.course_label),
                                             contentDescription = null,
@@ -274,7 +292,7 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
                                     },
                                     modifier = Modifier.align(Alignment.End)
                                 ) {
-                                    Text("Close")
+                                    Text("Cancel")
                                 }
                             }
                         }
@@ -287,6 +305,19 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
             }
         }
     }
+
+
+    // Show AlertDialog
+    if (showAlertDialog) {
+        InvalidInputAlertDialog(
+            alertMessage = showAlertMessage,
+            onDismiss = {
+                showAlertDialog = false
+                showAlertMessage = ""
+            }
+        )
+    }
+
 }
 
 
@@ -294,12 +325,25 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
 
 
 
+@Composable
+private fun InvalidInputAlertDialog(alertMessage: String, onDismiss: () -> Unit){
 
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = "OK",
+                    color = MaterialTheme.colorScheme.secondary)
+            }
+        },
+        title = { Text("Invalid Input") },
+        text = { Text(alertMessage) },
+        properties = DialogProperties(dismissOnClickOutside = true),
+        containerColor = MaterialTheme.colorScheme.primary
+    )
 
-
-
-
-
+}
 
 
 
@@ -309,7 +353,7 @@ fun FullScreenDialogCourse(onDismiss: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun FullScreenDialogPreview() {
-    FullScreenDialogCourse(onDismiss = {})
+    FullScreenDialogAddCourse(onDismiss = {})
 }
 
 

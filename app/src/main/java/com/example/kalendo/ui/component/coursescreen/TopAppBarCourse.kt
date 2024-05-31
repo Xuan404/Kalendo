@@ -1,9 +1,7 @@
 package com.example.kalendo.ui.component.coursescreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -67,7 +65,7 @@ fun TopAppBarCourse(
     )
 
     if (showDialog) {
-        FullScreenDialogCourse(onDismiss = { showDialog = false })
+        FullScreenDialogAddCourse(onDismiss = { showDialog = false })
     }
 }
 
