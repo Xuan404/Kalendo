@@ -10,11 +10,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.kalendo.R
+import com.example.kalendo.ui.component.coursescreen.FullScreenDialogAddCourse
 import com.example.kalendo.ui.theme.KalendoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,6 +29,9 @@ fun TopAppBarEdit(
     onNavigationIconClick: (() -> Unit)? = null,
     actions: @Composable (RowScope.() -> Unit)? = null
 ) {
+
+    var showDialog by remember { mutableStateOf(false) }
+
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -45,13 +53,13 @@ fun TopAppBarEdit(
             }
         },
         actions = {
-            IconButton(onClick = { /* Do nothing for preview */ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.refresh),
-                    contentDescription = "Refresh",
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+//            IconButton(onClick = { /* Do nothing for preview */ }) {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.refresh),
+//                    contentDescription = "Refresh",
+//                    modifier = Modifier.padding(8.dp)
+//                )
+//            }
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
                     painter = painterResource(id = R.drawable.sort),
@@ -59,7 +67,7 @@ fun TopAppBarEdit(
                     modifier = Modifier.padding(8.dp)
                 )
             }
-            IconButton(onClick = { /* Do nothing for preview */ }) {
+            IconButton(onClick = { showDialog = true }) {
                 Icon(
                     painter = painterResource(id = R.drawable.add_component),
                     contentDescription = "Add Component",
@@ -69,6 +77,10 @@ fun TopAppBarEdit(
 
         }
     )
+
+    if (showDialog) {
+        FullScreenDialogAddEdit(onDismiss = { showDialog = false })
+    }
 }
 
 @Preview(showBackground = true)
