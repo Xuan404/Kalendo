@@ -15,7 +15,11 @@ import com.google.gson.Gson
 fun ContentCourse(
     modifier: Modifier = Modifier,
     courses: List<CourseModel> = emptyList(),
-    navController: NavController
+    navController: NavController,
+    selectedItems: Set<Int>,
+    showSelectionAppBar: Boolean,
+    onItemSelected: (CourseModel, Boolean) -> Unit,
+    onItemLongClicked: (CourseModel) -> Unit
 ) {
     val gson = Gson()
 
@@ -26,11 +30,23 @@ fun ContentCourse(
 
     ) {
         items(courses) { course ->
-            CardCourse(course = course){
-                val courseJson = gson.toJson(course)
-                navController.navigate("edit/$courseJson")
-
-            }
+            // Is initially inserted as false but becomes true after being added to list
+            val isSelected = selectedItems.contains(course.id)
+            CardCourse(
+                course = course,
+                isSelected = isSelected,
+                onClick = {
+                    if (showSelectionAppBar) {
+                        onItemSelected(course, isSelected)
+                    } else {
+                        val courseJson = gson.toJson(course)
+                        navController.navigate("edit/$courseJson")
+                    }
+                },
+                onLongClick = {
+                    onItemLongClicked(course)
+                }
+            )
         }
 
     }

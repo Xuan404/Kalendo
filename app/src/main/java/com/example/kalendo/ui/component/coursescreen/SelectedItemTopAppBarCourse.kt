@@ -31,8 +31,8 @@ fun SelectedItemTopAppBarCourse(
 
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.secondary,
-            titleContentColor = MaterialTheme.colorScheme.onSecondary
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface
         ),
         title = {
             Text(
@@ -41,23 +41,20 @@ fun SelectedItemTopAppBarCourse(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { onClearSelection }) {
+            IconButton(onClick = { onClearSelection() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.cancel),
                     contentDescription = "Cancel Button",
                     modifier = Modifier.padding(12.dp),
-                    tint = MaterialTheme.colorScheme.onSecondary
-
                 )
             }
         },
         actions = {
-            IconButton(onClick = { onDeleteSelected }) {
+            IconButton(onClick = { onDeleteSelected() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.delete),
                     contentDescription = "Delete Course",
                     modifier = Modifier.padding(8.dp),
-                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
 

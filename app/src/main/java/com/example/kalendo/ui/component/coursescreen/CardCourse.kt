@@ -1,8 +1,11 @@
 package com.example.kalendo.ui.component.coursescreen
 
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -14,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,18 +27,33 @@ import com.example.kalendo.domain.model.CourseModel
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.ui.theme.courseColor1
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardCourse(course: CourseModel, onClick: () -> Unit) {
+fun CardCourse(
+    course: CourseModel,
+    onClick: () -> Unit,
+    isSelected: Boolean,
+    onLongClick: () -> Unit,
+) {
     Card(
         shape = RoundedCornerShape(25.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(
+            if (isSelected) MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         modifier = Modifier
             .height(100.dp)
             .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(5.dp)
-            .border(0.5.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(25.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            .padding(8.dp)
+            .combinedClickable (
+                onLongClick = {onLongClick()},
+                onClick = {onClick()},
+            )
+            .border(
+                width = if (isSelected) 2.dp else 0.5.dp,
+                color = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurface,
+                shape = RoundedCornerShape(25.dp)),
+
     ) {
         Column(
             modifier = Modifier
@@ -63,10 +82,10 @@ fun CardCourse(course: CourseModel, onClick: () -> Unit) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    KalendoTheme {
-        CardCourse(course = CourseModel(title = "CMPUT 300", color = courseColor1),  onClick = {})
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CardPreview() {
+//    KalendoTheme {
+//        CardCourse(course = CourseModel(title = "CMPUT 300", color = courseColor1),  onClick = {})
+//    }
+//}
