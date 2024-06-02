@@ -37,9 +37,11 @@ import com.example.kalendo.ui.theme.courseColor1
 import java.security.KeyStore.TrustedCertificateEntry
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CardEdit(assignment: AssignmentModel, onClick: () -> Unit) {
     Card(
@@ -59,12 +61,12 @@ fun CardEdit(assignment: AssignmentModel, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(15.dp))
             DetailRow(
                 label = "Date",
-                value = assignment.date.toString()
+                value = assignment.date.format(DateTimeFormatter.ofPattern("E, MMM d, yyyy")).toString()
             )
             Spacer(modifier = Modifier.height(8.dp))
             DetailRow(
                 label = "Time",
-                value = assignment.time.toString()
+                value = assignment.time.format(DateTimeFormatter.ofPattern("h:mm a")).toString()
             )
             Spacer(modifier = Modifier.height(8.dp))
             DetailRow(
