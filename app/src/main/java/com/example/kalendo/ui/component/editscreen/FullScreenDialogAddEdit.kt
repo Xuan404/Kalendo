@@ -1,5 +1,6 @@
 package com.example.kalendo.ui.component.editscreen
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -20,7 +21,10 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,8 +35,11 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -176,6 +183,9 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                         modifier = Modifier
                             .clickable { showDatePicker = true }
                             .weight(1f)
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { focusState -> 
+                                datePickerTextFieldFocused = focusState.isFocused }
                     )
 
                     Spacer(modifier = Modifier.width(10.dp))
@@ -243,8 +253,8 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
 
                 Spacer(modifier = Modifier.weight(10f))
 
+                // Show Component type picker dialog
                 if (dialogVisible) {
-
                     focusRequester.requestFocus()
                     BodyCourseComponentTypeDialog(
                         onDismiss = {
@@ -263,33 +273,33 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                     )
                 }
 
+                // Show Date Picker Dialog
+                if (showDatePicker) {
+                    BodyCourseComponentDatePicker(
+                        onDismiss = {
+                            showDatePicker = false
+                            focusManager.clearFocus()
+                        }
+                    )
+                }
+
+                // Show AlertDialog
+                if (showAlertDialog) {
+
+                    InvalidInputAlertDialog(
+                        alertMessage = showAlertMessage,
+                        onDismiss = {
+                            showAlertDialog = false
+                            showAlertMessage = ""
+                        }
+                    )
+                }
+
             }
         }
     }
 
 
-
-    // Show AlertDialog
-    if (showAlertDialog) {
-
-        InvalidInputAlertDialog(
-            alertMessage = showAlertMessage,
-            onDismiss = {
-                showAlertDialog = false
-                showAlertMessage = ""
-            }
-        )
-    }
-
-
-    if (showDatePicker) {
-        Log.i("DatePick", showDatePicker.toString())
-        BodyCourseComponentDatePicker(
-            onDismissRequest = {
-                showDatePicker = false
-            }
-        )
-    }
 
 
 
@@ -520,16 +530,62 @@ private fun BodyCourseComponentTypeDialog(
 }
 
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BodyCourseComponentDatePicker(
-    onDismissRequest: () -> Unit
+    onDismiss: () -> Unit
 ) {
-    DatePickerDialog(
-        onDismissRequest = { onDismissRequest() },
-        confirmButton = { /*TODO*/ }
-    ) {
+    val datePickerState = rememberDatePickerState()
+    val state = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
+    val confirmEnabled = derivedStateOf { datePickerState.displayMode != null }
 
+    DatePickerDialog(
+        onDismissRequest = { onDismiss() },
+        confirmButton = {
+            TextButton(
+                onClick = {
+
+                },
+            ) {
+                Text(
+                    text = "OK",
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismiss()
+                }
+            ) {
+                Text(
+                    text = "Cancel",
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+        },
+        colors = DatePickerDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
+    ) {
+        DatePicker(
+            state = datePickerState,
+            showModeToggle = false,
+            colors = DatePickerDefaults.colors(
+                todayDateBorderColor = MaterialTheme.colorScheme.secondary,
+                todayContentColor = MaterialTheme.colorScheme.onPrimary,
+                selectedDayContainerColor = MaterialTheme.colorScheme.secondary,
+                selectedDayContentColor = MaterialTheme.colorScheme.onSecondary,
+                selectedYearContainerColor = MaterialTheme.colorScheme.secondary,
+                selectedYearContentColor = MaterialTheme.colorScheme.onSecondary,
+                currentYearContentColor = MaterialTheme.colorScheme.onPrimary,
+            )
+
+        )
     }
-    //DatePicker(state = )
+
 }
