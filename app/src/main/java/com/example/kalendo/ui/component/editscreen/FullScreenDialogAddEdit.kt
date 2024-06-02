@@ -1,6 +1,7 @@
 package com.example.kalendo.ui.component.editscreen
 
-import android.widget.Toast
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -49,22 +49,28 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.R
-import com.example.kalendo.ui.theme.defaultColor
 import com.example.kalendo.ui.viewmodel.AssignmentViewModel
-import com.example.kalendo.ui.viewmodel.CourseViewModel
 import com.example.kalendo.util.ColorItem
-import com.example.kalendo.util.CourseColorLabel
+import java.time.LocalDate
+import java.time.LocalTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), onDismiss: () -> Unit) {
 
-    // For the first Outlined Text Field
-    var courseTitle by remember { mutableStateOf("") } // Item to be sent to database
-    // For the Component Item Outlined Text Field
+    // For the Component Title Outlined Text Field
+    var componentTitle by remember { mutableStateOf("") } // Item to be sent to database
+    // For the Component Type Outlined Text Field
     val focusRequester = remember { FocusRequester() }
     var dialogVisible by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
     var selectedItemIsDeadline by remember { mutableStateOf<Any?>(null)}
+    // For Time picker
+    var showTimePicker by remember { mutableStateOf(false) }
+    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+    // For date picker
+    var showDatePicker by remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     // Invalid Input Alert Dialog
     var showAlertDialog by remember { mutableStateOf(false) }
     var showAlertMessage by remember { mutableStateOf("") }
@@ -103,44 +109,12 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                     )
             ) {
                 // Top Part
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp, horizontal = 6.dp)
-                ) {
-                    IconButton(onClick = onDismiss) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.cancel),
-                            contentDescription = "Cancel Dialog",
-                            modifier = Modifier.padding(12.dp)
-                        )
+                Header(
+                    onDismiss = onDismiss,
+                    onClickSave = {
+                        // TODO: Add component to database
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = "Add Component",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Spacer(modifier = Modifier.weight(10f))
-                    Button(
-                        onClick = {
-
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(12.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
-                    ) {
-                        Text(
-                            text = "Save",
-                            fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onSecondary,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
+                )
 
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = 10.dp),
@@ -151,51 +125,16 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                 Spacer(modifier = Modifier.weight(1f))
 
                 // Body Part
-                OutlinedTextField(
-                    value = courseTitle,
-                    onValueChange = { courseTitle = it },
-                    label = {
-                        Text(
-                            text = "Component Title",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Light
-                        )
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                        cursorColor = MaterialTheme.colorScheme.onBackground
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 25.dp)
+                BodyComponentTitle(
+                    componentTitle = componentTitle,
+                    onValueChange = {newTitle -> componentTitle = newTitle}
                 )
 
                 Spacer(modifier = Modifier.weight(0.5f))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-                OutlinedTextField(
-                    value = selectedItem, //
-                    onValueChange = { },
-                    label = {
-                        Text(
-                            text = "Select Component Type",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Light
-                        )
-                    },
+                BodyCourseComponentType(
+                    selectedItem = selectedItem,
+                    focusRequester = focusRequester,
                     leadingIcon = {
                         if (selectedItemIsDeadline == false) {
                             Icon(
@@ -211,130 +150,31 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                             )
                         }
                     },
-                    trailingIcon = {
-                        Icon(
-                            Icons.Default.ArrowDropDown,
-                            contentDescription = "Dropdown Icon",
-                            Modifier.clickable { dialogVisible = true }
-                        )
-                    },
-                    readOnly = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 25.dp)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged { focusState ->
-                            secondTextFieldFocused = focusState.isFocused
-                        }
+                    onClickTrailingIcon = {dialogVisible = true},
+                    onFocusChanged = { focusState ->
+                        secondTextFieldFocused = focusState
+                    }
                 )
+
                 Spacer(modifier = Modifier.weight(10f))
 
-                if (dialogVisible) {
-                    Dialog(onDismissRequest = {
+                BodyCourseComponentTypeDialog(
+                    dialogVisible = dialogVisible,
+                    focusRequester = focusRequester,
+                    onDismiss = {
                         dialogVisible = false;
                         focusManager.clearFocus()
-                    }) {
+                    },
+                    onItemClickToDo = {
+                        selectedItem = "To-Do"
+                        selectedItemIsDeadline = false
 
-                        if (dialogVisible) {
-                            focusRequester.requestFocus()
-                        }
-
-                        Surface(
-                            shape = RoundedCornerShape(20.dp),
-                            color = MaterialTheme.colorScheme.primary
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "Select Type",
-                                    modifier = Modifier.padding(bottom = 16.dp),
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 20.sp
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            selectedItem = "To-Do"
-                                            selectedItemIsDeadline = false
-                                            focusManager.clearFocus()
-                                            dialogVisible = false
-                                        }
-                                        .padding(vertical = 8.dp)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.to_do),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(14.dp)
-                                            .align(Alignment.CenterVertically),
-                                        //tint = item.color
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(text = "To-Do")
-
-                                }
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            selectedItem = "Deadline"
-                                            selectedItemIsDeadline = true
-                                            focusManager.clearFocus()
-                                            dialogVisible = false
-                                        }
-                                        .padding(vertical = 8.dp)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.deadline),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(14.dp)
-                                            .align(Alignment.CenterVertically),
-                                        //tint = item.color
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(text = "Deadline")
-                                }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                Button(
-                                    onClick = {
-                                        dialogVisible = false
-                                        focusManager.clearFocus() // Might not need this
-                                    },
-                                    modifier = Modifier.align(Alignment.End)
-                                ) {
-                                    Text("Cancel")
-                                }
-                            }
-                        }
+                    },
+                    onItemClickDeadline = {
+                        selectedItem = "Deadline"
+                        selectedItemIsDeadline = true
                     }
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                )
 
             }
         }
@@ -355,8 +195,6 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
 
 
 }
-
-
 
 
 
@@ -382,3 +220,213 @@ private fun InvalidInputAlertDialog(alertMessage: String, onDismiss: () -> Unit)
 }
 
 
+@Composable
+private fun Header(
+    onDismiss: () -> Unit,
+    onClickSave: ()  -> Unit
+
+){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 6.dp)
+    ) {
+        IconButton(onClick = onDismiss) {
+            Icon(
+                painter = painterResource(id = R.drawable.cancel),
+                contentDescription = "Cancel Dialog",
+                modifier = Modifier.padding(12.dp)
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = "Add Component",
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Spacer(modifier = Modifier.weight(10f))
+        Button(
+            onClick = {onClickSave()},
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(12.dp),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
+        ) {
+            Text(
+                text = "Save",
+                fontSize = 15.sp,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+
+}
+
+@Composable
+private fun BodyComponentTitle(
+    componentTitle: String,
+    onValueChange: (String) -> Unit
+){
+    OutlinedTextField(
+        value = componentTitle,
+        onValueChange = onValueChange,
+        label = {
+            Text(
+                text = "Component Title",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Light
+            )
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.secondary,
+            cursorColor = MaterialTheme.colorScheme.onBackground
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 25.dp)
+    )
+}
+
+@Composable
+private fun BodyCourseComponentType(
+    selectedItem: String,
+    focusRequester: FocusRequester,
+    leadingIcon: @Composable () -> Unit,
+    onClickTrailingIcon: () -> Unit,
+    onFocusChanged: (Boolean) -> Unit
+){
+    OutlinedTextField(
+        value = selectedItem, //
+        onValueChange = { },
+        label = {
+            Text(
+                text = "Select Component Type",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Light
+            )
+        },
+        leadingIcon = {
+            // TODO
+            leadingIcon()
+        },
+        trailingIcon = {
+            // TODO
+            Icon(
+                Icons.Default.ArrowDropDown,
+                contentDescription = "Dropdown Icon",
+                Modifier.clickable { onClickTrailingIcon() }
+            )
+        },
+        readOnly = true,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.secondary,
+        ),
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 25.dp)
+            .focusRequester(focusRequester)
+            .onFocusChanged { focusState ->
+                onFocusChanged(focusState.isFocused)
+            }
+    )
+
+}
+
+
+@Composable
+private fun BodyCourseComponentTypeDialog(
+    dialogVisible: Boolean,
+    focusRequester: FocusRequester,
+    onDismiss: () -> Unit,
+    onItemClickToDo: () -> Unit,
+    onItemClickDeadline: () -> Unit
+){
+
+    if (dialogVisible) {
+        Dialog(
+            onDismissRequest = {onDismiss()}
+        ) {
+
+            if (dialogVisible) {
+                focusRequester.requestFocus()
+            }
+
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.primary
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Select Type",
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onItemClickToDo()
+                                onDismiss()
+                            }
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.to_do),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(14.dp)
+                                .align(Alignment.CenterVertically),
+                            //tint = item.color
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "To-Do")
+
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onItemClickDeadline()
+                                onDismiss()
+                            }
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.deadline),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(14.dp)
+                                .align(Alignment.CenterVertically),
+                            //tint = item.color
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "Deadline")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {onDismiss()},
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        Text("Cancel")
+                    }
+                }
+            }
+        }
+    }
+
+
+}

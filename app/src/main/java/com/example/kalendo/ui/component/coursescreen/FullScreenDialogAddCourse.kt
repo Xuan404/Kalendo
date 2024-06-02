@@ -344,7 +344,8 @@ private fun BodyCourseColorLabelDialog(
 
     if (dialogVisible) {
         focusRequester.requestFocus()
-        Dialog(onDismissRequest = {onDismiss()}
+        Dialog(
+            onDismissRequest = {onDismiss()}
         ) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
@@ -399,16 +400,6 @@ private fun BodyCourseColorLabelDialog(
 
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun FullScreenDialogPreview() {
-    FullScreenDialogAddCourse(onDismiss = {})
-}
-
-
-
-
 
 
 
