@@ -1,8 +1,10 @@
 package com.example.kalendo.ui.component.editscreen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -35,7 +37,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,8 +61,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.R
 import com.example.kalendo.ui.viewmodel.AssignmentViewModel
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -184,8 +187,9 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                             .clickable { showDatePicker = true }
                             .weight(1f)
                             .focusRequester(focusRequester)
-                            .onFocusChanged { focusState -> 
-                                datePickerTextFieldFocused = focusState.isFocused }
+                            .onFocusChanged { focusState ->
+                                datePickerTextFieldFocused = focusState.isFocused
+                            }
                     )
 
                     Spacer(modifier = Modifier.width(10.dp))
@@ -216,7 +220,7 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                         ),
                         modifier = Modifier
                             .clickable { showTimePicker = true }
-                            .weight(1f)
+                            .weight(0.9f)
                     )
 
 
@@ -279,7 +283,11 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                         onDismiss = {
                             showDatePicker = false
                             focusManager.clearFocus()
-                        }
+                        },
+                        onDateSelected = {newDate ->
+                            selectedDate = newDate
+                        },
+                        context = context
                     )
                 }
 
@@ -530,22 +538,31 @@ private fun BodyCourseComponentTypeDialog(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BodyCourseComponentDatePicker(
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onDateSelected: (LocalDate) -> Unit,
+    context: Context
 ) {
     val datePickerState = rememberDatePickerState()
-    val state = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
-    val confirmEnabled = derivedStateOf { datePickerState.displayMode != null }
 
     DatePickerDialog(
         onDismissRequest = { onDismiss() },
         confirmButton = {
             TextButton(
                 onClick = {
-
+                    // Had to manually add one day cuz the converter was being a bitch
+                    val selectedDateMillis = datePickerState.selectedDateMillis?.plus(86400000)
+                    if (selectedDateMillis != null) {
+                        val selectedDate = Instant.ofEpochMilli(selectedDateMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+                        onDateSelected(selectedDate)
+                        onDismiss()
+                    } else {
+                        Toast.makeText(context, "Please Select a date", Toast.LENGTH_SHORT).show()
+                    }
                 },
             ) {
                 Text(
@@ -589,3 +606,4 @@ private fun BodyCourseComponentDatePicker(
     }
 
 }
+
