@@ -29,11 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -44,10 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.R
-import com.example.kalendo.data.local.dao.CourseDao
-import com.example.kalendo.data.local.database.AppDatabase
-import com.example.kalendo.data.local.entity.CourseEntity
-import com.example.kalendo.data.repository.CourseRepositoryImpl
 import com.example.kalendo.ui.theme.defaultColor
 import com.example.kalendo.ui.viewmodel.CourseViewModel
 import com.example.kalendo.util.ColorItem
@@ -101,65 +97,30 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
                         interactionSource = remember { MutableInteractionSource() }
                     )
             ) {
-                // Top Part
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp, horizontal = 6.dp)
-                ) {
-                    IconButton(onClick = onDismiss) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.cancel),
-                            contentDescription = "Cancel Dialog",
-                            modifier = Modifier.padding(12.dp)
-                        )
+
+
+                Header(
+                    onDismiss = onDismiss,
+                    onClickSave = {
+                        if (courseTitle.length > 15) {
+                            showAlertDialog = true
+                            showAlertMessage = "Course Title must be less than 15 characters"
+                        } else if (courseTitle == "") {
+                            showAlertDialog = true
+                            showAlertMessage = "Course Title cannot be empty"
+                        } else if (selectedItem == null) {
+                            showAlertDialog = true
+                            showAlertMessage = "Please select a Color Label"
+                        } else {
+                            //save to room database and show a toast message then dismiss
+                            //insertCourse = true
+                            viewModel.addCourse(courseTitle, selectedItem!!.color)
+                            Toast.makeText(context, "Added Course Successfully", Toast.LENGTH_SHORT)
+                                .show()
+                            onDismiss()
+                        }
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = "Add Course",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Spacer(modifier = Modifier.weight(10f))
-                    Button(
-                        onClick = {
-
-                            if (courseTitle.length > 15){
-                                showAlertDialog = true
-                                showAlertMessage = "Course Title must be less than 15 characters"
-                            } else if (courseTitle == "" ) {
-                                showAlertDialog = true
-                                showAlertMessage = "Course Title cannot be empty"
-                            } else if( selectedItem == null){
-                                showAlertDialog = true
-                                showAlertMessage = "Please select a Color Label"
-                            } else {
-                                //save to room database and show a toast message then dismiss
-                                //insertCourse = true
-                                viewModel.addCourse(courseTitle, selectedItem!!.color)
-                                Toast.makeText(context, "Added Course Successfully", Toast.LENGTH_SHORT).show()
-                                onDismiss()
-                            }
-
-
-
-
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(12.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
-                    ) {
-                        Text(
-                            text = "Save",
-                            fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onSecondary,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
+                )
 
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = 10.dp),
@@ -170,134 +131,38 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
                 Spacer(modifier = Modifier.weight(1f))
 
                 // Body Part
-                OutlinedTextField(
-                    value = courseTitle,
-                    onValueChange = { courseTitle = it },
-                    label = {
-                        Text(
-                            text = "Course Title",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Light
-                        )
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                        cursorColor = MaterialTheme.colorScheme.onBackground
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 25.dp)
+                BodyCourseTitle(
+                    courseTitle = courseTitle,
+                    onValueChange = {newTitle -> courseTitle = newTitle}
                 )
 
                 Spacer(modifier = Modifier.weight(0.5f))
 
-                OutlinedTextField(
-                    value = selectedItem?.name ?: "", //
-                    onValueChange = { },
-                    label = {
-                        Text(
-                            text = "Select a Color Label",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Light
-                        )
-                    },
-                    leadingIcon = {
-                        color?.let {
-                            Icon(
-                                painter = painterResource(id = R.drawable.course_label),
-                                contentDescription = null,
-                                modifier = Modifier.size(14.dp),
-                                tint = it
-                            )
-                        }
-                    },
-                    trailingIcon = {
-                        Icon(
-                            Icons.Default.ArrowDropDown,
-                            contentDescription = "Dropdown Icon",
-                            Modifier.clickable { dialogVisible = true }
-                        )
-                    },
-                    readOnly = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 25.dp)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged { focusState ->
-                            secondTextFieldFocused = focusState.isFocused
-                        }
-                )
-                Spacer(modifier = Modifier.weight(10f))
+                BodyCourseColorLabel(
+                    selectedItem = selectedItem,
+                    color = color,
+                    focusRequester = focusRequester,
+                    onClickTrailingIcon = {dialogVisible = true} ,
+                    onFocusChanged = { focusState ->
+                        secondTextFieldFocused = focusState
+                    }
 
-                if (dialogVisible) {
-                    Dialog(onDismissRequest = {
+                )
+
+                BodyCourseColorLabelDialog(
+                    dialogVisible = dialogVisible,
+                    focusRequester = focusRequester,
+                    onDismiss = {
                         dialogVisible = false;
                         focusManager.clearFocus()
-                    }) {
+                    },
+                    onItemClick = { item ->
+                        selectedItem = item
+                        color = item.color
+                    },
+                )
 
-                        if (dialogVisible) {
-                            focusRequester.requestFocus()
-                        }
-
-                        Surface(
-                            shape = RoundedCornerShape(20.dp),
-                            color = MaterialTheme.colorScheme.primary
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "Select a Color",
-                                    modifier = Modifier.padding(bottom = 16.dp),
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 20.sp
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                CourseColorLabel.colorItems.forEach { item ->
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                selectedItem = item
-                                                color = item.color
-                                                focusManager.clearFocus()
-                                                dialogVisible = false
-                                            }
-                                            .padding(vertical = 8.dp)
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.course_label),
-                                            contentDescription = null,
-                                            modifier = Modifier
-                                                .size(14.dp)
-                                                .align(Alignment.CenterVertically),
-                                            tint = item.color
-                                        )
-                                        Spacer(modifier = Modifier.width(8.dp))
-                                        Text(text = item.name)
-                                    }
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Button(
-                                    onClick = {
-                                        dialogVisible = false
-                                        focusManager.clearFocus() // Might not need this
-                                    },
-                                    modifier = Modifier.align(Alignment.End)
-                                ) {
-                                    Text("Cancel")
-                                }
-                            }
-                        }
-                    }
-                }
+                Spacer(modifier = Modifier.weight(10f))
 
 
 
@@ -345,10 +210,195 @@ private fun InvalidInputAlertDialog(alertMessage: String, onDismiss: () -> Unit)
 
 }
 
+@Composable
+private fun Header(
+    onDismiss: () -> Unit,
+    onClickSave: ()  -> Unit
+
+){
+    // Top Part
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 6.dp)
+    ) {
+        IconButton(onClick = onDismiss) {
+            Icon(
+                painter = painterResource(id = R.drawable.cancel),
+                contentDescription = "Cancel Dialog",
+                modifier = Modifier.padding(12.dp)
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = "Add Course",
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Spacer(modifier = Modifier.weight(10f))
+        Button(
+            onClick = {onClickSave()},
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(12.dp),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
+        ) {
+            Text(
+                text = "Save",
+                fontSize = 15.sp,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+
+}
+
+@Composable
+private fun BodyCourseTitle(
+    courseTitle: String,
+    onValueChange: (String) -> Unit
+){
+    OutlinedTextField(
+        value = courseTitle,
+        onValueChange = onValueChange,
+        label = {
+            Text(
+                text = "Course Title",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Light
+            )
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.secondary,
+            cursorColor = MaterialTheme.colorScheme.onBackground
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 25.dp)
+    )
+}
+
+
+@Composable
+private fun BodyCourseColorLabel(
+    selectedItem: ColorItem?,
+    color: Color?,
+    focusRequester: FocusRequester,
+    onClickTrailingIcon: () -> Unit,
+    onFocusChanged: (Boolean) -> Unit
+){
+    OutlinedTextField(
+        value = selectedItem?.name ?: "",
+        onValueChange = { },
+        label = {
+            Text(
+                text = "Select a Color Label",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Light
+            )
+        },
+        leadingIcon = {
+            color?.let {
+                Icon(
+                    painter = painterResource(id = R.drawable.course_label),
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp),
+                    tint = it
+                )
+            }
+        },
+        trailingIcon = {
+            Icon(
+                Icons.Default.ArrowDropDown,
+                contentDescription = "Dropdown Icon",
+                Modifier.clickable { onClickTrailingIcon() }
+            )
+        },
+        readOnly = true,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.secondary,
+        ),
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 25.dp)
+            .focusRequester(focusRequester)
+            .onFocusChanged { focusState ->
+                onFocusChanged(focusState.isFocused)
+            }
+    )
+}
+
+
+@Composable
+private fun BodyCourseColorLabelDialog(
+    dialogVisible: Boolean,
+    focusRequester: FocusRequester,
+    onDismiss: () -> Unit,
+    onItemClick: (ColorItem) -> Unit,
+){
+
+    if (dialogVisible) {
+        focusRequester.requestFocus()
+        Dialog(onDismissRequest = {onDismiss()}
+        ) {
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.primary
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Select a Color",
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CourseColorLabel.colorItems.forEach { item ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onItemClick(item)
+                                    onDismiss()
+                                }
+                                .padding(vertical = 8.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.course_label),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(14.dp)
+                                    .align(Alignment.CenterVertically),
+                                tint = item.color
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = item.name)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = {onDismiss()},
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        Text("Cancel")
+                    }
+                }
+            }
+        }
+    }
 
 
 
-
+}
 
 @Preview(showBackground = true)
 @Composable
