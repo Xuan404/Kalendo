@@ -156,25 +156,45 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                     }
                 )
 
+
+
+
+
+
+
+                // TODO: Add Date picker
+
+
+                // TODO: Add Time picker
+
+
+
+
+
+
+
+
+
                 Spacer(modifier = Modifier.weight(10f))
 
-                BodyCourseComponentTypeDialog(
-                    dialogVisible = dialogVisible,
-                    focusRequester = focusRequester,
-                    onDismiss = {
-                        dialogVisible = false;
-                        focusManager.clearFocus()
-                    },
-                    onItemClickToDo = {
-                        selectedItem = "To-Do"
-                        selectedItemIsDeadline = false
+                if (dialogVisible) {
+                    focusRequester.requestFocus()
+                    BodyCourseComponentTypeDialog(
+                        onDismiss = {
+                            dialogVisible = false;
+                            focusManager.clearFocus()
+                        },
+                        onItemClickToDo = {
+                            selectedItem = "To-Do"
+                            selectedItemIsDeadline = false
 
-                    },
-                    onItemClickDeadline = {
-                        selectedItem = "Deadline"
-                        selectedItemIsDeadline = true
-                    }
-                )
+                        },
+                        onItemClickDeadline = {
+                            selectedItem = "Deadline"
+                            selectedItemIsDeadline = true
+                        }
+                    )
+                }
 
             }
         }
@@ -340,93 +360,84 @@ private fun BodyCourseComponentType(
 
 @Composable
 private fun BodyCourseComponentTypeDialog(
-    dialogVisible: Boolean,
-    focusRequester: FocusRequester,
     onDismiss: () -> Unit,
     onItemClickToDo: () -> Unit,
     onItemClickDeadline: () -> Unit
 ){
-
-    if (dialogVisible) {
-        Dialog(
-            onDismissRequest = {onDismiss()}
+    Dialog(
+        onDismissRequest = { onDismiss() }
+    ) {
+        Surface(
+            shape = RoundedCornerShape(20.dp),
+            color = MaterialTheme.colorScheme.primary
         ) {
-
-            if (dialogVisible) {
-                focusRequester.requestFocus()
-            }
-
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.primary
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
             ) {
-                Column(
+                Text(
+                    text = "Select Type",
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
                     modifier = Modifier
-                        .padding(16.dp)
                         .fillMaxWidth()
+                        .clickable {
+                            onItemClickToDo()
+                            onDismiss()
+                        }
+                        .padding(vertical = 8.dp)
                 ) {
-                    Text(
-                        text = "Select Type",
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 20.sp
+                    Icon(
+                        painter = painterResource(id = R.drawable.to_do),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(14.dp)
+                            .align(Alignment.CenterVertically),
+                        //tint = item.color
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "To-Do")
 
-                    Row(
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onItemClickDeadline()
+                            onDismiss()
+                        }
+                        .padding(vertical = 8.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.deadline),
+                        contentDescription = null,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onItemClickToDo()
-                                onDismiss()
-                            }
-                            .padding(vertical = 8.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.to_do),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(14.dp)
-                                .align(Alignment.CenterVertically),
-                            //tint = item.color
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "To-Do")
+                            .size(14.dp)
+                            .align(Alignment.CenterVertically),
+                        //tint = item.color
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Deadline")
+                }
 
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onItemClickDeadline()
-                                onDismiss()
-                            }
-                            .padding(vertical = 8.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.deadline),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(14.dp)
-                                .align(Alignment.CenterVertically),
-                            //tint = item.color
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Deadline")
-                    }
+                Spacer(modifier = Modifier.height(16.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = {onDismiss()},
-                        modifier = Modifier.align(Alignment.End)
-                    ) {
-                        Text("Cancel")
-                    }
+                Button(
+                    onClick = { onDismiss() },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Cancel")
                 }
             }
         }
     }
+
 
 
 }

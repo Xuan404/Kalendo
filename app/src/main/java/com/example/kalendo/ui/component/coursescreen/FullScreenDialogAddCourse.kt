@@ -149,23 +149,21 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
 
                 )
 
-                BodyCourseColorLabelDialog(
-                    dialogVisible = dialogVisible,
-                    focusRequester = focusRequester,
-                    onDismiss = {
-                        dialogVisible = false;
-                        focusManager.clearFocus()
-                    },
-                    onItemClick = { item ->
-                        selectedItem = item
-                        color = item.color
-                    },
-                )
-
                 Spacer(modifier = Modifier.weight(10f))
 
-
-
+                if (dialogVisible) {
+                    focusRequester.requestFocus()
+                    BodyCourseColorLabelDialog(
+                        onDismiss = {
+                            dialogVisible = false;
+                            focusManager.clearFocus()
+                        },
+                        onItemClick = { item ->
+                            selectedItem = item
+                            color = item.color
+                        },
+                    )
+                }
 
             }
         }
@@ -336,66 +334,61 @@ private fun BodyCourseColorLabel(
 
 @Composable
 private fun BodyCourseColorLabelDialog(
-    dialogVisible: Boolean,
-    focusRequester: FocusRequester,
     onDismiss: () -> Unit,
     onItemClick: (ColorItem) -> Unit,
 ){
-
-    if (dialogVisible) {
-        focusRequester.requestFocus()
-        Dialog(
-            onDismissRequest = {onDismiss()}
+    Dialog(
+        onDismissRequest = { onDismiss() }
+    ) {
+        Surface(
+            shape = RoundedCornerShape(20.dp),
+            color = MaterialTheme.colorScheme.primary
         ) {
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.primary
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Select a Color",
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 20.sp
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CourseColorLabel.colorItems.forEach { item ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onItemClick(item)
-                                    onDismiss()
-                                }
-                                .padding(vertical = 8.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.course_label),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(14.dp)
-                                    .align(Alignment.CenterVertically),
-                                tint = item.color
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = item.name)
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = {onDismiss()},
-                        modifier = Modifier.align(Alignment.End)
+                Text(
+                    text = "Select a Color",
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                CourseColorLabel.colorItems.forEach { item ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onItemClick(item)
+                                onDismiss()
+                            }
+                            .padding(vertical = 8.dp)
                     ) {
-                        Text("Cancel")
+                        Icon(
+                            painter = painterResource(id = R.drawable.course_label),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(14.dp)
+                                .align(Alignment.CenterVertically),
+                            tint = item.color
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = item.name)
                     }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = { onDismiss() },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Cancel")
                 }
             }
         }
     }
+
 
 
 
