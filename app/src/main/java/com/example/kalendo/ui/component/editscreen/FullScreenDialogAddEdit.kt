@@ -554,10 +554,9 @@ private fun BodyCourseComponentDatePicker(
         confirmButton = {
             TextButton(
                 onClick = {
-                    // Had to manually add one day cuz the converter was being a bitch
-                    val selectedDateMillis = datePickerState.selectedDateMillis?.plus(86400000)
+                    val selectedDateMillis = datePickerState.selectedDateMillis
                     if (selectedDateMillis != null) {
-                        val selectedDate = Instant.ofEpochMilli(selectedDateMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+                        val selectedDate = Instant.ofEpochMilli(selectedDateMillis).atZone(ZoneId.of("UTC")).toLocalDate()
                         onDateSelected(selectedDate)
                         onDismiss()
                     } else {
