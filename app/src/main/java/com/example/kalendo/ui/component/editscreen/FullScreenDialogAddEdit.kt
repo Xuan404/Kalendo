@@ -189,8 +189,7 @@ fun FullScreenDialogAddEdit(
 
                 Spacer(modifier = Modifier.weight(0.5f))
 
-
-////////////////---BEGIN---//////
+                // Date and Time
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -265,9 +264,6 @@ fun FullScreenDialogAddEdit(
 
 
                 }
-///////////////---END---//////////
-
-
 
                 Spacer(modifier = Modifier.weight(0.5f))
 
