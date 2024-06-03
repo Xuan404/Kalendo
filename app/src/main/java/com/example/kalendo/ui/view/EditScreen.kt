@@ -1,5 +1,7 @@
 package com.example.kalendo.ui.view
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,6 +26,7 @@ import com.example.kalendo.ui.viewmodel.AssignmentViewModel
 import com.example.kalendo.util.Strings
 import com.google.gson.Gson
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EditScreenContent(
     navController: NavController,
@@ -51,7 +54,8 @@ fun EditScreenContent(
                 TopAppBarEdit(
                     title = Strings.EDIT_SCREEN_TITLE,
                     onNavigationIconClick = {navController.popBackStack()},
-                    actions = {}
+                    actions = {},
+                    course = course
                 )
             },
             content = { innerPadding ->

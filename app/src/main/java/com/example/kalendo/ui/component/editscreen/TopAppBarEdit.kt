@@ -1,5 +1,7 @@
 package com.example.kalendo.ui.component.editscreen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,18 +18,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.kalendo.R
-import com.example.kalendo.ui.component.coursescreen.FullScreenDialogAddCourse
-import com.example.kalendo.ui.theme.KalendoTheme
+import com.example.kalendo.domain.model.CourseModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarEdit(
     title: String,
     onNavigationIconClick: (() -> Unit)? = null,
-    actions: @Composable (RowScope.() -> Unit)? = null
+    actions: @Composable (RowScope.() -> Unit)? = null,
+    course: CourseModel?
 ) {
 
     var showDialog by remember { mutableStateOf(false) }
@@ -79,17 +81,19 @@ fun TopAppBarEdit(
     )
 
     if (showDialog) {
-        FullScreenDialogAddEdit(onDismiss = { showDialog = false })
+        FullScreenDialogAddEdit(
+            onDismiss = { showDialog = false },
+            course = course)
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MyTopAppBarPreview() {
-    KalendoTheme {
-        TopAppBarEdit(
-            title = "Edit",
-        )
-    }
-}
-
+//@Preview(showBackground = true)
+//@Composable
+//fun MyTopAppBarPreview() {
+//    KalendoTheme {
+//        TopAppBarEdit(
+//            title = "Edit",
+//        )
+//    }
+//}
+//

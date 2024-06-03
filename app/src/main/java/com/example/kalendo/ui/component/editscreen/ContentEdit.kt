@@ -1,6 +1,8 @@
 package com.example.kalendo.ui.component.editscreen
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import com.example.kalendo.domain.model.AssignmentModel
 import com.example.kalendo.domain.model.CourseModel
 import com.google.gson.Gson
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContentEdit(
     modifier: Modifier = Modifier,
@@ -68,9 +71,10 @@ fun ContentEdit(
 }
 
 @Composable
-fun TopPart(modifier: Modifier = Modifier,
-            color: Color,
-            title: String
+fun TopPart(
+    modifier: Modifier = Modifier,
+    color: Color,
+    title: String
 ) {
     Box(
         modifier = modifier
@@ -101,6 +105,7 @@ fun TopPart(modifier: Modifier = Modifier,
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BottomPart(modifier: Modifier = Modifier, assignments: List<AssignmentModel>) {
     Box(

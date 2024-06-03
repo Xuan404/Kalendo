@@ -2,6 +2,7 @@ package com.example.kalendo.ui.component.editscreen
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -60,6 +61,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.R
+import com.example.kalendo.domain.model.CourseModel
 import com.example.kalendo.ui.viewmodel.AssignmentViewModel
 import java.time.Instant
 import java.time.LocalDate
@@ -70,7 +72,11 @@ import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), onDismiss: () -> Unit) {
+fun FullScreenDialogAddEdit(
+    viewModel: AssignmentViewModel = hiltViewModel(),
+    onDismiss: () -> Unit,
+    course: CourseModel?
+) {
 
     // For the Component Title Outlined Text Field
     var componentTitle by remember { mutableStateOf("") } // Item to be sent to database
@@ -78,7 +84,7 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
     val focusRequester = remember { FocusRequester() }
     var dialogVisible by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
-    var selectedItemIsDeadline by remember { mutableStateOf<Any?>(null)}
+    var selectedItemIsDeadline by remember { mutableStateOf<Boolean?>(null)}
     // For Time picker
     var showTimePicker by remember { mutableStateOf(false) }
     var selectedTime by remember { mutableStateOf(LocalTime.now()) }
@@ -138,7 +144,32 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                 Header(
                     onDismiss = onDismiss,
                     onClickSave = {
-                        // TODO: Add component to database
+                        if (componentTitle.length > 20) {
+                            showAlertDialog = true
+                            showAlertMessage = "ComponentTitle must be less than 20 characters"
+                        } else if (componentTitle == "") {
+                            showAlertDialog = true
+                            showAlertMessage = "Component Title cannot be empty"
+                        } else if (selectedItemIsDeadline == null) {
+                            showAlertDialog = true
+                            showAlertMessage = "Please select a Component Type"
+                        } else {
+                            //save to room database and show a toast message then dismiss
+                            //insertCourse = true
+                            Log.i("CourseEdit", course.toString())
+                            if (course != null) {
+                                viewModel.addAssignment(
+                                    courseId = course.id,
+                                    title = componentTitle,
+                                    date = selectedDate,
+                                    time = selectedTime,
+                                    isDeadline = selectedItemIsDeadline!!
+                                )
+                            }
+                            Toast.makeText(context, "Added Component Successfully", Toast.LENGTH_SHORT)
+                                .show()
+                            onDismiss()
+                        }
                     }
                 )
 
@@ -166,7 +197,6 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                         .padding(horizontal = 25.dp)
                 ){
 
-                    // TODO: Add Date picker
                     OutlinedTextField(
                         value = selectedDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
                         onValueChange = {},
@@ -201,7 +231,6 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    // TODO: Add Time picker
                     OutlinedTextField(
                         value = selectedTime.format(DateTimeFormatter.ofPattern("h:mm a")),
                         onValueChange = {},
