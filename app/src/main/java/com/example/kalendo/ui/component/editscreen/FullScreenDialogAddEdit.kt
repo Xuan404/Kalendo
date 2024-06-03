@@ -1,14 +1,14 @@
 package com.example.kalendo.ui.component.editscreen
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +26,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -37,10 +36,11 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimeInput
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +66,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -110,6 +111,12 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
         LaunchedEffect(datePickerTextFieldFocused) {
             if (datePickerTextFieldFocused) {
                 showDatePicker = true
+            }
+        }
+        var timePickerTextFieldFocused by remember { mutableStateOf(false) }
+        LaunchedEffect(timePickerTextFieldFocused) {
+            if (timePickerTextFieldFocused) {
+                showTimePicker = true
             }
         }
 
@@ -221,6 +228,10 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                         modifier = Modifier
                             .clickable { showTimePicker = true }
                             .weight(0.9f)
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { focusState ->
+                                timePickerTextFieldFocused = focusState.isFocused
+                            }
                     )
 
 
@@ -288,6 +299,20 @@ fun FullScreenDialogAddEdit(viewModel: AssignmentViewModel = hiltViewModel(), on
                             selectedDate = newDate
                         },
                         context = context
+                    )
+                }
+
+                // Show Time Picker Dialog
+                if (showTimePicker) {
+                    BodyCourseComponentTimePicker(
+                        onDismiss = {
+                            showTimePicker = false
+                            focusManager.clearFocus()
+                        },
+                        onTimeSelected = { newTime ->
+                            selectedTime = newTime
+                        }
+
                     )
                 }
 
@@ -539,7 +564,6 @@ private fun BodyCourseComponentTypeDialog(
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BodyCourseComponentDatePicker(
@@ -606,3 +630,90 @@ private fun BodyCourseComponentDatePicker(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BodyCourseComponentTimePicker(
+    onDismiss: () -> Unit,
+    onTimeSelected: (LocalTime) -> Unit,
+){
+    val timePickerState = rememberTimePickerState()
+
+    TimePickerDialog(
+        onDismiss = { onDismiss() },
+        onConfirm = {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+            cal.set(Calendar.MINUTE, timePickerState.minute)
+            cal.isLenient = false
+
+            var selectedTime = LocalTime.of(timePickerState.hour, timePickerState.minute)
+            onTimeSelected(selectedTime)
+            onDismiss()
+        },
+    ) {
+        TimeInput(state = timePickerState)
+    }
+}
+
+
+// FROM: https://github.com/Dinesh2510/Jetpack-Compose-UI-Components-Material-3/blob/main/TimePicker.kt#L90
+@Composable
+fun TimePickerDialog(
+    title: String = "Enter Time",
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    toggle: @Composable () -> Unit = {},
+    content: @Composable () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = {onDismiss()},
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.extraLarge,
+            tonalElevation = 6.dp,
+            modifier = Modifier
+                .width(IntrinsicSize.Min)
+                .height(IntrinsicSize.Min)
+                .background(
+                    shape = MaterialTheme.shapes.extraLarge,
+                    color = MaterialTheme.colorScheme.surface
+                ),
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
+                    text = title,
+                    //style = MaterialTheme.typography.labelMedium
+                )
+                content()
+                Row(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .fillMaxWidth()
+                ) {
+                    toggle()
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextButton(onClick = {onDismiss()}) {
+                        Text(
+                            text = "Cancel",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                    TextButton(onClick = {onConfirm()}) {
+                        Text(
+                            text = "OK",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
