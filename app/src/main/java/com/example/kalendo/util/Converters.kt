@@ -1,4 +1,4 @@
-package com.example.kalendo.data.mapper
+package com.example.kalendo.util
 
 import android.os.Build
 import androidx.annotation.RequiresApi

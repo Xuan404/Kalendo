@@ -15,13 +15,12 @@ import com.example.kalendo.data.local.dao.AssignmentDao
 import com.example.kalendo.data.local.dao.CourseDao
 import com.example.kalendo.data.local.entity.AssignmentEntity
 import com.example.kalendo.data.local.entity.CourseEntity
-import com.example.kalendo.data.mapper.Converters
+import com.example.kalendo.util.Converters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.Date
 
 @Database(entities = [CourseEntity::class, AssignmentEntity::class], version = 1)
 @TypeConverters(Converters::class)
