@@ -209,7 +209,7 @@ fun FullScreenDialogAddEdit(
                         readOnly = true,
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = R.drawable.calender),
+                                painter = painterResource(id = R.drawable.icon_calender),
                                 contentDescription = "Date Picker",
                                 modifier = Modifier.size(20.dp),
                             )
@@ -243,7 +243,7 @@ fun FullScreenDialogAddEdit(
                         readOnly = true,
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = R.drawable.clock),
+                                painter = painterResource(id = R.drawable.icon_clock),
                                 contentDescription = "Time Picker",
                                 modifier = Modifier.size(20.dp),
                             )
@@ -273,13 +273,13 @@ fun FullScreenDialogAddEdit(
                     leadingIcon = {
                         if (selectedItemIsDeadline == false) {
                             Icon(
-                                painter = painterResource(id = R.drawable.to_do),
+                                painter = painterResource(id = R.drawable.icon_to_do),
                                 contentDescription = null,
                                 modifier = Modifier.size(14.dp),
                             )
                         } else if (selectedItemIsDeadline == true) {
                             Icon(
-                                painter = painterResource(id = R.drawable.deadline),
+                                painter = painterResource(id = R.drawable.icon_deadline),
                                 contentDescription = null,
                                 modifier = Modifier.size(14.dp),
                             )
@@ -403,7 +403,7 @@ private fun Header(
     ) {
         IconButton(onClick = onDismiss) {
             Icon(
-                painter = painterResource(id = R.drawable.cancel),
+                painter = painterResource(id = R.drawable.icon_cancel),
                 contentDescription = "Cancel Dialog",
                 modifier = Modifier.padding(12.dp)
             )
@@ -541,7 +541,7 @@ private fun BodyCourseComponentTypeDialog(
                         .padding(vertical = 8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.to_do),
+                        painter = painterResource(id = R.drawable.icon_to_do),
                         contentDescription = null,
                         modifier = Modifier
                             .size(14.dp)
@@ -562,7 +562,7 @@ private fun BodyCourseComponentTypeDialog(
                         .padding(vertical = 8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.deadline),
+                        painter = painterResource(id = R.drawable.icon_deadline),
                         contentDescription = null,
                         modifier = Modifier
                             .size(14.dp)

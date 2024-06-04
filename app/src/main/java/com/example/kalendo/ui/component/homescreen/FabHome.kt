@@ -84,7 +84,7 @@ fun FabHome(
                             .offset(x = (-8).dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.courses),
+                            painter = painterResource(id = R.drawable.icon_courses),
                             contentDescription = "Courses",
                             modifier = Modifier.padding(7.dp),
                             tint = MaterialTheme.colorScheme.primary // Ensure original colors are used
@@ -123,7 +123,7 @@ fun FabHome(
                             .offset(x = (-8).dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.notes),
+                            painter = painterResource(id = R.drawable.icon_notes),
                             contentDescription = "Notes",
                             modifier = Modifier.padding(7.dp),
                             tint = MaterialTheme.colorScheme.primary // Ensure original colors are used

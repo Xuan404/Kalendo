@@ -48,7 +48,7 @@ fun TopAppBarEdit(
                 onNavigationIconClick?.invoke()
             }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.back),
+                    painter = painterResource(id = R.drawable.icon_back),
                     contentDescription = "Back Button",
                     modifier = Modifier.padding(8.dp)
                 )
@@ -64,14 +64,14 @@ fun TopAppBarEdit(
 //            }
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.sort),
+                    painter = painterResource(id = R.drawable.icon_sort),
                     contentDescription = "Grid Rectangle",
                     modifier = Modifier.padding(8.dp)
                 )
             }
             IconButton(onClick = { showDialog = true }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add_component),
+                    painter = painterResource(id = R.drawable.icon_add_component),
                     contentDescription = "Add Component",
                     modifier = Modifier.padding(8.dp)
                 )

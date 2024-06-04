@@ -38,7 +38,7 @@ fun TopAppBarNote(
                 onNavigationIconClick?.invoke()
             }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.back),
+                    painter = painterResource(id = R.drawable.icon_back),
                     contentDescription = "Back Button",
                     modifier = Modifier.padding(8.dp)
                 )
@@ -47,14 +47,14 @@ fun TopAppBarNote(
         actions = {
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.grid_rectangle),
+                    painter = painterResource(id = R.drawable.icon_grid_rectangle),
                     contentDescription = "Grid Rectangle",
                     modifier = Modifier.padding(8.dp)
                 )
             }
             IconButton(onClick = { /* Do nothing for preview */ }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add_course),
+                    painter = painterResource(id = R.drawable.icon_add_course),
                     contentDescription = "Add Notes",
                     modifier = Modifier.padding(8.dp)
                 )

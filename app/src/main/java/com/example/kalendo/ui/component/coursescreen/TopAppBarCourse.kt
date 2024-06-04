@@ -46,7 +46,7 @@ fun TopAppBarCourse(
                 onNavigationIconClick?.invoke()
             }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.back),
+                    painter = painterResource(id = R.drawable.icon_back),
                     contentDescription = "Back Button",
                     modifier = Modifier.padding(8.dp)
                 )
@@ -55,7 +55,7 @@ fun TopAppBarCourse(
         actions = {
             IconButton(onClick = { showDialog = true }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add_course),
+                    painter = painterResource(id = R.drawable.icon_add_course),
                     contentDescription = "Add Course",
                     modifier = Modifier.padding(8.dp)
                 )

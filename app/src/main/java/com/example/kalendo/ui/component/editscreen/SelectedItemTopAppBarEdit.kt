@@ -38,7 +38,7 @@ fun SelectedItemTopAppBarEdit(
         navigationIcon = {
             IconButton(onClick = { onClearSelection() }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.cancel),
+                    painter = painterResource(id = R.drawable.icon_cancel),
                     contentDescription = "Cancel Button",
                     modifier = Modifier.padding(12.dp),
                 )
@@ -47,7 +47,7 @@ fun SelectedItemTopAppBarEdit(
         actions = {
             IconButton(onClick = { onDeleteSelected() }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.delete),
+                    painter = painterResource(id = R.drawable.icon_delete),
                     contentDescription = "Delete Course",
                     modifier = Modifier.padding(8.dp),
                 )

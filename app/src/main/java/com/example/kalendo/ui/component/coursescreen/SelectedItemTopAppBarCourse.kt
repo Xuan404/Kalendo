@@ -1,6 +1,5 @@
 package com.example.kalendo.ui.component.coursescreen
 
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -10,10 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +38,7 @@ fun SelectedItemTopAppBarCourse(
         navigationIcon = {
             IconButton(onClick = { onClearSelection() }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.cancel),
+                    painter = painterResource(id = R.drawable.icon_cancel),
                     contentDescription = "Cancel Button",
                     modifier = Modifier.padding(12.dp),
                 )
@@ -52,7 +47,7 @@ fun SelectedItemTopAppBarCourse(
         actions = {
             IconButton(onClick = { onDeleteSelected() }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.delete),
+                    painter = painterResource(id = R.drawable.icon_delete),
                     contentDescription = "Delete Course",
                     modifier = Modifier.padding(8.dp),
                 )

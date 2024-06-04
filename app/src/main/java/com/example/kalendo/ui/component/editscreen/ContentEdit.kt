@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
 import com.example.kalendo.domain.model.AssignmentModel
 import com.example.kalendo.domain.model.CourseModel
-import com.example.kalendo.ui.component.coursescreen.CardCourse
 import com.google.gson.Gson
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -95,7 +94,7 @@ fun TopPart(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.course_label),
+                painter = painterResource(id = R.drawable.icon_course_label),
                 contentDescription = null,
                 tint = color,
                 modifier = Modifier.size(14.dp),

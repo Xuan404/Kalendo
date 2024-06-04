@@ -25,6 +25,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
@@ -48,6 +51,7 @@ import com.example.kalendo.ui.theme.defaultColor
 import com.example.kalendo.ui.viewmodel.CourseViewModel
 import com.example.kalendo.util.ColorItem
 import com.example.kalendo.util.CourseColorLabel
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -65,6 +69,9 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
     var showAlertMessage by remember { mutableStateOf("") }
     // Toast message after successfull ROOM insert
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    var snackbarHost = { SnackbarHost(hostState = snackbarHostState)
+    val scope = rememberCoroutineScope()
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -82,6 +89,7 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
                 dialogVisible = true
             }
         }
+
 
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -115,8 +123,13 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
                             //save to room database and show a toast message then dismiss
                             //insertCourse = true
                             viewModel.addCourse(courseTitle, selectedItem!!.color)
-                            Toast.makeText(context, "Added Course Successfully", Toast.LENGTH_SHORT)
-                                .show()
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Button clicked!",
+                                    actionLabel = "Dismiss",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                             onDismiss()
                         }
                     }

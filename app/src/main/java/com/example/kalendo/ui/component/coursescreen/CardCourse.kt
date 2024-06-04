@@ -3,9 +3,7 @@ package com.example.kalendo.ui.component.coursescreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -16,16 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
 import com.example.kalendo.domain.model.CourseModel
-import com.example.kalendo.ui.theme.KalendoTheme
-import com.example.kalendo.ui.theme.courseColor1
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -65,7 +58,7 @@ fun CardCourse(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.course_label),
+                    painter = painterResource(id = R.drawable.icon_course_label),
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
                     tint = course.color

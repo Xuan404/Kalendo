@@ -4,13 +4,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,22 +23,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
 import com.example.kalendo.domain.model.AssignmentModel
-import com.example.kalendo.domain.model.CourseModel
-import com.example.kalendo.ui.component.coursescreen.CardCourse
-import com.example.kalendo.ui.theme.KalendoTheme
-import com.example.kalendo.ui.theme.courseColor1
-import java.security.KeyStore.TrustedCertificateEntry
-import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -119,7 +107,7 @@ fun DetailRow(label: String, value: String, isDeadline: Boolean = false) {
                 Icon(
                     //painter = painterResource(id = R.drawable.deadline), // Replace with your icon resource
                     painter = painterResource(
-                        id = if (isDeadline) R.drawable.deadline else R.drawable.to_do
+                        id = if (isDeadline) R.drawable.icon_deadline else R.drawable.icon_to_do
                     ),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground,
