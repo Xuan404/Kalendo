@@ -58,7 +58,7 @@ fun CardEdit(
             if (isSelected) MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surface
         ),
         modifier = Modifier
-            .padding(0.dp)
+            .padding(horizontal = 5.dp, vertical = 1.dp)
             .fillMaxWidth()
             .combinedClickable (
                 onLongClick = {onLongClick()},

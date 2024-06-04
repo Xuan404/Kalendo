@@ -44,7 +44,7 @@ fun CardCourse(
         modifier = Modifier
             .height(100.dp)
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(horizontal = 5.dp, vertical = 7.dp)
             .combinedClickable (
                 onLongClick = {onLongClick()},
                 onClick = {onClick()},
