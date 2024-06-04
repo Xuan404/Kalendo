@@ -69,9 +69,6 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
     var showAlertMessage by remember { mutableStateOf("") }
     // Toast message after successfull ROOM insert
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
-    var snackbarHost = { SnackbarHost(hostState = snackbarHostState)
-    val scope = rememberCoroutineScope()
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -89,7 +86,6 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
                 dialogVisible = true
             }
         }
-
 
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -123,13 +119,8 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
                             //save to room database and show a toast message then dismiss
                             //insertCourse = true
                             viewModel.addCourse(courseTitle, selectedItem!!.color)
-                            scope.launch {
-                                snackbarHostState.showSnackbar(
-                                    message = "Button clicked!",
-                                    actionLabel = "Dismiss",
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
+                            Toast.makeText(context, "Added Course Successfully", Toast.LENGTH_SHORT)
+                                .show()
                             onDismiss()
                         }
                     }
@@ -236,7 +227,7 @@ private fun Header(
     ) {
         IconButton(onClick = onDismiss) {
             Icon(
-                painter = painterResource(id = R.drawable.cancel),
+                painter = painterResource(id = R.drawable.icon_cancel),
                 contentDescription = "Cancel Dialog",
                 modifier = Modifier.padding(12.dp)
             )
@@ -315,7 +306,7 @@ private fun BodyCourseColorLabel(
         leadingIcon = {
             color?.let {
                 Icon(
-                    painter = painterResource(id = R.drawable.course_label),
+                    painter = painterResource(id = R.drawable.icon_course_label),
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
                     tint = it
@@ -380,7 +371,7 @@ private fun BodyCourseColorLabelDialog(
                             .padding(vertical = 8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.course_label),
+                            painter = painterResource(id = R.drawable.icon_course_label),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(14.dp)
@@ -406,11 +397,6 @@ private fun BodyCourseColorLabelDialog(
 
 
 }
-
-
-
-
-
 
 
 
