@@ -2,8 +2,10 @@ package com.example.kalendo.ui.component.editscreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,15 +43,31 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CardEdit(assignment: AssignmentModel, onClick: () -> Unit) {
+fun CardEdit(
+    assignment: AssignmentModel,
+    onClick: () -> Unit,
+    isSelected: Boolean,
+    onLongClick: () -> Unit,
+) {
     Card(
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(
+            if (isSelected) MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surface
+        ),
         modifier = Modifier
             .padding(0.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .combinedClickable (
+                onLongClick = {onLongClick()},
+                onClick = {onClick()},
+            )
+            .border(
+                width = if (isSelected) 2.dp else 0.dp,
+                color = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(20.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -114,11 +132,11 @@ fun DetailRow(label: String, value: String, isDeadline: Boolean = false) {
 
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun CardEditPreview() {
-    KalendoTheme {
-        CardEdit(assignment = AssignmentModel(id = 1, courseId = 1, title = "Quiz 9", date = LocalDate.now(), time = LocalTime.now() , isDeadline = false),  onClick = {})
-    }
-}
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Preview(showBackground = true)
+//@Composable
+//fun CardEditPreview() {
+//    KalendoTheme {
+//        CardEdit(assignment = AssignmentModel(id = 1, courseId = 1, title = "Quiz 9", date = LocalDate.now(), time = LocalTime.now() , isDeadline = false),  onClick = {})
+//    }
+//}

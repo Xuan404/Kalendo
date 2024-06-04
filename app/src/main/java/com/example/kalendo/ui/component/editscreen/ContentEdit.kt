@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.kalendo.R
 import com.example.kalendo.domain.model.AssignmentModel
 import com.example.kalendo.domain.model.CourseModel
+import com.example.kalendo.ui.component.coursescreen.CardCourse
 import com.google.gson.Gson
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -38,7 +39,11 @@ import com.google.gson.Gson
 fun ContentEdit(
     modifier: Modifier = Modifier,
     courseJson: String?,
-    assignments: List<AssignmentModel>
+    assignments: List<AssignmentModel>,
+    selectedItems: Set<Int>,
+    showSelectionAppBar: Boolean,
+    onItemSelected: (AssignmentModel, Boolean) -> Unit,
+    onItemLongClicked: (AssignmentModel) -> Unit
 ) {
 
     // Deserialize the Object
@@ -63,7 +68,11 @@ fun ContentEdit(
             )
             BottomPart(
                 modifier = Modifier.weight(6f),
-                assignments = assignments
+                assignments = assignments,
+                selectedItems = selectedItems,
+                showSelectionAppBar = showSelectionAppBar,
+                onItemSelected = onItemSelected,
+                onItemLongClicked = onItemLongClicked
             )
         }
     }
@@ -74,7 +83,7 @@ fun ContentEdit(
 fun TopPart(
     modifier: Modifier = Modifier,
     color: Color,
-    title: String
+    title: String,
 ) {
     Box(
         modifier = modifier
@@ -107,7 +116,14 @@ fun TopPart(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BottomPart(modifier: Modifier = Modifier, assignments: List<AssignmentModel>) {
+fun BottomPart(
+    modifier: Modifier = Modifier,
+    assignments: List<AssignmentModel>,
+    selectedItems: Set<Int>,
+    showSelectionAppBar: Boolean,
+    onItemSelected: (AssignmentModel, Boolean) -> Unit,
+    onItemLongClicked: (AssignmentModel) -> Unit
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -120,12 +136,20 @@ fun BottomPart(modifier: Modifier = Modifier, assignments: List<AssignmentModel>
 
         ) {
             items(assignments) { assignment ->
-                CardEdit(assignment = assignment){}
-//                HorizontalDivider(
-//                    modifier = Modifier.padding(horizontal = 15.dp),
-//                    thickness = 1.dp,
-//                    color = MaterialTheme.colorScheme.primary
-//                )
+                // Is initially inserted as false but becomes true after being added to list
+                val isSelected = selectedItems.contains(assignment.id)
+                CardEdit(
+                    assignment = assignment,
+                    isSelected = isSelected,
+                    onClick = {
+                        if (showSelectionAppBar) {
+                            onItemSelected(assignment, isSelected)
+                        }
+                    },
+                    onLongClick = {
+                        onItemLongClicked(assignment)
+                    }
+                )
 
             }
 
