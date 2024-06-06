@@ -3,6 +3,7 @@ package com.example.kalendo.ui.component.homescreen
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -36,14 +37,13 @@ import java.util.Calendar
 fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = viewModel()) {
     val scrollState = rememberLazyListState()
     val months by rememberUpdatedState(viewModel.months)
-    val startYear = 2020
-    val endYear = 2026
+    val startYear = 2000
+    val endYear = 2025
 
     // TODO: Figure out the calculation
     // Calculate the initial scroll position
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
-    val initialIndex = (currentYear - startYear) * 12 + currentMonth
+    val initialIndex = (viewModel.yearOffset * 12) + currentMonth
     //Log.i("CurrentTime", initialIndex.toString())
 
     // Scroll to the current month on first launch
@@ -55,11 +55,10 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
         state = scrollState,
         modifier = modifier.fillMaxSize()
     ) {
-        months.forEach { monthData ->
-            item {
-                BannerHeader(year = monthData.year, month = monthData.month, imageBanner = monthData.banner)
-            }
-            items(monthData.days) { day ->
+        Log.i("CurrentIndex", scrollState.firstVisibleItemIndex.toString())
+        items(months) {month ->
+            BannerHeader(year = month.year, month = month.month, imageBanner = month.banner)
+            for (day in month.days) {
                 DayItem(date = day.date, dayOfWeek = day.dayOfWeek)
             }
         }
@@ -73,8 +72,11 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
             .collectLatest { (firstVisibleItemIndex, totalItemsCount) ->
                 if (firstVisibleItemIndex == 0) {
                     // User has scrolled to the top, load previous month
+                    val index = scrollState.firstVisibleItemIndex + 1
+                    val indexoffset = scrollState.firstVisibleItemScrollOffset
+                    scrollState.scrollToItem(index, indexoffset)
                     viewModel.loadPreviousMonth()
-                    scrollState.scrollToItem(3)
+
                 } else if (firstVisibleItemIndex >= totalItemsCount - 1) {
                     // User has scrolled to the bottom, load next month
                     val nextMonthIndex = months.size
@@ -89,7 +91,7 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
 }
 
 @Composable
-fun BannerHeader(year: Int, month: String, imageBanner: ImageBanner?) {
+private fun BannerHeader(year: Int, month: String, imageBanner: ImageBanner?) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -118,9 +120,18 @@ fun BannerHeader(year: Int, month: String, imageBanner: ImageBanner?) {
 }
 
 @Composable
-fun DayItem(date: Int, dayOfWeek: String) {
-    Text(
-        text = "$dayOfWeek, $date",
-        modifier = Modifier.padding(8.dp)
-    )
+private fun DayItem(date: Int, dayOfWeek: String) {
+    Box (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp)
+    ){
+        Text(
+            text = "$dayOfWeek, $date",
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.Center)
+        )
+    }
 }
+
