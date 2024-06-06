@@ -9,6 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -17,31 +21,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.kalendo.util.calender.CalendarImageBanners
-import com.example.kalendo.util.calender.GenerateCalendarData
+import com.example.kalendo.ui.viewmodel.CalendarViewModel
 import com.example.kalendo.util.calender.ImageBanner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 
+@OptIn(FlowPreview::class)
 @Composable
-fun ContentHome(modifier: Modifier = Modifier) {
+fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = viewModel()) {
     val scrollState = rememberLazyListState()
-    val months = GenerateCalendarData()
-    Column(
-        modifier = modifier
-            .fillMaxSize()
+    val months by rememberUpdatedState(viewModel.months)
+
+    LazyColumn(
+        state = scrollState,
+        modifier = modifier.fillMaxSize()
     ) {
-        LazyColumn(
-            state = scrollState,
-        ) {
-            months.forEach { month ->
-                item {
-                    BannerHeader(month.year, month.month, month.banner)
-                }
-                items(month.days) { day ->
-                    DayItem(day.date, day.dayOfWeek)
+        months.forEach { monthData ->
+            item {
+                BannerHeader(year = monthData.year, month = monthData.month, imageBanner = monthData.banner)
+            }
+            items(monthData.days) { day ->
+                DayItem(date = day.date, dayOfWeek = day.dayOfWeek)
+            }
+        }
+    }
+
+    LaunchedEffect(scrollState) {
+        snapshotFlow { scrollState.firstVisibleItemIndex }
+            .map { it }
+            .distinctUntilChanged()
+            .debounce(300)  // Debounce to avoid rapid triggering
+            .collectLatest { index ->
+                if (index >= months.size - 1) {
+                    val nextMonthIndex = months.size
+                    val year = 2022 + nextMonthIndex / 12
+                    val month = nextMonthIndex % 12
+                    viewModel.loadMoreMonths(year, month)
                 }
             }
-
-        }
     }
 }
 
@@ -71,10 +92,8 @@ fun BannerHeader(year: Int, month: String, imageBanner: ImageBanner?) {
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.background
         )
-
     }
 }
-
 
 @Composable
 fun DayItem(date: Int, dayOfWeek: String) {
