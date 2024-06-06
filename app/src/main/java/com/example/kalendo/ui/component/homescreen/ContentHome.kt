@@ -37,8 +37,6 @@ import java.util.Calendar
 fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = viewModel()) {
     val scrollState = rememberLazyListState()
     val months by rememberUpdatedState(viewModel.months)
-    val startYear = 2000
-    val endYear = 2025
 
     // TODO: Figure out the calculation
     // Calculate the initial scroll position
@@ -74,17 +72,13 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
                     // User has scrolled to the top, load previous month
                     val index = scrollState.firstVisibleItemIndex + 1
                     val indexoffset = scrollState.firstVisibleItemScrollOffset
-                    scrollState.scrollToItem(index, indexoffset)
                     viewModel.loadPreviousMonth()
+                    scrollState.scrollToItem(index, indexoffset)
 
                 } else if (firstVisibleItemIndex >= totalItemsCount - 1) {
                     // User has scrolled to the bottom, load next month
-                    val nextMonthIndex = months.size
-                    val nextYear = startYear + nextMonthIndex / 12
-                    val nextMonth = nextMonthIndex % 12
-                    if (nextYear <= endYear) {
-                        viewModel.loadNextMonth()
-                    }
+                    viewModel.loadNextMonth()
+
                 }
             }
     }

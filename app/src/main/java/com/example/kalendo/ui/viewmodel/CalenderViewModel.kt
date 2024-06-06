@@ -16,7 +16,7 @@ class CalendarViewModel : ViewModel() {
     val yearOffset = 1
 
     private val startYear = 2000
-    private val endYear = 2025
+    private val endYear = 2030
 
     init {
         loadInitialMonths()
@@ -33,7 +33,6 @@ class CalendarViewModel : ViewModel() {
 
     private fun generateInitialMonths(): List<Month> {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
         val monthsInYear = 12
 
         val monthsList = mutableListOf<Month>()
@@ -44,45 +43,52 @@ class CalendarViewModel : ViewModel() {
             }
         }
 
-//        for (month in 0 until monthsInYear) {
-//            monthsList.add(generateMonthData(currentYear, month))
-//        }
-
-
         return monthsList
     }
 
     fun loadPreviousMonth() {
-        if (_months.isNotEmpty()) {
-            val firstMonth = _months.first()
-            val year = firstMonth.year
-            val month = firstMonth.monthIndex
 
-            if (year > startYear || (year == startYear && month > 0)) {
-                val newMonth = if (month == 0) {
-                    generateMonthData(year - 1, 11)
-                } else {
-                    generateMonthData(year, month - 1)
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                if (_months.isNotEmpty()) {
+                    val firstMonth = _months.first()
+                    val year = firstMonth.year
+                    val month = firstMonth.monthIndex
+
+                    if (year > startYear || (year == startYear && month > 0)) {
+                        val newMonth = if (month == 0) {
+                            generateMonthData(year - 1, 11)
+                        } else {
+                            generateMonthData(year, month - 1)
+                        }
+                        _months.add(0, newMonth)
+                    }
                 }
-                _months.add(0, newMonth)
             }
         }
+
     }
 
     fun loadNextMonth() {
-        if (_months.isNotEmpty()) {
-            val lastMonth = _months.last()
-            val year = lastMonth.year
-            val month = lastMonth.monthIndex
 
-            if (year < endYear || (year == endYear && month < 11)) {
-                val newMonth = if (month == 11) {
-                    generateMonthData(year + 1, 0)
-                } else {
-                    generateMonthData(year, month + 1)
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                if (_months.isNotEmpty()) {
+                    val lastMonth = _months.last()
+                    val year = lastMonth.year
+                    val month = lastMonth.monthIndex
+
+                    if (year < endYear || (year == endYear && month < 11)) {
+                        val newMonth = if (month == 11) {
+                            generateMonthData(year + 1, 0)
+                        } else {
+                            generateMonthData(year, month + 1)
+                        }
+                        _months.add(newMonth)
+                    }
                 }
-                _months.add(newMonth)
             }
         }
+
     }
 }
