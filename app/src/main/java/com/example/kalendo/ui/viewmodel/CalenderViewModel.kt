@@ -13,6 +13,9 @@ class CalendarViewModel : ViewModel() {
     private val _months = mutableStateListOf<Month>()
     val months: List<Month> = _months
 
+    private val startYear = 2000
+    private val endYear = 2002
+
     init {
         loadInitialMonths()
     }
@@ -27,10 +30,8 @@ class CalendarViewModel : ViewModel() {
     }
 
     private fun generateInitialMonths(): List<Month> {
-        val startYear = 2022
-        val endYear = 2023
         val monthsInYear = 12
-        return (startYear..endYear).flatMap { year ->
+        return (startYear..startYear + 1).flatMap { year ->
             (0 until monthsInYear).map { month ->
                 generateMonthData(year, month)
             }
@@ -38,10 +39,12 @@ class CalendarViewModel : ViewModel() {
     }
 
     fun loadMoreMonths(year: Int, month: Int) {
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                val newMonth = generateMonthData(year, month)
-                _months.add(newMonth)
+        if (year in startYear..endYear) {
+            viewModelScope.launch {
+                withContext(Dispatchers.Default) {
+                    val newMonth = generateMonthData(year, month)
+                    _months.add(newMonth)
+                }
             }
         }
     }

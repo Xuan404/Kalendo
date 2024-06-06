@@ -35,6 +35,8 @@ import kotlinx.coroutines.flow.debounce
 fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = viewModel()) {
     val scrollState = rememberLazyListState()
     val months by rememberUpdatedState(viewModel.months)
+    val startYear = 2000
+    val endYear = 2002
 
     LazyColumn(
         state = scrollState,
@@ -58,9 +60,11 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
             .collectLatest { index ->
                 if (index >= months.size - 1) {
                     val nextMonthIndex = months.size
-                    val year = 2022 + nextMonthIndex / 12
-                    val month = nextMonthIndex % 12
-                    viewModel.loadMoreMonths(year, month)
+                    val nextYear = startYear + nextMonthIndex / 12
+                    val nextMonth = nextMonthIndex % 12
+                    if (nextYear <= endYear) {
+                        viewModel.loadMoreMonths(nextYear, nextMonth)
+                    }
                 }
             }
     }
