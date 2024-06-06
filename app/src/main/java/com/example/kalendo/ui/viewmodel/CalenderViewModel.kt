@@ -8,13 +8,14 @@ import com.example.kalendo.util.calender.generateMonthData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 class CalendarViewModel : ViewModel() {
     private val _months = mutableStateListOf<Month>()
     val months: List<Month> = _months
 
-    private val startYear = 2000
-    private val endYear = 2002
+    private val startYear = 2020
+    private val endYear = 2026
 
     init {
         loadInitialMonths()
@@ -30,21 +31,51 @@ class CalendarViewModel : ViewModel() {
     }
 
     private fun generateInitialMonths(): List<Month> {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
         val monthsInYear = 12
-        return (startYear..startYear + 1).flatMap { year ->
-            (0 until monthsInYear).map { month ->
-                generateMonthData(year, month)
+
+        val monthsList = mutableListOf<Month>()
+
+        for (year in currentYear - 1..currentYear + 1) {
+            for (month in 0 until monthsInYear) {
+                monthsList.add(generateMonthData(year, month))
+            }
+        }
+
+        return monthsList
+    }
+
+    fun loadPreviousMonth() {
+        if (_months.isNotEmpty()) {
+            val firstMonth = _months.first()
+            val year = firstMonth.year
+            val month = firstMonth.monthIndex
+
+            if (year > startYear || (year == startYear && month > 0)) {
+                val newMonth = if (month == 0) {
+                    generateMonthData(year - 1, 11)
+                } else {
+                    generateMonthData(year, month - 1)
+                }
+                _months.add(0, newMonth)
             }
         }
     }
 
-    fun loadMoreMonths(year: Int, month: Int) {
-        if (year in startYear..endYear) {
-            viewModelScope.launch {
-                withContext(Dispatchers.Default) {
-                    val newMonth = generateMonthData(year, month)
-                    _months.add(newMonth)
+    fun loadNextMonth() {
+        if (_months.isNotEmpty()) {
+            val lastMonth = _months.last()
+            val year = lastMonth.year
+            val month = lastMonth.monthIndex
+
+            if (year < endYear || (year == endYear && month < 11)) {
+                val newMonth = if (month == 11) {
+                    generateMonthData(year + 1, 0)
+                } else {
+                    generateMonthData(year, month + 1)
                 }
+                _months.add(newMonth)
             }
         }
     }

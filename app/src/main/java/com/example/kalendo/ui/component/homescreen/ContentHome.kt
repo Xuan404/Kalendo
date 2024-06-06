@@ -29,14 +29,27 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import java.util.Calendar
 
 @OptIn(FlowPreview::class)
 @Composable
 fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = viewModel()) {
     val scrollState = rememberLazyListState()
     val months by rememberUpdatedState(viewModel.months)
-    val startYear = 2000
-    val endYear = 2002
+    val startYear = 2020
+    val endYear = 2026
+
+    // TODO: Figure out the calculation
+    // Calculate the initial scroll position
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+    val initialIndex = (currentYear - startYear) * 12 + currentMonth
+    //Log.i("CurrentTime", initialIndex.toString())
+
+    // Scroll to the current month on first launch
+    LaunchedEffect(Unit) {
+        scrollState.scrollToItem(initialIndex)
+    }
 
     LazyColumn(
         state = scrollState,
@@ -53,17 +66,22 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
     }
 
     LaunchedEffect(scrollState) {
-        snapshotFlow { scrollState.firstVisibleItemIndex }
+        snapshotFlow { scrollState.firstVisibleItemIndex to scrollState.layoutInfo.totalItemsCount }
             .map { it }
             .distinctUntilChanged()
             .debounce(300)  // Debounce to avoid rapid triggering
-            .collectLatest { index ->
-                if (index >= months.size - 1) {
+            .collectLatest { (firstVisibleItemIndex, totalItemsCount) ->
+                if (firstVisibleItemIndex == 0) {
+                    // User has scrolled to the top, load previous month
+                    viewModel.loadPreviousMonth()
+                    scrollState.scrollToItem(3)
+                } else if (firstVisibleItemIndex >= totalItemsCount - 1) {
+                    // User has scrolled to the bottom, load next month
                     val nextMonthIndex = months.size
                     val nextYear = startYear + nextMonthIndex / 12
                     val nextMonth = nextMonthIndex % 12
                     if (nextYear <= endYear) {
-                        viewModel.loadMoreMonths(nextYear, nextMonth)
+                        viewModel.loadNextMonth()
                     }
                 }
             }
