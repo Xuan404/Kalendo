@@ -25,14 +25,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -41,7 +37,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -49,9 +44,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.R
 import com.example.kalendo.ui.theme.defaultColor
 import com.example.kalendo.ui.viewmodel.CourseViewModel
-import com.example.kalendo.util.ColorItem
+import com.example.kalendo.domain.model.ColorItemModel
 import com.example.kalendo.util.CourseColorLabel
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -63,7 +57,7 @@ fun FullScreenDialogAddCourse(viewModel: CourseViewModel = hiltViewModel(), onDi
     val focusRequester = remember { FocusRequester() }
     var color by remember { mutableStateOf<Color?>(defaultColor) }
     var dialogVisible by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf<ColorItem?>(null) } // color value to be send to database
+    var selectedItem by remember { mutableStateOf<ColorItemModel?>(null) } // color value to be send to database
     // Invalid Input Alert Dialog
     var showAlertDialog by remember { mutableStateOf(false) }
     var showAlertMessage by remember { mutableStateOf("") }
@@ -287,7 +281,7 @@ private fun BodyCourseTitle(
 
 @Composable
 private fun BodyCourseColorLabel(
-    selectedItem: ColorItem?,
+    selectedItem: ColorItemModel?,
     color: Color?,
     focusRequester: FocusRequester,
     onClickTrailingIcon: () -> Unit,
@@ -339,7 +333,7 @@ private fun BodyCourseColorLabel(
 @Composable
 private fun BodyCourseColorLabelDialog(
     onDismiss: () -> Unit,
-    onItemClick: (ColorItem) -> Unit,
+    onItemClick: (ColorItemModel) -> Unit,
 ){
     Dialog(
         onDismissRequest = { onDismiss() }

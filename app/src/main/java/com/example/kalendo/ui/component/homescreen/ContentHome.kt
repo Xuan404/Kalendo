@@ -24,12 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.ui.viewmodel.CalendarViewModel
-import com.example.kalendo.util.calender.ImageBanner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.FlowPreview
+import com.example.kalendo.domain.model.ImageBannerModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import java.util.Calendar
 
 @Composable
@@ -80,7 +77,7 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hi
 }
 
 @Composable
-private fun BannerHeader(year: Int, month: String, imageBanner: ImageBanner?) {
+private fun BannerHeader(year: Int, month: String, imageBanner: ImageBannerModel?) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

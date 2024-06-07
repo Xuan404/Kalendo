@@ -3,8 +3,8 @@ package com.example.kalendo.ui.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kalendo.util.calender.Month
-import com.example.kalendo.util.calender.generateMonthData
+import com.example.kalendo.domain.model.MonthModel
+import com.example.kalendo.util.generateMonthData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor() : ViewModel() {
-    private val _months = mutableStateListOf<Month>()
-    val months: List<Month> = _months
+    private val _months = mutableStateListOf<MonthModel>()
+    val months: List<MonthModel> = _months
 
     val yearOffset = 1
 
@@ -35,11 +35,11 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun generateInitialMonths(): List<Month> {
+    private fun generateInitialMonths(): List<MonthModel> {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val monthsInYear = 12
 
-        val monthsList = mutableListOf<Month>()
+        val monthsList = mutableListOf<MonthModel>()
 
         for (year in (currentYear - yearOffset)..(currentYear + yearOffset)) {
             for (month in 0 until monthsInYear) {

@@ -1,6 +1,6 @@
 package com.example.kalendo.util
 
-import androidx.compose.ui.graphics.Color
+import com.example.kalendo.domain.model.ColorItemModel
 import com.example.kalendo.ui.theme.courseColor0
 import com.example.kalendo.ui.theme.courseColor1
 import com.example.kalendo.ui.theme.courseColor2
@@ -15,15 +15,15 @@ import com.example.kalendo.ui.theme.courseColor9
 object CourseColorLabel {
 
     val colorItems = listOf(
-        ColorItem("Red", courseColor1),
-        ColorItem("Orange", courseColor2),
-        ColorItem("Banana", courseColor3),
-        ColorItem("Green", courseColor4),
-        ColorItem("Greenishh", courseColor5),
-        ColorItem("Looks Purple", courseColor6),
-        ColorItem("Light Purple?", courseColor7),
-        ColorItem("Purple Pink!", courseColor8),
-        ColorItem("Light Skinned", courseColor9),
-        ColorItem("Blue", courseColor0),
+        ColorItemModel("Red", courseColor1),
+        ColorItemModel("Orange", courseColor2),
+        ColorItemModel("Banana", courseColor3),
+        ColorItemModel("Green", courseColor4),
+        ColorItemModel("Greenishh", courseColor5),
+        ColorItemModel("Looks Purple", courseColor6),
+        ColorItemModel("Light Purple?", courseColor7),
+        ColorItemModel("Purple Pink!", courseColor8),
+        ColorItemModel("Light Skinned", courseColor9),
+        ColorItemModel("Blue", courseColor0),
     )
 }
