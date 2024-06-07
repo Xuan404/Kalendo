@@ -13,10 +13,11 @@ import java.util.Calendar
 class CalendarViewModel : ViewModel() {
     private val _months = mutableStateListOf<Month>()
     val months: List<Month> = _months
+
     val yearOffset = 1
 
-    private val startYear = 2000
-    private val endYear = 2030
+    private val startYear = 1900
+    private val endYear = 2100
 
     init {
         loadInitialMonths()

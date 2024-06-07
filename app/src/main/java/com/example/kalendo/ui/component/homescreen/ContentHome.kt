@@ -3,6 +3,7 @@ package com.example.kalendo.ui.component.homescreen
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,17 +31,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import java.util.Calendar
 
-@OptIn(FlowPreview::class)
 @Composable
 fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = viewModel()) {
     val scrollState = rememberLazyListState()
     val months by rememberUpdatedState(viewModel.months)
 
-    // TODO: Figure out the calculation
     // Calculate the initial scroll position
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val initialIndex = (viewModel.yearOffset * 12) + currentMonth
-    //Log.i("CurrentTime", initialIndex.toString())
 
     // Scroll to the current month on first launch
     LaunchedEffect(Unit) {
@@ -63,16 +61,15 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
     LaunchedEffect(scrollState) {
         snapshotFlow { scrollState.firstVisibleItemIndex to scrollState.firstVisibleItemScrollOffset}
             .map { it }
-            .debounce(300)  // Debounce to avoid rapid triggering
+            //.debounce(100)  // Debounce to avoid rapid triggering
             .collectLatest { (firstVisibleItemIndex, firstVisibleItemScrollOffset) ->
-                if (firstVisibleItemIndex <= 12 ) {
+                if (firstVisibleItemIndex <= 3 ) {
                     // User has scrolled to the top, load previous month
-                    val index = firstVisibleItemIndex + 1
-                    scrollState.scrollToItem(index, firstVisibleItemScrollOffset)
+                    scrollState.scrollToItem( firstVisibleItemIndex + 1, firstVisibleItemScrollOffset)
                     viewModel.loadPreviousMonth()
 
 
-                } else if (firstVisibleItemIndex >=  (scrollState.layoutInfo.totalItemsCount - 12)) {
+                } else if (firstVisibleItemIndex >=  (scrollState.layoutInfo.totalItemsCount - 3)) {
                     // User has scrolled to the bottom, load next month
                     viewModel.loadNextMonth()
 
@@ -116,6 +113,7 @@ private fun DayItem(date: Int, dayOfWeek: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp)
+            .clickable {  }
     ){
         Text(
             text = "$dayOfWeek, $date",
