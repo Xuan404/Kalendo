@@ -48,56 +48,38 @@ class CalendarViewModel : ViewModel() {
 
     fun loadPreviousMonth() {
 
+        if (_months.isNotEmpty()) {
+            val firstMonth = _months.first()
+            val year = firstMonth.year
+            val month = firstMonth.monthIndex
 
-                if (_months.isNotEmpty()) {
-                    val firstMonth = _months.first()
-                    val year = firstMonth.year
-                    val month = firstMonth.monthIndex
-
-                    if (year > startYear || (year == startYear && month > 0)) {
-                        val newMonth = if (month == 0) {
-                            generateMonthData(year - 1, 11)
-                        } else {
-                            generateMonthData(year, month - 1)
-                        }
-                        _months.add(0, newMonth)
-                    }
+            if (year > startYear || (year == startYear && month > 0)) {
+                val newMonth = if (month == 0) {
+                    generateMonthData(year - 1, 11)
+                } else {
+                    generateMonthData(year, month - 1)
                 }
-                if (_months.isNotEmpty()) {
-                    val firstMonth = _months.first()
-                    val year = firstMonth.year
-                    val month = firstMonth.monthIndex
+                _months.add(0, newMonth)
+            }
+        }
 
-                    if (year > startYear || (year == startYear && month > 0)) {
-                        val newMonth = if (month == 0) {
-                            generateMonthData(year - 1, 11)
-                        } else {
-                            generateMonthData(year, month - 1)
-                        }
-                        _months.add(0, newMonth)
-                    }
-                }
 
     }
 
     fun loadNextMonth() {
 
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                if (_months.isNotEmpty()) {
-                    val lastMonth = _months.last()
-                    val year = lastMonth.year
-                    val month = lastMonth.monthIndex
+        if (_months.isNotEmpty()) {
+            val lastMonth = _months.last()
+            val year = lastMonth.year
+            val month = lastMonth.monthIndex
 
-                    if (year < endYear || (year == endYear && month < 11)) {
-                        val newMonth = if (month == 11) {
-                            generateMonthData(year + 1, 0)
-                        } else {
-                            generateMonthData(year, month + 1)
-                        }
-                        _months.add(newMonth)
-                    }
+            if (year < endYear || (year == endYear && month < 11)) {
+                val newMonth = if (month == 11) {
+                    generateMonthData(year + 1, 0)
+                } else {
+                    generateMonthData(year, month + 1)
                 }
+                _months.add(newMonth)
             }
         }
 

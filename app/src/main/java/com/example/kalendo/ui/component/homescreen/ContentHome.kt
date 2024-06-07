@@ -65,14 +65,14 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = vi
             .map { it }
             .debounce(300)  // Debounce to avoid rapid triggering
             .collectLatest { (firstVisibleItemIndex, firstVisibleItemScrollOffset) ->
-                if (firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0) {
+                if (firstVisibleItemIndex <= 12 ) {
                     // User has scrolled to the top, load previous month
-                    val index = firstVisibleItemIndex + 2
+                    val index = firstVisibleItemIndex + 1
                     scrollState.scrollToItem(index, firstVisibleItemScrollOffset)
                     viewModel.loadPreviousMonth()
 
 
-                } else if (firstVisibleItemIndex >=  scrollState.layoutInfo.totalItemsCount - 1) {
+                } else if (firstVisibleItemIndex >=  (scrollState.layoutInfo.totalItemsCount - 12)) {
                     // User has scrolled to the bottom, load next month
                     viewModel.loadNextMonth()
 
