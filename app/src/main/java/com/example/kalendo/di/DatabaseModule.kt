@@ -21,7 +21,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-//object DatabaseModule {
+object DatabaseModule {
+
+    // TODO: Uncomment out this one after finishing up the app
 //    @Provides
 //    @Singleton
 //    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -31,23 +33,6 @@ import javax.inject.Singleton
 //            "actual_database"
 //        ).build()
 //    }
-//
-//    @Provides
-//    fun provideCourseDao(database: AppDatabase): CourseDao {
-//        return database.courseDao()
-//    }
-//
-//    @Provides
-//    fun provideAssignmentDao(database: AppDatabase): AssignmentDao {
-//        return database.assignmentDao()
-//    }
-//
-//}
-
-
-// For Production/Testing purpose only
-object DatabaseModule {
-
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {

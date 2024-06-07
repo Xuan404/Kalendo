@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.ui.viewmodel.CalendarViewModel
 import com.example.kalendo.util.calender.ImageBanner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,7 +33,7 @@ import kotlinx.coroutines.flow.debounce
 import java.util.Calendar
 
 @Composable
-fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = viewModel()) {
+fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hiltViewModel()) {
     val scrollState = rememberLazyListState()
     val months by rememberUpdatedState(viewModel.months)
 

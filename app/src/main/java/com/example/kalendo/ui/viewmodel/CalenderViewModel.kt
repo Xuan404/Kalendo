@@ -5,12 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kalendo.util.calender.Month
 import com.example.kalendo.util.calender.generateMonthData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
+import javax.inject.Inject
 
-class CalendarViewModel : ViewModel() {
+@HiltViewModel
+class CalendarViewModel @Inject constructor() : ViewModel() {
     private val _months = mutableStateListOf<Month>()
     val months: List<Month> = _months
 
