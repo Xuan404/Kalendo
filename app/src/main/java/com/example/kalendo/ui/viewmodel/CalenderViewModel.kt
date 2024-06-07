@@ -48,8 +48,7 @@ class CalendarViewModel : ViewModel() {
 
     fun loadPreviousMonth() {
 
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+
                 if (_months.isNotEmpty()) {
                     val firstMonth = _months.first()
                     val year = firstMonth.year
@@ -64,8 +63,20 @@ class CalendarViewModel : ViewModel() {
                         _months.add(0, newMonth)
                     }
                 }
-            }
-        }
+                if (_months.isNotEmpty()) {
+                    val firstMonth = _months.first()
+                    val year = firstMonth.year
+                    val month = firstMonth.monthIndex
+
+                    if (year > startYear || (year == startYear && month > 0)) {
+                        val newMonth = if (month == 0) {
+                            generateMonthData(year - 1, 11)
+                        } else {
+                            generateMonthData(year, month - 1)
+                        }
+                        _months.add(0, newMonth)
+                    }
+                }
 
     }
 
