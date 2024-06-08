@@ -110,8 +110,7 @@ private fun BannerHeader(year: Int, month: String, imageBanner: ImageBannerModel
 }
 
 @Composable
-private fun DayItem(date: Int, dayOfWeek: String) {
-    val currentDate = Calendar.getInstance().get(Calendar.DATE)
+private fun DayItem(date: Int, dayOfWeek: String, today: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,7 +123,7 @@ private fun DayItem(date: Int, dayOfWeek: String) {
                 .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (date != currentDate) {
+            if (!today) {
                 // Day of the week
                 Text(
                     text = dayOfWeek.take(3),
@@ -171,7 +170,10 @@ private fun DayItem(date: Int, dayOfWeek: String) {
 @Composable
 private fun MonthItem(month: MonthModel){
 
-    var count = 0
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+    val currentDate = Calendar.getInstance().get(Calendar.DATE)
+
     BannerHeader(year = month.year, month = month.month, imageBanner = month.banner)
     Row (
         modifier = Modifier
@@ -186,16 +188,17 @@ private fun MonthItem(month: MonthModel){
             text = "Deadline",
         )
     }
-    for (day in month.days) {
-        DayItem(date = day.date, dayOfWeek = day.dayOfWeek)
-        count ++
-        if (count != month.days.size) {
+    month.days.forEachIndexed { index, day ->
+        val today = month.year == currentYear && month.monthIndex == currentMonth && day.date == currentDate
+        DayItem(date = day.date, dayOfWeek = day.dayOfWeek, today = today)
+
+        if (index != month.days.size - 1) {
             HorizontalDivider(
                 thickness = 1.dp,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 15.dp))
+                modifier = Modifier.padding(horizontal = 15.dp)
+            )
         }
-
     }
 
 }
