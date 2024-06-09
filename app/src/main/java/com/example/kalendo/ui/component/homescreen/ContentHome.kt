@@ -9,24 +9,24 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,24 +38,28 @@ import kotlinx.coroutines.flow.collectLatest
 import java.util.Calendar
 
 @Composable
-fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hiltViewModel()) {
+fun ContentHome(
+    modifier: Modifier = Modifier,
+    viewModel: CalendarViewModel = hiltViewModel(),
+    triggerScrollToCurrentDate: Boolean,
+    onScrollToCurrentDateHandled: () -> Unit
+) {
     val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     val months by rememberUpdatedState(viewModel.months)
+    var initialIndex by rememberSaveable { mutableIntStateOf(0) }
 
     // Calculate the initial scroll position
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val currentDate = Calendar.getInstance().get(Calendar.DATE)
 
     // (IMPORTANT!!) The offset is calculated Manually not Dynamically, so might need to recalculate
-    val initialIndex = (viewModel.yearOffset * 12) + currentMonth
     val initialIndexOffset = 625 + ((160 * currentDate) - 160 * 4)
 
     LazyColumn(
         state = scrollState,
         modifier = modifier.fillMaxSize()
     ) {
-        Log.i("CurrentIndex", scrollState.firstVisibleItemIndex.toString())
+        Log.i("CurrentIndex", initialIndex.toString())
         items(months) {month ->
             MonthItem(month = month)
         }
@@ -69,13 +73,11 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hi
                 if (firstVisibleItemIndex <= 1 ) {
                     // User has scrolled to the top, load previous month
                     scrollState.scrollToItem( firstVisibleItemIndex + 1, firstVisibleItemScrollOffset)
+                    initialIndex += 1
                     viewModel.loadPreviousMonth()
-
-
                 } else if (firstVisibleItemIndex >=  (scrollState.layoutInfo.totalItemsCount - 1)) {
                     // User has scrolled to the bottom, load next month
                     viewModel.loadNextMonth()
-
                 }
             }
     }
@@ -83,7 +85,17 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hi
     // Scroll to the current month on first launch
     LaunchedEffect(Unit) {
         if (scrollState.firstVisibleItemIndex == 0 && scrollState.firstVisibleItemScrollOffset == 0) {
+            initialIndex = (viewModel.yearOffset * 12) + currentMonth
             scrollState.scrollToItem(initialIndex, initialIndexOffset)
+        }
+    }
+
+    // Scroll to the current date on button press
+    LaunchedEffect(triggerScrollToCurrentDate) {
+        if (triggerScrollToCurrentDate) {
+            Log.i("CurrentIndexx", initialIndex.toString())
+            scrollState.scrollToItem(initialIndex, initialIndexOffset)
+            onScrollToCurrentDateHandled()
         }
     }
 

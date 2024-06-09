@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -16,9 +20,11 @@ import com.example.kalendo.ui.component.homescreen.ContentHome
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.util.Strings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContent(navController: NavController) {
+
+    // State to trigger the scroll action
+    var triggerScrollToCurrentDate by remember{mutableStateOf(false)}
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -26,11 +32,17 @@ fun HomeScreenContent(navController: NavController) {
                 TopAppBarHome(
                     title = Strings.APP_NAME,
                     onNavigationIconClick = { /* Handle navigation icon click */ },
-                    actions = {}
+                    onReturnToDateClick = {
+                        triggerScrollToCurrentDate = true
+                    }
                 )
             },
             content = { innerPadding ->
-                ContentHome(modifier = Modifier.padding(innerPadding))
+                ContentHome(
+                    modifier = Modifier.padding(innerPadding),
+                    triggerScrollToCurrentDate = triggerScrollToCurrentDate,
+                    onScrollToCurrentDateHandled = { triggerScrollToCurrentDate = false }
+                )
             }
         )
         FabHome(

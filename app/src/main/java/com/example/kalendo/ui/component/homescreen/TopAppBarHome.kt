@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.*
 fun TopAppBarHome(
     title: String,
     onNavigationIconClick: (() -> Unit)? = null,
-    actions: @Composable (RowScope.() -> Unit)? = null
+    onReturnToDateClick : () -> Unit
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -37,10 +37,10 @@ fun TopAppBarHome(
                     modifier = Modifier.padding(8.dp)
                 )
             }
-            IconButton(onClick = { /* Do nothing for preview */ }) {
+            IconButton(onClick =  {onReturnToDateClick()}) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_date1),
-                    contentDescription = "Grid Linear",
+                    contentDescription = "Return to current date",
                     modifier = Modifier.padding(8.dp)
                 )
             }
@@ -63,186 +63,7 @@ fun MyTopAppBarPreview() {
     KalendoTheme {
         TopAppBarHome(
             title = "Kalendo",
+            onReturnToDateClick = {}
         )
     }
 }
-
-
-
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun MyTopAppBar(
-//    title: String,
-//    onNavigationIconClick: (() -> Unit)? = null,
-//    actions: @Composable (RowScope.() -> Unit)? = null,
-//    onDateSelected: (String) -> Unit
-//) {
-//    var expanded by remember { mutableStateOf(false) }
-//
-//    TopAppBar(
-//        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = MaterialTheme.colorScheme.primaryContainer,
-//            titleContentColor = MaterialTheme.colorScheme.primary
-//        ),
-//        title = {
-//            Box(
-//                modifier = Modifier
-//                    .clickable { expanded = true }
-//                    .padding(8.dp)
-//            ) {
-//                Text(text = title, textAlign = TextAlign.Center)
-//                DropdownMenu(
-//                    expanded = expanded,
-//                    onDismissRequest = { expanded = false }
-//                ) {
-//                    val months = listOf(
-//                        "January", "February", "March", "April",
-//                        "May", "June", "July", "August",
-//                        "September", "October", "November", "December"
-//                    )
-//                    months.forEach { month ->
-//                        DropdownMenuItem(
-//                            text = { Text(month) },
-//                            onClick = {
-//                                expanded = false
-//                                onDateSelected(month)
-//                            }
-//                        )
-//                    }
-//                }
-//            }
-//        },
-//        actions = actions ?: {}
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun MyTopAppBarPreview() {
-//    KalendoTheme {
-//        MyTopAppBar(
-//            title = "Select Month",
-//            onNavigationIconClick = { /* Do nothing for preview */ },
-//            actions = {
-//                IconButton(onClick = { /* Do nothing for preview */ }) {
-//                    Icon(Icons.Default.Search, contentDescription = "Search")
-//                }
-//                IconButton(onClick = { /* Profile action */ }) {
-//                    Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
-//                }
-//            },
-//            onDateSelected = { selectedMonth ->
-//                // Handle date selection
-//            }
-//        )
-//    }
-//}
-//
-
-
-
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun MyTopAppBar(
-//    title: String,
-//    onNavigationIconClick: (() -> Unit)? = null,
-//    actions: @Composable (RowScope.() -> Unit)? = null,
-//    onDateSelected: (String) -> Unit
-//) {
-//    var expanded by remember { mutableStateOf(false) }
-//    var selectedMonth by remember { mutableStateOf(title) }
-//
-//    val months = listOf(
-//        "Jan", "Feb", "Mar", "Apr",
-//        "May", "Jun", "Jul", "Aug",
-//        "Sep", "Oct", "Nov", "Dec"
-//    )
-//
-//    TopAppBar(
-//        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = MaterialTheme.colorScheme.primaryContainer,
-//            titleContentColor = MaterialTheme.colorScheme.primary
-//        ),
-//        title = {
-//            Box(
-//                modifier = Modifier
-//                    .clickable { expanded = true }
-//                    .padding(8.dp)
-//            ) {
-//                Row(verticalAlignment = Alignment.CenterVertically) {
-//                    Text(text = selectedMonth, textAlign = TextAlign.Center)
-//                    Icon(
-//                        imageVector = Icons.Default.ArrowDropDown,
-//                        contentDescription = "Dropdown",
-//                        modifier = Modifier.size(24.dp)
-//                    )
-//                }
-//                DropdownMenu(
-//                    expanded = expanded,
-//                    onDismissRequest = { expanded = false },
-//                    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-//                ) {
-//                    months.forEach { month ->
-//                        DropdownMenuItem(
-//                            text = {
-//                                Box(
-//                                    modifier = Modifier
-//                                        .padding(4.dp)
-//                                        .background(
-//                                            if (month == selectedMonth) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-//                                            else Color.Transparent,
-//                                            shape = RoundedCornerShape(4.dp)
-//                                        )
-//                                        .padding(horizontal = 8.dp, vertical = 4.dp)
-//                                ) {
-//                                    Text(
-//                                        text = month,
-//                                        color = if (month == selectedMonth) MaterialTheme.colorScheme.primary else LocalContentColor.current
-//                                    )
-//                                }
-//                            },
-//                            onClick = {
-//                                expanded = false
-//                                selectedMonth = month
-//                                onDateSelected(month)
-//                            }
-//                        )
-//                    }
-//                }
-//            }
-//        },
-//        actions = actions ?: {}
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun MyTopAppBarPreview() {
-//    KalendoTheme {
-//        MyTopAppBar(
-//            title = "May",
-//            onNavigationIconClick = { /* Do nothing for preview */ },
-//            actions = {
-//                IconButton(onClick = { /* Do nothing for preview */ }) {
-//                    Icon(Icons.Default.Search, contentDescription = "Search")
-//                }
-//                IconButton(onClick = { /* Do nothing for preview */ }) {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.grid_linear),
-//                        contentDescription = "Grid Linear",
-//                        modifier = Modifier.padding(4.dp),
-//                        tint = Color.Unspecified // Ensure original colors are used
-//                    )
-//                }
-//                IconButton(onClick = { /* Profile action */ }) {
-//                    Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
-//                }
-//            },
-//            onDateSelected = { selectedMonth ->
-//                // Handle date selection
-//            }
-//        )
-//    }
-//}
