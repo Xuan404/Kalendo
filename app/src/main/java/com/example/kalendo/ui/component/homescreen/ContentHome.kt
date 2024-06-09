@@ -43,8 +43,13 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hi
     val months by rememberUpdatedState(viewModel.months)
 
     // Calculate the initial scroll position
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+    val currentDate = Calendar.getInstance().get(Calendar.DATE)
+
+    // (IMPORTANT!!) The offset is calculated Manually not Dynamically, so might need to recalculate
     val initialIndex = (viewModel.yearOffset * 12) + currentMonth
+    val initialIndexOffset = 625 + ((160 * currentDate) - 160 * 4)
 
     LazyColumn(
         state = scrollState,
@@ -78,7 +83,7 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hi
     // Scroll to the current month on first launch
     LaunchedEffect(Unit) {
         if (scrollState.firstVisibleItemIndex == 0 && scrollState.firstVisibleItemScrollOffset == 0) {
-            scrollState.scrollToItem(initialIndex)
+            scrollState.scrollToItem(initialIndex, initialIndexOffset)
         }
     }
 
