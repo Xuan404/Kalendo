@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,17 +39,12 @@ import java.util.Calendar
 
 @Composable
 fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hiltViewModel()) {
-    val scrollState = rememberLazyListState()
+    val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     val months by rememberUpdatedState(viewModel.months)
 
     // Calculate the initial scroll position
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val initialIndex = (viewModel.yearOffset * 12) + currentMonth
-
-    // Scroll to the current month on first launch
-    LaunchedEffect(Unit) {
-        scrollState.scrollToItem(initialIndex)
-    }
 
     LazyColumn(
         state = scrollState,
@@ -77,6 +74,14 @@ fun ContentHome(modifier: Modifier = Modifier, viewModel: CalendarViewModel = hi
                 }
             }
     }
+
+    // Scroll to the current month on first launch
+    LaunchedEffect(Unit) {
+        if (scrollState.firstVisibleItemIndex == 0 && scrollState.firstVisibleItemScrollOffset == 0) {
+            scrollState.scrollToItem(initialIndex)
+        }
+    }
+
 }
 
 @Composable
