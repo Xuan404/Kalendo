@@ -23,21 +23,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    // TODO: Uncomment out this one after finishing up the app
-//    @Provides
-//    @Singleton
-//    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
-//        return Room.databaseBuilder(
-//            appContext,
-//            AppDatabase::class.java,
-//            "actual_database"
-//        ).build()
-//    }
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        val scope = CoroutineScope(SupervisorJob())
-        return AppDatabase.getDatabase(appContext, scope)
+        return Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java,
+            "database1"
+        ).build()
     }
 
     @Provides
