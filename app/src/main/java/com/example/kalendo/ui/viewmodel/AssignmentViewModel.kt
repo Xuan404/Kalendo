@@ -1,9 +1,11 @@
 package com.example.kalendo.ui.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kalendo.domain.model.AssignmentModel
+import com.example.kalendo.domain.model.AssignmentWithCourseColor
 import com.example.kalendo.domain.repository.AssignmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,6 +20,9 @@ class AssignmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     val assignments = MutableLiveData<List<AssignmentModel>>()
+    private val _assignmentsWithColor = MutableLiveData<List<AssignmentWithCourseColor>>()
+    val assignmentsWithColor: LiveData<List<AssignmentWithCourseColor>> = _assignmentsWithColor
+
 
     fun getAssignmentsForCourse(courseId: Int) {
         viewModelScope.launch {
@@ -37,6 +42,14 @@ class AssignmentViewModel @Inject constructor(
             val courseId = assignments.value?.find { it.id == assignmentId }?.courseId ?: return@launch
             assignmentRepository.deleteAssignment(assignmentId)
             getAssignmentsForCourse(courseId) // Refresh the list
+        }
+    }
+
+
+    fun getAssignmentsWithCourseColorByDate(date: LocalDate) {
+        viewModelScope.launch {
+            val assignments = assignmentRepository.getAssignmentsWithCourseColorByDate(date)
+            _assignmentsWithColor.postValue(assignments)
         }
     }
 }

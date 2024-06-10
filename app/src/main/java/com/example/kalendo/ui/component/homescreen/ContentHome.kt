@@ -82,10 +82,10 @@ fun ContentHome(
             }
     }
 
-    // Scroll to the current month on first launch
+    // Scroll to the current date on first launch
     LaunchedEffect(Unit) {
         if (scrollState.firstVisibleItemIndex == 0 && scrollState.firstVisibleItemScrollOffset == 0) {
-            initialIndex = (viewModel.yearOffset * 12) + currentMonth
+            initialIndex = (viewModel.yearOffset * 12) + currentMonth //Current Month Offset
             scrollState.scrollToItem(initialIndex, initialIndexOffset)
         }
     }
