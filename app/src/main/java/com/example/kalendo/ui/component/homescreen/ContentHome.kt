@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -30,9 +29,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.kalendo.domain.model.AssignmentWithCourseColor
 import com.example.kalendo.ui.viewmodel.CalendarViewModel
 import com.example.kalendo.domain.model.ImageBannerModel
 import com.example.kalendo.domain.model.MonthModel
+import com.example.kalendo.ui.viewmodel.AssignmentViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Calendar
@@ -40,12 +41,13 @@ import java.util.Calendar
 @Composable
 fun ContentHome(
     modifier: Modifier = Modifier,
-    viewModel: CalendarViewModel = hiltViewModel(),
+    calendarViewModel: CalendarViewModel = hiltViewModel(),
+    assignmentViewModel: AssignmentViewModel = hiltViewModel(),
     triggerScrollToCurrentDate: Boolean,
     onScrollToCurrentDateHandled: () -> Unit
 ) {
     val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    val months by rememberUpdatedState(viewModel.months)
+    val months by rememberUpdatedState(calendarViewModel.months)
     var initialIndex by rememberSaveable { mutableIntStateOf(0) }
 
     // Calculate the initial scroll position
@@ -74,10 +76,10 @@ fun ContentHome(
                     // User has scrolled to the top, load previous month
                     scrollState.scrollToItem( firstVisibleItemIndex + 1, firstVisibleItemScrollOffset)
                     initialIndex += 1
-                    viewModel.loadPreviousMonth()
+                    calendarViewModel.loadPreviousMonth()
                 } else if (firstVisibleItemIndex >=  (scrollState.layoutInfo.totalItemsCount - 1)) {
                     // User has scrolled to the bottom, load next month
-                    viewModel.loadNextMonth()
+                    calendarViewModel.loadNextMonth()
                 }
             }
     }
@@ -85,7 +87,7 @@ fun ContentHome(
     // Scroll to the current date on first launch
     LaunchedEffect(Unit) {
         if (scrollState.firstVisibleItemIndex == 0 && scrollState.firstVisibleItemScrollOffset == 0) {
-            initialIndex = (viewModel.yearOffset * 12) + currentMonth //Current Month Offset
+            initialIndex = (calendarViewModel.yearOffset * 12) + currentMonth //Current Month Offset
             scrollState.scrollToItem(initialIndex, initialIndexOffset)
         }
     }
@@ -102,7 +104,11 @@ fun ContentHome(
 }
 
 @Composable
-private fun BannerHeader(year: Int, month: String, imageBanner: ImageBannerModel?) {
+private fun BannerHeader(
+    year: Int,
+    month: String,
+    imageBanner: ImageBannerModel?
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

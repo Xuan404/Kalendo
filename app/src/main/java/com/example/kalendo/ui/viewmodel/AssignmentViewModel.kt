@@ -45,7 +45,6 @@ class AssignmentViewModel @Inject constructor(
         }
     }
 
-
     fun getAssignmentsWithCourseColorByDate(date: LocalDate) {
         viewModelScope.launch {
             val assignments = assignmentRepository.getAssignmentsWithCourseColorByDate(date)
