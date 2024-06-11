@@ -18,7 +18,7 @@ interface AssignmentDao {
     suspend fun getAssignmentsForCourse(courseId: Int): List<AssignmentEntity>
 
     @Query("""
-        SELECT assignments.*, courses.color 
+        SELECT assignments.*, courses.color AS courseColor, courses.title AS courseTitle
         FROM assignments 
         JOIN courses ON assignments.courseId = courses.id 
         WHERE assignments.date = :date
