@@ -138,17 +138,37 @@ private fun BannerHeader(
 }
 
 @Composable
-private fun DayItem(date: Int, dayOfWeek: String, today: Boolean) {
-    Box(
+private fun DayItem(
+    date: Int,
+    dayOfWeek: String,
+    today: Boolean,
+    assignmentsWithColor: List<AssignmentWithCourseColor> = emptyList()
+) {
+
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp)
-    ) {
+            .clickable { }
+            .padding(vertical = 5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Row(
+            modifier = Modifier
+                .weight(2f)
+                .padding(start = 16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Text(
+                text = "Hello111111111111",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 12.sp,
+            )
+        }
         Column(
             modifier = Modifier
-                .align(Alignment.Center)
-                .clickable { }
-                .padding(horizontal = 8.dp),
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (!today) {
@@ -190,9 +210,24 @@ private fun DayItem(date: Int, dayOfWeek: String, today: Boolean) {
                     )
                 }
             }
-
+        }
+        Row(
+            modifier = Modifier
+                .weight(2f)
+                .padding(end = 16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "Hello2",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 12.sp,
+            )
         }
     }
+
+
+
 }
 
 @Composable
