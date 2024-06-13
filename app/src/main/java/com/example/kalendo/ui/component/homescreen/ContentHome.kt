@@ -142,12 +142,71 @@ private fun BannerHeader(
 }
 
 @Composable
+private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewModel) {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+    val currentDate = Calendar.getInstance().get(Calendar.DATE)
+
+    BannerHeader(year = month.year, month = month.month, imageBanner = month.banner)
+    Row(
+        modifier = Modifier
+            .padding(top = 8.dp, start = 50.dp, end = 50.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "To-Do",
+        )
+        Text(
+            text = "Deadline",
+        )
+    }
+    month.days.forEachIndexed { index, day ->
+        val isToday = month.year == currentYear && month.monthIndex == currentMonth && day.date == currentDate
+        DayItem(
+            year = month.year,
+            month = month.monthIndex + 1,
+            date = day.date,
+            dayOfWeek = day.dayOfWeek,
+            isToday = isToday,
+            assignmentViewModel = assignmentViewModel
+        )
+        if (index != month.days.size - 1) {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 15.dp)
+            )
+        }
+    }
+}
+
+@Composable
 private fun DayItem(
+    month: Int,
+    year: Int,
     date: Int,
     dayOfWeek: String,
     isToday: Boolean,
-    assignmentsWithColor: List<AssignmentWithCourseColor>
+    assignmentViewModel: AssignmentViewModel,
 ) {
+    val todayLocalDate = LocalDate.of(year, month, date)
+
+    // Fetch assignments for the specific date if not already fetched
+    LaunchedEffect(todayLocalDate) {
+        assignmentViewModel.getAssignmentsWithCourseColorByDate(todayLocalDate)
+//        if (!assignmentViewModel.assignmentsColor.value.orEmpty().containsKey(todayLocalDate)) {
+//            assignmentViewModel.getAssignmentsWithCourseColorByDate(todayLocalDate)
+//        }
+    }
+
+    val assignmentsMap by assignmentViewModel.assignmentsColor.observeAsState(emptyMap())
+    val assignmentsWithColor = assignmentsMap[todayLocalDate] ?: emptyList()
+
+    Log.i("CheckCourseColor", assignmentsWithColor.toString())
+    Log.i("CheckCourseColor", todayLocalDate.toString())
+    Log.i("CheckMap", assignmentsMap.toString())
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -222,55 +281,6 @@ private fun DayItem(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 12.sp,
-            )
-        }
-    }
-}
-
-@Composable
-private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewModel) {
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-    val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
-    val currentDate = Calendar.getInstance().get(Calendar.DATE)
-
-    BannerHeader(year = month.year, month = month.month, imageBanner = month.banner)
-    Row(
-        modifier = Modifier
-            .padding(top = 8.dp, start = 50.dp, end = 50.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = "To-Do")
-        Text(text = "Deadline")
-    }
-
-    month.days.forEachIndexed { index, day ->
-        val isToday = month.year == currentYear && month.monthIndex == currentMonth && day.date == currentDate
-        val todayLocalDate = LocalDate.of(month.year, month.monthIndex + 1, day.date)
-
-        LaunchedEffect(todayLocalDate) {
-            assignmentViewModel.getAssignmentsWithCourseColorByDate(todayLocalDate)
-        }
-
-        val assignmentsWithColor by remember {
-            assignmentViewModel.assignmentsWithColor
-        }.observeAsState(emptyList())
-
-        Log.i("CheckCourseColor", assignmentsWithColor.toString())
-        Log.i("CheckCourseColor", todayLocalDate.toString())
-
-        DayItem(
-            date = day.date,
-            dayOfWeek = day.dayOfWeek,
-            isToday = isToday,
-            assignmentsWithColor = assignmentsWithColor
-        )
-
-        if (index != month.days.size - 1) {
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 15.dp)
             )
         }
     }

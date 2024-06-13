@@ -1,5 +1,8 @@
 package com.example.kalendo.ui.viewmodel
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,9 +23,9 @@ class AssignmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     val assignments = MutableLiveData<List<AssignmentModel>>()
-    private val _assignmentsWithColor = MutableLiveData<List<AssignmentWithCourseColor>>()
-    val assignmentsWithColor: LiveData<List<AssignmentWithCourseColor>> = _assignmentsWithColor
 
+    private val _assignmentsColor = MutableLiveData<Map<LocalDate, List<AssignmentWithCourseColor>>>()
+    val assignmentsColor: LiveData<Map<LocalDate, List<AssignmentWithCourseColor>>> = _assignmentsColor
 
     fun getAssignmentsForCourse(courseId: Int) {
         viewModelScope.launch {
@@ -42,13 +45,14 @@ class AssignmentViewModel @Inject constructor(
             val courseId = assignments.value?.find { it.id == assignmentId }?.courseId ?: return@launch
             assignmentRepository.deleteAssignment(assignmentId)
             getAssignmentsForCourse(courseId) // Refresh the list
+
         }
     }
 
     fun getAssignmentsWithCourseColorByDate(date: LocalDate) {
         viewModelScope.launch {
-            val assignments = assignmentRepository.getAssignmentsWithCourseColorByDate(date)
-            _assignmentsWithColor.postValue(assignments)
+            val newAssignments = assignmentRepository.getAssignmentsWithCourseColorByDate(date)
+           _assignmentsColor.setValue(_assignmentsColor.value.orEmpty() + (date to newAssignments))
         }
     }
 }
