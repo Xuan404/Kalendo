@@ -12,11 +12,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -27,8 +27,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,6 +39,7 @@ import com.example.kalendo.domain.model.AssignmentWithCourseColor
 import com.example.kalendo.ui.viewmodel.CalendarViewModel
 import com.example.kalendo.domain.model.ImageBannerModel
 import com.example.kalendo.domain.model.MonthModel
+import com.example.kalendo.ui.theme.defaultColor
 import com.example.kalendo.ui.viewmodel.AssignmentViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.collectLatest
@@ -147,6 +150,16 @@ private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewMode
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val currentDate = Calendar.getInstance().get(Calendar.DATE)
 
+    val assignmentsMap by assignmentViewModel.assignmentsOfDate.observeAsState(emptyMap())
+
+    // Fetch assignments for all days in the month
+    LaunchedEffect(month) {
+        month.days.forEach { day ->
+            val date = LocalDate.of(month.year, month.monthIndex + 1, day.date)
+            assignmentViewModel.getAssignmentsWithCourseColorByDate(date)
+        }
+    }
+
     BannerHeader(year = month.year, month = month.month, imageBanner = month.banner)
     Row(
         modifier = Modifier
@@ -163,13 +176,13 @@ private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewMode
     }
     month.days.forEachIndexed { index, day ->
         val isToday = month.year == currentYear && month.monthIndex == currentMonth && day.date == currentDate
+        val date = LocalDate.of(month.year, month.monthIndex + 1, day.date)
+        val assignmentsWithColor = assignmentsMap[date] ?: emptyList()
         DayItem(
-            year = month.year,
-            month = month.monthIndex + 1,
             date = day.date,
             dayOfWeek = day.dayOfWeek,
             isToday = isToday,
-            assignmentViewModel = assignmentViewModel
+            assignmentsWithColor = assignmentsWithColor
         )
         if (index != month.days.size - 1) {
             HorizontalDivider(
@@ -183,30 +196,11 @@ private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewMode
 
 @Composable
 private fun DayItem(
-    month: Int,
-    year: Int,
     date: Int,
     dayOfWeek: String,
     isToday: Boolean,
-    assignmentViewModel: AssignmentViewModel,
+    assignmentsWithColor: List<AssignmentWithCourseColor>
 ) {
-    val todayLocalDate = LocalDate.of(year, month, date)
-
-    // Fetch assignments for the specific date if not already fetched
-    LaunchedEffect(todayLocalDate) {
-        assignmentViewModel.getAssignmentsWithCourseColorByDate(todayLocalDate)
-//        if (!assignmentViewModel.assignmentsColor.value.orEmpty().containsKey(todayLocalDate)) {
-//            assignmentViewModel.getAssignmentsWithCourseColorByDate(todayLocalDate)
-//        }
-    }
-
-    val assignmentsMap by assignmentViewModel.assignmentsColor.observeAsState(emptyMap())
-    val assignmentsWithColor = assignmentsMap[todayLocalDate] ?: emptyList()
-
-    Log.i("CheckCourseColor", assignmentsWithColor.toString())
-    Log.i("CheckCourseColor", todayLocalDate.toString())
-    Log.i("CheckMap", assignmentsMap.toString())
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -215,21 +209,51 @@ private fun DayItem(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .weight(2f)
-                .padding(start = 16.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            assignmentsWithColor.forEach { course ->
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_course_label),
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = Color(course.courseColor)
-                )
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            Row(
+                modifier = Modifier
+                    .weight(2f)
+                    .padding(end = 16.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                var count = 0
+                assignmentsWithColor.forEach { course ->
+                    if (!course.isDeadline) {
+                        if (count < 3) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_course_label),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = Color(course.courseColor)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                        }
+                        count ++
+                    }
+                }
+                if (count > 3) {
+                    count -= 3
+                    Box(
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clip(CircleShape)
+                            .background(defaultColor),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "+$count",
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                        )
+                    }
+                }
+
             }
         }
+
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -256,7 +280,7 @@ private fun DayItem(
                 )
                 Box(
                     modifier = Modifier
-                        .size(35.dp)
+                        .size(40.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.secondary),
                     contentAlignment = Alignment.Center
@@ -274,14 +298,43 @@ private fun DayItem(
             modifier = Modifier
                 .weight(2f)
                 .padding(end = 16.dp),
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Hello2",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 12.sp,
-            )
+            var count = 0
+            assignmentsWithColor.forEach { course ->
+                if (course.isDeadline) {
+                    if (count < 3) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_course_label),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(20.dp),
+                            tint = Color(course.courseColor)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    count ++
+                }
+            }
+            if (count > 3) {
+                count -= 3
+                Box(
+                    modifier = Modifier
+                        .size(25.dp)
+                        .clip(CircleShape)
+                        .background(defaultColor),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "+$count",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                    )
+                }
+            }
+
         }
     }
 }
