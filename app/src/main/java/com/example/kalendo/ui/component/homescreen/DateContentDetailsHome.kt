@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,10 +47,10 @@ fun DateContentDetailsHome (onDismissRequest: () -> Unit) {
                 .width(boxWidth)
                 .height(boxHeight)
                 .align(Alignment.Center)
-                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
-                .padding(16.dp)
-                .clickable { /* Consume clicks inside the dialog */ },
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(20.dp))
+                .clickable {  },
+                //.padding(16.dp),
+            contentAlignment = Alignment.Center,
         ) {
             Text("This is a floating card dialog")
         }

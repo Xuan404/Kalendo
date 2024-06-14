@@ -1,6 +1,8 @@
 package com.example.kalendo.navigation
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
@@ -17,6 +19,7 @@ import com.example.kalendo.ui.view.HomeScreenContent
 import com.example.kalendo.ui.view.NoteScreenContent
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modifier){
 

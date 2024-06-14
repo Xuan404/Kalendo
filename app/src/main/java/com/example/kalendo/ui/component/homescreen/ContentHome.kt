@@ -7,7 +7,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,8 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -37,7 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -62,13 +58,14 @@ fun ContentHome(
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     assignmentViewModel: AssignmentViewModel = hiltViewModel(),
     triggerScrollToCurrentDate: Boolean,
-    onScrollToCurrentDateHandled: () -> Unit
+    onScrollToCurrentDateHandled: () -> Unit,
+    onLongClickDate: () -> Unit
 ) {
     val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     val months by rememberUpdatedState(calendarViewModel.months)
     var initialIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    var isDateContentDetailsVisible by remember { mutableStateOf(false) }
+
 
     // Calculate the initial scroll position
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
@@ -81,10 +78,13 @@ fun ContentHome(
         state = scrollState,
         modifier = modifier
             .fillMaxSize()
-            .then(if (isDateContentDetailsVisible) Modifier.blur(16.dp) else Modifier)
     ) {
         items(months) {month ->
-            MonthItem(month = month, assignmentViewModel = assignmentViewModel, onLongClick = {isDateContentDetailsVisible = true})
+            MonthItem(
+                month = month,
+                assignmentViewModel = assignmentViewModel,
+                onLongClick = {onLongClickDate()}
+            )
         }
     }
 
@@ -122,11 +122,7 @@ fun ContentHome(
         }
     }
 
-    if (isDateContentDetailsVisible) {
-        DateContentDetailsHome(
-            onDismissRequest = { isDateContentDetailsVisible = false }
-        )
-    }
+
 
 }
 
