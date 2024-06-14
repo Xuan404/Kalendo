@@ -4,9 +4,11 @@ package com.example.kalendo.ui.component.homescreen
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -19,12 +21,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
@@ -63,6 +68,8 @@ fun ContentHome(
     val months by rememberUpdatedState(calendarViewModel.months)
     var initialIndex by rememberSaveable { mutableIntStateOf(0) }
 
+    var isDateContentDetailsVisible by remember { mutableStateOf(false) }
+
     // Calculate the initial scroll position
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val currentDate = Calendar.getInstance().get(Calendar.DATE)
@@ -72,10 +79,12 @@ fun ContentHome(
 
     LazyColumn(
         state = scrollState,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .then(if (isDateContentDetailsVisible) Modifier.blur(16.dp) else Modifier)
     ) {
         items(months) {month ->
-            MonthItem(month = month, assignmentViewModel = assignmentViewModel)
+            MonthItem(month = month, assignmentViewModel = assignmentViewModel, onLongClick = {isDateContentDetailsVisible = true})
         }
     }
 
@@ -111,6 +120,12 @@ fun ContentHome(
             scrollState.scrollToItem(initialIndex, initialIndexOffset)
             onScrollToCurrentDateHandled()
         }
+    }
+
+    if (isDateContentDetailsVisible) {
+        DateContentDetailsHome(
+            onDismissRequest = { isDateContentDetailsVisible = false }
+        )
     }
 
 }
@@ -151,7 +166,7 @@ private fun BannerHeader(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewModel) {
+private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewModel, onLongClick: () -> Unit) {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val currentDate = Calendar.getInstance().get(Calendar.DATE)
@@ -194,7 +209,8 @@ private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewMode
             date = day.date,
             dayOfWeek = day.dayOfWeek,
             isToday = isToday,
-            assignmentsWithColor = assignmentsWithColor
+            assignmentsWithColor = assignmentsWithColor,
+            onLongClick = {onLongClick()}
         )
         if (index != month.days.size - 1) {
             HorizontalDivider(
@@ -206,17 +222,22 @@ private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewMode
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DayItem(
     date: Int,
     dayOfWeek: String,
     isToday: Boolean,
-    assignmentsWithColor: List<AssignmentWithCourseColor>
+    assignmentsWithColor: List<AssignmentWithCourseColor>,
+    onLongClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { }
+            .combinedClickable(
+                onClick = { /* Handle click */ },
+                onLongClick = { onLongClick() }
+            )
             .padding(vertical = 5.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -349,4 +370,5 @@ private fun DayItem(
 
         }
     }
+
 }
