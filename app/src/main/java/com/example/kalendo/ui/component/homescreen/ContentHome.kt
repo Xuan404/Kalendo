@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -225,7 +226,7 @@ private fun DayItem(
                                 painter = painterResource(id = R.drawable.icon_course_label),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .size(20.dp),
+                                    .size(16.dp),
                                 tint = Color(course.courseColor)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
@@ -244,7 +245,7 @@ private fun DayItem(
                     ) {
                         Text(
                             text = "+$count",
-                            color = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
                         )
@@ -280,7 +281,7 @@ private fun DayItem(
                 )
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(35.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.secondary),
                     contentAlignment = Alignment.Center
@@ -309,7 +310,7 @@ private fun DayItem(
                             painter = painterResource(id = R.drawable.icon_course_label),
                             contentDescription = null,
                             modifier = Modifier
-                                .size(20.dp),
+                                .size(16.dp),
                             tint = Color(course.courseColor)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -328,7 +329,7 @@ private fun DayItem(
                 ) {
                     Text(
                         text = "+$count",
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                     )
