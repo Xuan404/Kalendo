@@ -1,7 +1,9 @@
 package com.example.kalendo.ui.component.homescreen
 
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +33,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +50,7 @@ import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 import java.util.Calendar
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContentHome(
     modifier: Modifier = Modifier,
@@ -145,6 +149,7 @@ private fun BannerHeader(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewModel) {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -170,9 +175,15 @@ private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewMode
     ) {
         Text(
             text = "To-Do",
+            style = MaterialTheme.typography.bodyLarge.copy(
+                textDecoration = TextDecoration.Underline
+            )
         )
         Text(
             text = "Deadline",
+            style = MaterialTheme.typography.bodyLarge.copy(
+                textDecoration = TextDecoration.Underline
+            )
         )
     }
     month.days.forEachIndexed { index, day ->
