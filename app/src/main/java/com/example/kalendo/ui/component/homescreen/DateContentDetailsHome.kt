@@ -72,7 +72,12 @@ fun DateContentDetailsHome(onDismissRequest: () -> Unit, selectedDate: LocalDate
                 .height(boxHeight)
                 .align(Alignment.Center)
                 .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(20.dp))
-                .padding(horizontal = 16.dp, vertical = 25.dp),
+                .padding(horizontal = 16.dp, vertical = 25.dp)
+                .clickable(
+                    onClick = { },
+                    indication = null, // Remove the click animation
+                    interactionSource = remember { MutableInteractionSource() }
+                ),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -131,12 +136,12 @@ private fun Header(
 private fun TodoList(
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Column(
         modifier = modifier.fillMaxSize()
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.width(5.dp))
             Icon(
@@ -158,7 +163,7 @@ private fun TodoList(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(horizontal = 16.dp, vertical = 5.dp)
         ) {
             items(dummyItems) { item ->
                 Text(
@@ -179,17 +184,17 @@ private fun TodoList(
 private fun DeadlineList(
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Column(
         modifier = modifier.fillMaxSize()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.width(5.dp))
             Icon(
                 painter = painterResource(id = R.drawable.icon_deadline),
-                contentDescription = "Todo",
+                contentDescription = "Deadline",
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(16.dp)
             )
@@ -202,12 +207,11 @@ private fun DeadlineList(
             )
         }
 
-
         val dummyItems = remember { List(20) { "Item #$it" } }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(horizontal = 16.dp, vertical = 5.dp)
         ) {
             items(dummyItems) { item ->
                 Text(
