@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
@@ -59,7 +58,8 @@ fun ContentHome(
     assignmentViewModel: AssignmentViewModel = hiltViewModel(),
     triggerScrollToCurrentDate: Boolean,
     onScrollToCurrentDateHandled: () -> Unit,
-    onLongClickDate: () -> Unit
+    onLongClickDate: () -> Unit,
+    onLongClickDateSelected: (LocalDate) -> Unit
 ) {
     val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     val months by rememberUpdatedState(calendarViewModel.months)
@@ -83,7 +83,8 @@ fun ContentHome(
             MonthItem(
                 month = month,
                 assignmentViewModel = assignmentViewModel,
-                onLongClick = {onLongClickDate()}
+                onLongClick = {onLongClickDate()},
+                onLongClickDateSelected = onLongClickDateSelected
             )
         }
     }
@@ -162,7 +163,12 @@ private fun BannerHeader(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewModel, onLongClick: () -> Unit) {
+private fun MonthItem(
+    month: MonthModel,
+    assignmentViewModel: AssignmentViewModel,
+    onLongClick: () -> Unit,
+    onLongClickDateSelected: (LocalDate) -> Unit
+) {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val currentDate = Calendar.getInstance().get(Calendar.DATE)
@@ -199,14 +205,17 @@ private fun MonthItem(month: MonthModel, assignmentViewModel: AssignmentViewMode
     }
     month.days.forEachIndexed { index, day ->
         val isToday = month.year == currentYear && month.monthIndex == currentMonth && day.date == currentDate
-        val date = LocalDate.of(month.year, month.monthIndex + 1, day.date)
-        val assignmentsWithColor = assignmentsMap[date] ?: emptyList()
+        val localDate = LocalDate.of(month.year, month.monthIndex + 1, day.date)
+        val assignmentsWithColor = assignmentsMap[localDate] ?: emptyList()
         DayItem(
             date = day.date,
             dayOfWeek = day.dayOfWeek,
             isToday = isToday,
             assignmentsWithColor = assignmentsWithColor,
-            onLongClick = {onLongClick()}
+            onLongClick = {onLongClick()},
+            onLongClickDateSelected = onLongClickDateSelected,
+            localDateInfo = localDate
+
         )
         if (index != month.days.size - 1) {
             HorizontalDivider(
@@ -225,14 +234,19 @@ private fun DayItem(
     dayOfWeek: String,
     isToday: Boolean,
     assignmentsWithColor: List<AssignmentWithCourseColor>,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
+    onLongClickDateSelected: (LocalDate) -> Unit,
+    localDateInfo: LocalDate
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
                 onClick = { /* Handle click */ },
-                onLongClick = { onLongClick() }
+                onLongClick = {
+                    onLongClick()
+                    onLongClickDateSelected(localDateInfo)
+                }
             )
             .padding(vertical = 5.dp),
         horizontalArrangement = Arrangement.SpaceBetween,

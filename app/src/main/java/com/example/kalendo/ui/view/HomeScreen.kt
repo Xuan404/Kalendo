@@ -24,6 +24,7 @@ import com.example.kalendo.ui.component.homescreen.ContentHome
 import com.example.kalendo.ui.component.homescreen.DateContentDetailsHome
 import com.example.kalendo.ui.theme.KalendoTheme
 import com.example.kalendo.util.Strings
+import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -31,8 +32,9 @@ fun HomeScreenContent(navController: NavController) {
 
     // State to trigger the scroll action
     var triggerScrollToCurrentDate by remember{mutableStateOf(false)}
-    // TODO
+
     var isDateContentDetailsVisible by remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
     Box(
         modifier = Modifier
@@ -54,7 +56,10 @@ fun HomeScreenContent(navController: NavController) {
                     modifier = Modifier.padding(innerPadding),
                     triggerScrollToCurrentDate = triggerScrollToCurrentDate,
                     onScrollToCurrentDateHandled = { triggerScrollToCurrentDate = false },
-                    onLongClickDate = {isDateContentDetailsVisible = true}
+                    onLongClickDate = {isDateContentDetailsVisible = true},
+                    onLongClickDateSelected = {date ->
+                        selectedDate = date
+                    }
                 )
             }
         )
@@ -68,12 +73,14 @@ fun HomeScreenContent(navController: NavController) {
     // TODO
     if (isDateContentDetailsVisible) {
         DateContentDetailsHome(
-            onDismissRequest = { isDateContentDetailsVisible = false }
+            onDismissRequest = { isDateContentDetailsVisible = false },
+            selectedDate = selectedDate
         )
     }
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenContentPreview() {
