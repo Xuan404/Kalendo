@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,6 +37,8 @@ import com.example.kalendo.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import androidx.compose.foundation.lazy.items
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -69,8 +72,7 @@ fun DateContentDetailsHome(onDismissRequest: () -> Unit, selectedDate: LocalDate
                 .height(boxHeight)
                 .align(Alignment.Center)
                 .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(20.dp))
-                .padding(horizontal = 16.dp, vertical = 25.dp)
-                .clickable { },
+                .padding(horizontal = 16.dp, vertical = 25.dp),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -151,6 +153,24 @@ private fun TodoList(
                 color = MaterialTheme.colorScheme.onPrimary,
             )
         }
+
+        val dummyItems = remember { List(20) { "Item #$it" } }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            items(dummyItems) { item ->
+                Text(
+                    text = item,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                )
+            }
+        }
     }
 
 }
@@ -181,6 +201,26 @@ private fun DeadlineList(
                 color = MaterialTheme.colorScheme.onPrimary,
             )
         }
+
+
+        val dummyItems = remember { List(20) { "Item #$it" } }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            items(dummyItems) { item ->
+                Text(
+                    text = item,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                )
+            }
+        }
+
     }
 }
 
