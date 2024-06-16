@@ -97,7 +97,6 @@ fun DateContentDetailsHome(
                     .fillMaxSize()
             ) {
                 Header(
-                    onDismiss = { onDismissRequest() },
                     month = monthName,
                     date = date,
                     modifier = Modifier.weight(0.2f)
@@ -107,18 +106,22 @@ fun DateContentDetailsHome(
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
-                TodoList(
+                TypeList(
                     modifier = Modifier.weight(1f),
-                    assignmentsTodo = assignmentsTodo
+                    assignments = assignmentsTodo,
+                    iconDrawable = R.drawable.icon_to_do,
+                    typeName = "To-Do"
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 10.dp),
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
-                DeadlineList(
+                TypeList(
                     modifier = Modifier.weight(1f),
-                    assignmentsDue = assignmentsDue
+                    assignments = assignmentsDue,
+                    iconDrawable = R.drawable.icon_deadline,
+                    typeName = "Deadline"
                 )
             }
         }
@@ -127,7 +130,6 @@ fun DateContentDetailsHome(
 
 @Composable
 private fun Header(
-    onDismiss: () -> Unit,
     month: String?,
     date: String?,
     modifier: Modifier = Modifier
@@ -147,89 +149,11 @@ private fun Header(
 }
 
 @Composable
-private fun TodoList(
+private fun TypeList(
     modifier: Modifier = Modifier,
-    assignmentsTodo: Map<String, List<AssignmentWithCourseColor>>
-) {
-    Column(
-        modifier = modifier.fillMaxSize()
-    ){
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.width(5.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.icon_to_do),
-                contentDescription = "Todo",
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = "To-Do",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onPrimary,
-            )
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 5.dp)
-        ) {
-            assignmentsTodo.forEach { (courseTitle, assignments) ->
-                val courseColor = assignments.first().courseColor
-                item {
-                    Box(contentAlignment = Alignment.Center) {
-                        Box(
-                            modifier = Modifier
-                                .height(25.dp)
-                                .background(
-                                    shape = RoundedCornerShape(45.dp),
-                                    color = Color(courseColor)
-                                )
-                        ){
-                            Text(
-                                text = courseTitle,
-                                fontSize = 12.sp,
-                                color = Color(courseColor),
-                                modifier = Modifier.padding(20.dp)
-                            )
-                        }
-                        Text(
-                            text = courseTitle,
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-
-                    }
-
-                }
-                items(assignments) { item ->
-                    Text(
-                        text = item.title,
-                        fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.ExtraLight,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 2.dp, horizontal = 20.dp)
-                    )
-                }
-            }
-        }
-    }
-
-}
-
-@Composable
-private fun DeadlineList(
-    modifier: Modifier = Modifier,
-    assignmentsDue: Map<String, List<AssignmentWithCourseColor>>
+    assignments: Map<String, List<AssignmentWithCourseColor>>,
+    iconDrawable : Int,
+    typeName: String
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -240,14 +164,14 @@ private fun DeadlineList(
         ) {
             Spacer(modifier = Modifier.width(5.dp))
             Icon(
-                painter = painterResource(id = R.drawable.icon_deadline),
-                contentDescription = "Deadline",
+                painter = painterResource(id = iconDrawable),
+                contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(16.dp)
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = "Deadline",
+                text = typeName,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onPrimary,
@@ -259,46 +183,16 @@ private fun DeadlineList(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 5.dp)
         ) {
-            assignmentsDue.forEach { (courseTitle, assignments) ->
+            assignments.forEach { (courseTitle, assignments) ->
                 val courseColor = assignments.first().courseColor
                 item {
-                    Box(contentAlignment = Alignment.Center) {
-                        Box(
-                            modifier = Modifier
-                                .height(25.dp)
-                                .background(
-                                    shape = RoundedCornerShape(45.dp),
-                                    color = Color(courseColor)
-                                )
-                        ){
-                            Text(
-                                text = courseTitle,
-                                fontSize = 12.sp,
-                                color = Color(courseColor),
-                                modifier = Modifier.padding(20.dp)
-                            )
-                        }
-                        Text(
-                            text = courseTitle,
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-
-                    }
-
+                    CourseItem(
+                        courseColor = courseColor,
+                        courseTitle = courseTitle
+                    )
                 }
                 items(assignments) { item ->
-                    Text(
-                        text = item.title,
-                        fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.ExtraLight,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 2.dp, horizontal = 20.dp)
-                    )
+                    AssignmentItem(item = item)
                 }
             }
         }
@@ -306,12 +200,53 @@ private fun DeadlineList(
     }
 }
 
-fun sortAndGroupAssignments(assignments: List<AssignmentWithCourseColor>): Map<String, List<AssignmentWithCourseColor>> {
+private fun sortAndGroupAssignments(assignments: List<AssignmentWithCourseColor>): Map<String, List<AssignmentWithCourseColor>> {
     return assignments
         .sortedWith(compareBy({ it.courseId }, { it.courseTitle }))
         .groupBy { it.courseTitle }
 }
 
+@Composable
+private fun CourseItem(courseColor: Long, courseTitle: String){
+    Box(contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .height(25.dp)
+                .background(
+                    shape = RoundedCornerShape(45.dp),
+                    color = Color(courseColor)
+                )
+        ){
+            Text(
+                text = courseTitle,
+                fontSize = 12.sp,
+                color = Color(courseColor),
+                modifier = Modifier.padding(20.dp)
+            )
+        }
+        Text(
+            text = courseTitle,
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+    }
+}
+
+@Composable
+private fun AssignmentItem(item: AssignmentWithCourseColor){
+    Text(
+        text = item.title,
+        fontSize = 15.sp,
+        color = MaterialTheme.colorScheme.onPrimary,
+        fontWeight = FontWeight.ExtraLight,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp, horizontal = 20.dp)
+    )
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
