@@ -38,11 +38,18 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Surface
+import com.example.kalendo.domain.model.AssignmentWithCourseColor
+import com.example.kalendo.ui.theme.defaultColor
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DateContentDetailsHome(onDismissRequest: () -> Unit, selectedDate: LocalDate?) {
+fun DateContentDetailsHome(
+    onDismissRequest: () -> Unit,
+    selectedDate: LocalDate?,
+    assignments: List<AssignmentWithCourseColor>
+) {
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val boxWidth = screenWidth * 0.95f
@@ -55,6 +62,11 @@ fun DateContentDetailsHome(onDismissRequest: () -> Unit, selectedDate: LocalDate
     // Retrieve month name and date
     val monthName = selectedDate?.format(monthFormatter)
     val date = selectedDate?.format(dateFormatter)
+
+    // Handle the sorting of items
+    //val groupedAssignments = sortAndGroupAssignments(assignments)
+    val assignmentsTodo = sortAndGroupAssignments(assignments.filter { !it.isDeadline })
+    val assignmentsDue = sortAndGroupAssignments(assignments.filter { it.isDeadline })
 
     Box(
         modifier = Modifier
@@ -96,7 +108,8 @@ fun DateContentDetailsHome(onDismissRequest: () -> Unit, selectedDate: LocalDate
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 TodoList(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    assignmentsTodo = assignmentsTodo
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 10.dp),
@@ -104,7 +117,8 @@ fun DateContentDetailsHome(onDismissRequest: () -> Unit, selectedDate: LocalDate
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 DeadlineList(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    assignmentsDue = assignmentsDue
                 )
             }
         }
@@ -134,7 +148,8 @@ private fun Header(
 
 @Composable
 private fun TodoList(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    assignmentsTodo: Map<String, List<AssignmentWithCourseColor>>
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -159,21 +174,52 @@ private fun TodoList(
             )
         }
 
-        val dummyItems = remember { List(20) { "Item #$it" } }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 5.dp)
         ) {
-            items(dummyItems) { item ->
-                Text(
-                    text = item,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                )
+            assignmentsTodo.forEach { (courseTitle, assignments) ->
+                val courseColor = assignments.first().courseColor
+                item {
+                    Box(contentAlignment = Alignment.Center) {
+                        Box(
+                            modifier = Modifier
+                                .height(25.dp)
+                                .background(
+                                    shape = RoundedCornerShape(45.dp),
+                                    color = Color(courseColor)
+                                )
+                        ){
+                            Text(
+                                text = courseTitle,
+                                fontSize = 12.sp,
+                                color = Color(courseColor),
+                                modifier = Modifier.padding(20.dp)
+                            )
+                        }
+                        Text(
+                            text = courseTitle,
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+
+                    }
+
+                }
+                items(assignments) { item ->
+                    Text(
+                        text = item.title,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.ExtraLight,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 2.dp, horizontal = 20.dp)
+                    )
+                }
             }
         }
     }
@@ -182,7 +228,8 @@ private fun TodoList(
 
 @Composable
 private fun DeadlineList(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    assignmentsDue: Map<String, List<AssignmentWithCourseColor>>
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -207,27 +254,63 @@ private fun DeadlineList(
             )
         }
 
-        val dummyItems = remember { List(20) { "Item #$it" } }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 5.dp)
         ) {
-            items(dummyItems) { item ->
-                Text(
-                    text = item,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                )
+            assignmentsDue.forEach { (courseTitle, assignments) ->
+                val courseColor = assignments.first().courseColor
+                item {
+                    Box(contentAlignment = Alignment.Center) {
+                        Box(
+                            modifier = Modifier
+                                .height(25.dp)
+                                .background(
+                                    shape = RoundedCornerShape(45.dp),
+                                    color = Color(courseColor)
+                                )
+                        ){
+                            Text(
+                                text = courseTitle,
+                                fontSize = 12.sp,
+                                color = Color(courseColor),
+                                modifier = Modifier.padding(20.dp)
+                            )
+                        }
+                        Text(
+                            text = courseTitle,
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+
+                    }
+
+                }
+                items(assignments) { item ->
+                    Text(
+                        text = item.title,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.ExtraLight,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 2.dp, horizontal = 20.dp)
+                    )
+                }
             }
         }
 
     }
 }
 
+fun sortAndGroupAssignments(assignments: List<AssignmentWithCourseColor>): Map<String, List<AssignmentWithCourseColor>> {
+    return assignments
+        .sortedWith(compareBy({ it.courseId }, { it.courseTitle }))
+        .groupBy { it.courseTitle }
+}
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -238,6 +321,7 @@ fun PreviewAlignedRow() {
 
     DateContentDetailsHome(
         onDismissRequest = {},
-        selectedDate = localDate
+        selectedDate = localDate,
+        assignments = emptyList()
     )
 }

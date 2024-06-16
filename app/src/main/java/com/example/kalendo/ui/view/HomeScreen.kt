@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.kalendo.domain.model.AssignmentWithCourseColor
 import com.example.kalendo.navigation.NavRoute
 import com.example.kalendo.ui.component.homescreen.FabHome
 import com.example.kalendo.ui.component.homescreen.TopAppBarHome
@@ -35,6 +36,7 @@ fun HomeScreenContent(navController: NavController) {
 
     var isDateContentDetailsVisible by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var assignmentsOfSelectedDate by remember { mutableStateOf<List<AssignmentWithCourseColor>>(emptyList())}
 
     Box(
         modifier = Modifier
@@ -57,8 +59,9 @@ fun HomeScreenContent(navController: NavController) {
                     triggerScrollToCurrentDate = triggerScrollToCurrentDate,
                     onScrollToCurrentDateHandled = { triggerScrollToCurrentDate = false },
                     onLongClickDate = {isDateContentDetailsVisible = true},
-                    onLongClickDateSelected = {date ->
+                    onLongClickDateSelected = {date, assignments ->
                         selectedDate = date
+                        assignmentsOfSelectedDate = assignments
                     }
                 )
             }
@@ -70,11 +73,11 @@ fun HomeScreenContent(navController: NavController) {
         )
     }
 
-    // TODO
     if (isDateContentDetailsVisible) {
         DateContentDetailsHome(
             onDismissRequest = { isDateContentDetailsVisible = false },
-            selectedDate = selectedDate
+            selectedDate = selectedDate,
+            assignments = assignmentsOfSelectedDate
         )
     }
 }

@@ -59,7 +59,7 @@ fun ContentHome(
     triggerScrollToCurrentDate: Boolean,
     onScrollToCurrentDateHandled: () -> Unit,
     onLongClickDate: () -> Unit,
-    onLongClickDateSelected: (LocalDate) -> Unit
+    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColor>) -> Unit
 ) {
     val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     val months by rememberUpdatedState(calendarViewModel.months)
@@ -167,7 +167,7 @@ private fun MonthItem(
     month: MonthModel,
     assignmentViewModel: AssignmentViewModel,
     onLongClick: () -> Unit,
-    onLongClickDateSelected: (LocalDate) -> Unit
+    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColor>) -> Unit
 ) {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
@@ -235,7 +235,7 @@ private fun DayItem(
     isToday: Boolean,
     assignmentsWithColor: List<AssignmentWithCourseColor>,
     onLongClick: () -> Unit,
-    onLongClickDateSelected: (LocalDate) -> Unit,
+    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColor>) -> Unit,
     localDateInfo: LocalDate
 ) {
     Row(
@@ -245,7 +245,7 @@ private fun DayItem(
                 onClick = { /* Handle click */ },
                 onLongClick = {
                     onLongClick()
-                    onLongClickDateSelected(localDateInfo)
+                    onLongClickDateSelected(localDateInfo, assignmentsWithColor)
                 }
             )
             .padding(vertical = 5.dp),
