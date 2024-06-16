@@ -263,7 +263,7 @@ private fun DayItem(
                 var count = 0
                 assignmentsWithColor.forEach { course ->
                     if (!course.isDeadline) {
-                        if (count < 3) {
+                        if (count < 4) {
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_course_label),
                                 contentDescription = null,
@@ -276,8 +276,8 @@ private fun DayItem(
                         count ++
                     }
                 }
-                if (count > 3) {
-                    count -= 3
+                if (count > 4) {
+                    count -= 4
                     Box(
                         modifier = Modifier
                             .size(25.dp)
@@ -347,7 +347,7 @@ private fun DayItem(
             var count = 0
             assignmentsWithColor.forEach { course ->
                 if (course.isDeadline) {
-                    if (count < 3) {
+                    if (count < 4) {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_course_label),
                             contentDescription = null,
@@ -360,8 +360,8 @@ private fun DayItem(
                     count ++
                 }
             }
-            if (count > 3) {
-                count -= 3
+            if (count > 4) {
+                count -= 4
                 Box(
                     modifier = Modifier
                         .size(25.dp)
