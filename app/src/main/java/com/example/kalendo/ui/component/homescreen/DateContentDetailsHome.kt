@@ -1,6 +1,7 @@
 package com.example.kalendo.ui.component.homescreen
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -148,6 +149,7 @@ private fun Header(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun TypeList(
     modifier: Modifier = Modifier,
@@ -200,12 +202,6 @@ private fun TypeList(
     }
 }
 
-private fun sortAndGroupAssignments(assignments: List<AssignmentWithCourseColor>): Map<String, List<AssignmentWithCourseColor>> {
-    return assignments
-        .sortedWith(compareBy({ it.courseId }, { it.courseTitle }))
-        .groupBy { it.courseTitle }
-}
-
 @Composable
 private fun CourseItem(courseColor: Long, courseTitle: String){
     Box(contentAlignment = Alignment.Center) {
@@ -235,17 +231,36 @@ private fun CourseItem(courseColor: Long, courseTitle: String){
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun AssignmentItem(item: AssignmentWithCourseColor){
-    Text(
-        text = item.title,
-        fontSize = 15.sp,
-        color = MaterialTheme.colorScheme.onPrimary,
-        fontWeight = FontWeight.ExtraLight,
+    Row(
         modifier = Modifier
+            .padding(start = 20.dp, top = 2.dp, bottom = 2.dp)
             .fillMaxWidth()
-            .padding(vertical = 2.dp, horizontal = 20.dp)
-    )
+            .clickable { },
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = item.title,
+            fontSize = 15.sp,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontWeight = FontWeight.ExtraLight,
+        )
+        Text(
+            text = item.time.format(DateTimeFormatter.ofPattern("h:mm a")).toString(),
+            fontSize = 15.sp,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+
+    }
+
+}
+
+private fun sortAndGroupAssignments(assignments: List<AssignmentWithCourseColor>): Map<String, List<AssignmentWithCourseColor>> {
+    return assignments
+        .sortedWith(compareBy({ it.courseId }, { it.courseTitle }))
+        .groupBy { it.courseTitle }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

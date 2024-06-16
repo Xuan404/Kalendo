@@ -9,7 +9,7 @@ object Strings {
 
     const val NOTES_SCREEN_TITLE = "Notes"
     const val COURSES_SCREEN_TITLE = "Courses"
-    const val EDIT_SCREEN_TITLE = "Edit"
+    const val EDIT_SCREEN_TITLE = "Components"
 
     const val HOME_SCREEN_ROUTE = "HomeScreen"
     const val COURSES_SCREEN_ROUTE = "CourseScreen"

@@ -105,7 +105,6 @@ fun DetailRow(label: String, value: String, isDeadline: Boolean = false) {
             Spacer(modifier = Modifier.width(10.dp))
             if (label == "Type") {
                 Icon(
-                    //painter = painterResource(id = R.drawable.deadline), // Replace with your icon resource
                     painter = painterResource(
                         id = if (isDeadline) R.drawable.icon_deadline else R.drawable.icon_to_do
                     ),
