@@ -12,6 +12,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.kalendo.R
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.sp
+import java.util.Calendar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,15 +37,24 @@ fun TopAppBarHome(
                 Icon(
                     painter = painterResource(id = R.drawable.icon_calender),
                     contentDescription = "Calender",
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(10.dp)
                 )
             }
-            IconButton(onClick =  {onReturnToDateClick()}) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_date1),
-                    contentDescription = "Return to current date",
-                    modifier = Modifier.padding(8.dp)
+            Box(contentAlignment = Alignment.Center ) {
+                val currentDate = Calendar.getInstance().get(Calendar.DATE)
+                Text(
+                    text = "$currentDate",
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
+                IconButton(onClick =  {onReturnToDateClick()}) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_date1),
+                        contentDescription = "Return to current date",
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
             IconButton(onClick = { /* Handle image button click */ }) {
                 Image(
