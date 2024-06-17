@@ -3,6 +3,7 @@ package com.example.kalendo.ui.component.homescreen
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -40,6 +41,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
 import com.example.kalendo.domain.model.AssignmentWithCourseColor
 import com.example.kalendo.ui.theme.defaultColor
 
@@ -217,7 +220,7 @@ private fun CourseItem(courseColor: Long, courseTitle: String){
                 text = courseTitle,
                 fontSize = 12.sp,
                 color = Color(courseColor),
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier.padding(10.dp)
             )
         }
         Text(
@@ -234,25 +237,40 @@ private fun CourseItem(courseColor: Long, courseTitle: String){
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun AssignmentItem(item: AssignmentWithCourseColor){
-    Row(
-        modifier = Modifier
-            .padding(start = 20.dp, top = 2.dp, bottom = 2.dp)
-            .fillMaxWidth()
-            .clickable { },
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = item.title,
-            fontSize = 15.sp,
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontWeight = FontWeight.ExtraLight,
-        )
-        Text(
-            text = item.time.format(DateTimeFormatter.ofPattern("h:mm a")).toString(),
-            fontSize = 15.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
 
+    Box (
+        contentAlignment = Alignment.Center
+    ){
+        // TODO: Will need this if I implement the isCompleted function
+//        Canvas(modifier = Modifier.fillMaxSize()) {
+//            val strokeWidth = 2.dp.toPx()
+//            drawLine(
+//                color = defaultColor,
+//                start = Offset(0f, 0f),
+//                end = Offset(size.width, size.height),
+//                strokeWidth = strokeWidth,
+//                cap = StrokeCap.Round
+//            )1
+//        }
+        Row(
+            modifier = Modifier
+                .padding(start = 20.dp, top = 2.dp, bottom = 2.dp)
+                .fillMaxWidth()
+                .clickable { },
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = item.title,
+                fontSize = 15.sp,
+                color = MaterialTheme.colorScheme.onPrimary,
+            )
+            Text(
+                text = item.time.format(DateTimeFormatter.ofPattern("h:mm a")).toString(),
+                fontSize = 15.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+        }
     }
 
 }
