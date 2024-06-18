@@ -10,7 +10,8 @@ fun AssignmentEntity.toDomainModel(): AssignmentModel {
         title = this.title,
         date = this.date,
         time = this.time,
-        isDeadline = this.isDeadline
+        isDeadline = this.isDeadline,
+        isCompleted = this.isCompleted
 
     )
 }
@@ -22,6 +23,7 @@ fun AssignmentModel.toEntityModel(): AssignmentEntity {
         title = this.title,
         date = this.date,
         time = this.time,
-        isDeadline = this.isDeadline
+        isDeadline = this.isDeadline,
+        isCompleted = this.isCompleted
     )
 }

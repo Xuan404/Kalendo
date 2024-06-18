@@ -29,9 +29,23 @@ class AssignmentViewModel @Inject constructor(
         }
     }
 
-    fun addAssignment(courseId: Int, title: String, date: LocalDate, time: LocalTime, isDeadline: Boolean) {
+    fun addAssignment(
+        courseId: Int,
+        title: String,
+        date: LocalDate,
+        time: LocalTime,
+        isDeadline: Boolean,
+        isCompleted: Boolean
+    ) {
         viewModelScope.launch {
-            assignmentRepository.insertAssignment(AssignmentModel(courseId = courseId, title = title, date = date, time = time, isDeadline = isDeadline))
+            assignmentRepository.insertAssignment(AssignmentModel(
+                courseId = courseId,
+                title = title,
+                date = date,
+                time = time,
+                isDeadline = isDeadline,
+                isCompleted = isCompleted
+            ))
             getAssignmentsForCourse(courseId) // Refresh the list
         }
     }

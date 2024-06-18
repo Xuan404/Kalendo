@@ -10,5 +10,6 @@ data class AssignmentModel(
     val title: String,
     val date: LocalDate,
     val time: LocalTime,
-    val isDeadline: Boolean
+    val isDeadline: Boolean,
+    val isCompleted: Boolean
 )

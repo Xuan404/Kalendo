@@ -163,7 +163,8 @@ fun FullScreenDialogAddEdit(
                                     title = componentTitle,
                                     date = selectedDate,
                                     time = selectedTime,
-                                    isDeadline = selectedItemIsDeadline!!
+                                    isDeadline = selectedItemIsDeadline!!,
+                                    isCompleted = false
                                 )
                             }
                             Toast.makeText(context, "Added Component Successfully", Toast.LENGTH_SHORT)
