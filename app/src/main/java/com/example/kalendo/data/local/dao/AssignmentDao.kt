@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.kalendo.data.local.entity.AssignmentEntity
-import com.example.kalendo.domain.model.AssignmentWithCourseColor
+import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 
 @Dao
 interface AssignmentDao {
@@ -23,5 +23,5 @@ interface AssignmentDao {
         JOIN courses ON assignments.courseId = courses.id 
         WHERE assignments.date = :date
     """)
-    suspend fun getAssignmentsWithCourseColorByDate(date: String): List<AssignmentWithCourseColor>
+    suspend fun getAssignmentsWithCourseColorByDate(date: String): List<AssignmentWithCourseColorModel>
 }

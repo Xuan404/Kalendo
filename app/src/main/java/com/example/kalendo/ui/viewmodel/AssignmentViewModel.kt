@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kalendo.domain.model.AssignmentModel
-import com.example.kalendo.domain.model.AssignmentWithCourseColor
+import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.domain.repository.AssignmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,8 +20,8 @@ class AssignmentViewModel @Inject constructor(
 
     val assignments = MutableLiveData<List<AssignmentModel>>()
 
-    private val _assignmentsOfDate = MutableLiveData<Map<LocalDate, List<AssignmentWithCourseColor>>>()
-    val assignmentsOfDate: LiveData<Map<LocalDate, List<AssignmentWithCourseColor>>> = _assignmentsOfDate
+    private val _assignmentsOfDate = MutableLiveData<Map<LocalDate, List<AssignmentWithCourseColorModel>>>()
+    val assignmentsOfDate: LiveData<Map<LocalDate, List<AssignmentWithCourseColorModel>>> = _assignmentsOfDate
 
     fun getAssignmentsForCourse(courseId: Int) {
         viewModelScope.launch {

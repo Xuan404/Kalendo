@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.R
-import com.example.kalendo.domain.model.AssignmentWithCourseColor
+import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.ui.viewmodel.CalendarViewModel
 import com.example.kalendo.domain.model.ImageBannerModel
 import com.example.kalendo.domain.model.MonthModel
@@ -59,7 +59,7 @@ fun ContentHome(
     triggerScrollToCurrentDate: Boolean,
     onScrollToCurrentDateHandled: () -> Unit,
     onLongClickDate: () -> Unit,
-    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColor>) -> Unit
+    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColorModel>) -> Unit
 ) {
     val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     val months by rememberUpdatedState(calendarViewModel.months)
@@ -167,7 +167,7 @@ private fun MonthItem(
     month: MonthModel,
     assignmentViewModel: AssignmentViewModel,
     onLongClick: () -> Unit,
-    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColor>) -> Unit
+    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColorModel>) -> Unit
 ) {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
@@ -233,9 +233,9 @@ private fun DayItem(
     date: Int,
     dayOfWeek: String,
     isToday: Boolean,
-    assignmentsWithColor: List<AssignmentWithCourseColor>,
+    assignmentsWithColor: List<AssignmentWithCourseColorModel>,
     onLongClick: () -> Unit,
-    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColor>) -> Unit,
+    onLongClickDateSelected: (LocalDate, List<AssignmentWithCourseColorModel>) -> Unit,
     localDateInfo: LocalDate
 ) {
     Row(

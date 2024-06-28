@@ -3,7 +3,7 @@ package com.example.kalendo.domain.model
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class AssignmentWithCourseColor(
+data class AssignmentWithCourseColorModel(
     val id: Int,
     val courseId: Int,
     val courseTitle: String,

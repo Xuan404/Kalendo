@@ -4,7 +4,7 @@ import com.example.kalendo.data.local.dao.AssignmentDao
 import com.example.kalendo.data.mapper.toDomainModel
 import com.example.kalendo.data.mapper.toEntityModel
 import com.example.kalendo.domain.model.AssignmentModel
-import com.example.kalendo.domain.model.AssignmentWithCourseColor
+import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.domain.repository.AssignmentRepository
 import java.time.LocalDate
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class AssignmentRepositoryImpl @Inject constructor(
         return assignmentDao.getAssignmentsForCourse(courseId).map { it.toDomainModel() }
     }
 
-    override suspend fun getAssignmentsWithCourseColorByDate(date: LocalDate): List<AssignmentWithCourseColor> {
+    override suspend fun getAssignmentsWithCourseColorByDate(date: LocalDate): List<AssignmentWithCourseColorModel> {
         return assignmentDao.getAssignmentsWithCourseColorByDate(date.toString())
     }
 }

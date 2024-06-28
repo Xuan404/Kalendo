@@ -1,7 +1,6 @@
 package com.example.kalendo.ui.component.homescreen
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -40,10 +39,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Surface
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
-import com.example.kalendo.domain.model.AssignmentWithCourseColor
+import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.ui.theme.defaultColor
 
 
@@ -52,7 +50,7 @@ import com.example.kalendo.ui.theme.defaultColor
 fun DateContentDetailsHome(
     onDismissRequest: () -> Unit,
     selectedDate: LocalDate?,
-    assignments: List<AssignmentWithCourseColor>
+    assignments: List<AssignmentWithCourseColorModel>
 ) {
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
@@ -156,7 +154,7 @@ private fun Header(
 @Composable
 private fun TypeList(
     modifier: Modifier = Modifier,
-    assignments: Map<String, List<AssignmentWithCourseColor>>,
+    assignments: Map<String, List<AssignmentWithCourseColorModel>>,
     iconDrawable : Int,
     typeName: String
 ) {
@@ -236,7 +234,7 @@ private fun CourseItem(courseColor: Long, courseTitle: String){
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun AssignmentItem(item: AssignmentWithCourseColor){
+private fun AssignmentItem(item: AssignmentWithCourseColorModel){
 
     Box (
         contentAlignment = Alignment.Center
@@ -278,7 +276,7 @@ private fun AssignmentItem(item: AssignmentWithCourseColor){
 
 }
 
-private fun sortAndGroupAssignments(assignments: List<AssignmentWithCourseColor>): Map<String, List<AssignmentWithCourseColor>> {
+private fun sortAndGroupAssignments(assignments: List<AssignmentWithCourseColorModel>): Map<String, List<AssignmentWithCourseColorModel>> {
     return assignments
         .sortedWith(compareBy({ it.courseId }, { it.courseTitle }))
         .groupBy { it.courseTitle }

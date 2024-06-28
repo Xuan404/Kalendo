@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.kalendo.domain.model.AssignmentWithCourseColor
+import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.navigation.NavRoute
 import com.example.kalendo.ui.component.homescreen.FabHome
 import com.example.kalendo.ui.component.homescreen.TopAppBarHome
@@ -36,7 +36,7 @@ fun HomeScreenContent(navController: NavController) {
 
     var isDateContentDetailsVisible by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
-    var assignmentsOfSelectedDate by remember { mutableStateOf<List<AssignmentWithCourseColor>>(emptyList())}
+    var assignmentsOfSelectedDate by remember { mutableStateOf<List<AssignmentWithCourseColorModel>>(emptyList())}
 
     Box(
         modifier = Modifier
