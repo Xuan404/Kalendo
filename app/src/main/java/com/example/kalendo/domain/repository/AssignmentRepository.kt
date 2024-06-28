@@ -9,5 +9,5 @@ interface AssignmentRepository {
     suspend fun deleteAssignment(assignmentId: Int)
     suspend fun getAssignmentsForCourse(courseId: Int): List<AssignmentModel>
     suspend fun getAssignmentsWithCourseColorByDate(date: LocalDate): List<AssignmentWithCourseColorModel>
-
+    suspend fun updateIsCompleted(assignmentId: Int, isCompleted: Boolean)
 }

@@ -24,4 +24,7 @@ interface AssignmentDao {
         WHERE assignments.date = :date
     """)
     suspend fun getAssignmentsWithCourseColorByDate(date: String): List<AssignmentWithCourseColorModel>
+
+    @Query("UPDATE assignments SET isCompleted = :isCompleted WHERE id = :assignmentId")
+    suspend fun updateIsCompleted(assignmentId: Int, isCompleted: Boolean)
 }

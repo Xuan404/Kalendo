@@ -27,4 +27,8 @@ class AssignmentRepositoryImpl @Inject constructor(
     override suspend fun getAssignmentsWithCourseColorByDate(date: LocalDate): List<AssignmentWithCourseColorModel> {
         return assignmentDao.getAssignmentsWithCourseColorByDate(date.toString())
     }
+
+    override suspend fun updateIsCompleted(assignmentId: Int, isCompleted: Boolean) {
+        assignmentDao.updateIsCompleted(assignmentId, isCompleted)
+    }
 }

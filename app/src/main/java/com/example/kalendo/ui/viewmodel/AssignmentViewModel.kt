@@ -65,4 +65,11 @@ class AssignmentViewModel @Inject constructor(
            _assignmentsOfDate.setValue(_assignmentsOfDate.value.orEmpty() + (date to newAssignments))
         }
     }
+
+    fun updateIsCompleted(assignmentId: Int, isCompleted: Boolean) {
+        viewModelScope.launch {
+            assignmentRepository.updateIsCompleted(assignmentId, isCompleted)
+            // Optionally refresh the assignments list if necessary
+        }
+    }
 }
