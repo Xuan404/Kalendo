@@ -11,5 +11,6 @@ data class AssignmentWithCourseColor(
     val date: LocalDate,
     val time: LocalTime,
     val isDeadline: Boolean,
+    var isCompleted: Boolean,
     val courseColor: Long
 )

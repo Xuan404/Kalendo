@@ -241,22 +241,25 @@ private fun AssignmentItem(item: AssignmentWithCourseColor){
     Box (
         contentAlignment = Alignment.Center
     ){
-        // TODO: Will need this if I implement the isCompleted function
-//        Canvas(modifier = Modifier.fillMaxSize()) {
-//            val strokeWidth = 2.dp.toPx()
-//            drawLine(
-//                color = defaultColor,
-//                start = Offset(0f, 0f),
-//                end = Offset(size.width, size.height),
-//                strokeWidth = strokeWidth,
-//                cap = StrokeCap.Round
-//            )1
-//        }
+
+        if (item.isCompleted) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val strokeWidth = 2.dp.toPx()
+                drawLine(
+                    color = defaultColor,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = strokeWidth,
+                    cap = StrokeCap.Round
+                )
+            }
+        }
+
         Row(
             modifier = Modifier
                 .padding(start = 20.dp, top = 2.dp, bottom = 2.dp)
                 .fillMaxWidth()
-                .clickable { },
+                .clickable { item.isCompleted = !item.isCompleted},
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
