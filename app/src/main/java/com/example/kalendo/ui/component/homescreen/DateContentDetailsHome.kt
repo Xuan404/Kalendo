@@ -46,6 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.ui.theme.defaultColor
 import com.example.kalendo.ui.viewmodel.AssignmentViewModel
@@ -122,7 +123,8 @@ fun DateContentDetailsHome(
                     modifier = Modifier.weight(1f),
                     assignments = assignmentsTodo,
                     iconDrawable = R.drawable.icon_to_do,
-                    typeName = "To-Do"
+                    typeName = "To-Do",
+                    viewModel = assignmentViewModel
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 10.dp),
@@ -133,7 +135,8 @@ fun DateContentDetailsHome(
                     modifier = Modifier.weight(1f),
                     assignments = assignmentsDue,
                     iconDrawable = R.drawable.icon_deadline,
-                    typeName = "Deadline"
+                    typeName = "Deadline",
+                    viewModel = assignmentViewModel
                 )
             }
         }
@@ -166,7 +169,8 @@ private fun TypeList(
     modifier: Modifier = Modifier,
     assignments: Map<String, List<AssignmentWithCourseColorModel>>,
     iconDrawable : Int,
-    typeName: String
+    typeName: String,
+    viewModel: AssignmentViewModel
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -206,7 +210,8 @@ private fun TypeList(
                 }
                 items(assignments) { item ->
                     AssignmentItem(
-                        item = item
+                        item = item,
+                        viewModel = viewModel
                     )
                 }
             }
@@ -247,7 +252,8 @@ private fun CourseItem(courseColor: Long, courseTitle: String){
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun AssignmentItem(
-    item: AssignmentWithCourseColorModel
+    item: AssignmentWithCourseColorModel,
+    viewModel: AssignmentViewModel
 ){
 
     var itemIsCompleted by remember { mutableStateOf(item.isCompleted) }
@@ -256,8 +262,12 @@ private fun AssignmentItem(
         modifier = Modifier
             .padding(start = 10.dp, top = 2.dp, bottom = 2.dp)
             .clickable {
-                // TODO: Complete the clickable feature
                 itemIsCompleted = !itemIsCompleted
+                viewModel.updateIsCompleted(
+                    assignmentId = item.id,
+                    isCompleted = itemIsCompleted,
+                    date = item.date
+                )
             }
     ){
 
