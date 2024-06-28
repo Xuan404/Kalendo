@@ -77,7 +77,7 @@ fun HomeScreenContent(navController: NavController) {
         DateContentDetailsHome(
             onDismissRequest = { isDateContentDetailsVisible = false },
             selectedDate = selectedDate,
-            assignments = assignmentsOfSelectedDate
+            //assignments = assignmentsOfSelectedDate
         )
     }
 }

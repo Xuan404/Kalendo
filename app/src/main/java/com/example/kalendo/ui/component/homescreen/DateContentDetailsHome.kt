@@ -39,10 +39,16 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.ui.theme.defaultColor
+import com.example.kalendo.ui.viewmodel.AssignmentViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -50,7 +56,8 @@ import com.example.kalendo.ui.theme.defaultColor
 fun DateContentDetailsHome(
     onDismissRequest: () -> Unit,
     selectedDate: LocalDate?,
-    assignments: List<AssignmentWithCourseColorModel>
+    assignmentViewModel: AssignmentViewModel = hiltViewModel()
+    //assignments: List<AssignmentWithCourseColorModel> // TODO: Refractor this out when I get time
 ) {
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
@@ -64,6 +71,9 @@ fun DateContentDetailsHome(
     // Retrieve month name and date
     val monthName = selectedDate?.format(monthFormatter)
     val date = selectedDate?.format(dateFormatter)
+    // Retrieve the assignments of that specific date
+    val assignmentsMap by assignmentViewModel.assignmentsOfDate.observeAsState(emptyMap())
+    val assignments = assignmentsMap[selectedDate] ?: emptyList()
 
     // Handle the sorting of items
     //val groupedAssignments = sortAndGroupAssignments(assignments)
@@ -195,7 +205,9 @@ private fun TypeList(
                     )
                 }
                 items(assignments) { item ->
-                    AssignmentItem(item = item)
+                    AssignmentItem(
+                        item = item
+                    )
                 }
             }
         }
@@ -234,13 +246,22 @@ private fun CourseItem(courseColor: Long, courseTitle: String){
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun AssignmentItem(item: AssignmentWithCourseColorModel){
+private fun AssignmentItem(
+    item: AssignmentWithCourseColorModel
+){
 
+    var itemIsCompleted by remember { mutableStateOf(item.isCompleted) }
     Box (
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .padding(start = 10.dp, top = 2.dp, bottom = 2.dp)
+            .clickable {
+                // TODO: Complete the clickable feature
+                itemIsCompleted = !itemIsCompleted
+            }
     ){
 
-        if (item.isCompleted) {
+        if (itemIsCompleted) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val strokeWidth = 2.dp.toPx()
                 drawLine(
@@ -255,9 +276,8 @@ private fun AssignmentItem(item: AssignmentWithCourseColorModel){
 
         Row(
             modifier = Modifier
-                .padding(start = 20.dp, top = 2.dp, bottom = 2.dp)
-                .fillMaxWidth()
-                .clickable { item.isCompleted = !item.isCompleted},
+                .padding(start = 10.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
@@ -291,6 +311,5 @@ fun PreviewAlignedRow() {
     DateContentDetailsHome(
         onDismissRequest = {},
         selectedDate = localDate,
-        assignments = emptyList()
     )
 }

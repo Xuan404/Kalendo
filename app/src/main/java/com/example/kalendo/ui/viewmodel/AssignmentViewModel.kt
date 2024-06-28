@@ -66,10 +66,14 @@ class AssignmentViewModel @Inject constructor(
         }
     }
 
-    fun updateIsCompleted(assignmentId: Int, isCompleted: Boolean) {
+    fun updateIsCompleted(
+        assignmentId: Int,
+        isCompleted: Boolean,
+        date: LocalDate) {
+
         viewModelScope.launch {
             assignmentRepository.updateIsCompleted(assignmentId, isCompleted)
-            // Optionally refresh the assignments list if necessary
+            getAssignmentsWithCourseColorByDate(date)
         }
     }
 }
