@@ -261,6 +261,7 @@ private fun AssignmentItem(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .padding(start = 10.dp, top = 2.dp, bottom = 2.dp)
+            //.background(Color.Black.copy(alpha = 0.1f))
             .clickable {
                 itemIsCompleted = !itemIsCompleted
                 viewModel.updateIsCompleted(
@@ -293,12 +294,12 @@ private fun AssignmentItem(
             Text(
                 text = item.title,
                 fontSize = 15.sp,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = if (itemIsCompleted) defaultColor else MaterialTheme.colorScheme.onPrimary
             )
             Text(
                 text = item.time.format(DateTimeFormatter.ofPattern("h:mm a")).toString(),
                 fontSize = 15.sp,
-                color = MaterialTheme.colorScheme.onBackground
+                color = if (itemIsCompleted) defaultColor else MaterialTheme.colorScheme.onPrimary
             )
 
         }
