@@ -100,6 +100,9 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
+
+    // Splash API
+    implementation (libs.androidx.core.splashscreen)
 }
 
 
