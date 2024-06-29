@@ -64,9 +64,7 @@ fun ContentHome(
     val scrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     val months by rememberUpdatedState(calendarViewModel.months)
     var initialIndex by rememberSaveable { mutableIntStateOf(0) }
-
-
-
+    
     // Calculate the initial scroll position
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
     val currentDate = Calendar.getInstance().get(Calendar.DATE)

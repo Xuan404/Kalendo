@@ -33,13 +33,13 @@ fun TopAppBarHome(
             Text(text = title)
         },
         actions = {
-            IconButton(onClick = { /* Do nothing for preview */ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_calender),
-                    contentDescription = "Calender",
-                    modifier = Modifier.padding(10.dp)
-                )
-            }
+//            IconButton(onClick = { /* Do nothing for preview */ }) {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.icon_calender),
+//                    contentDescription = "Calender",
+//                    modifier = Modifier.padding(10.dp)
+//                )
+//            }
             Box(contentAlignment = Alignment.Center ) {
                 val currentDate = Calendar.getInstance().get(Calendar.DATE)
                 Text(
