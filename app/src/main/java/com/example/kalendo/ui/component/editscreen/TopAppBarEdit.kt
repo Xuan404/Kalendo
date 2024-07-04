@@ -1,6 +1,7 @@
 package com.example.kalendo.ui.component.editscreen
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.kalendo.R
@@ -33,6 +35,7 @@ fun TopAppBarEdit(
 ) {
 
     var showDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -62,7 +65,7 @@ fun TopAppBarEdit(
 //                    modifier = Modifier.padding(8.dp)
 //                )
 //            }
-            IconButton(onClick = { /* Do nothing for preview */ }) {
+            IconButton(onClick = { Toast.makeText(context, "Sorting Feature Coming Soon", Toast.LENGTH_SHORT).show() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_sort),
                     contentDescription = "Grid Rectangle",
