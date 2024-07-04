@@ -5,18 +5,11 @@ import androidx.room.Room
 import com.example.kalendo.data.local.dao.AssignmentDao
 import com.example.kalendo.data.local.dao.CourseDao
 import com.example.kalendo.data.local.database.AppDatabase
-import com.example.kalendo.data.repository.AssignmentRepositoryImpl
-import com.example.kalendo.data.repository.CourseRepositoryImpl
-import com.example.kalendo.domain.repository.AssignmentRepository
-import com.example.kalendo.domain.repository.CourseRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -29,7 +22,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             appContext,
             AppDatabase::class.java,
-            "database2"
+            "KalendoDatabase0"
         ).build()
     }
 
