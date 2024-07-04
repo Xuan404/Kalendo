@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import com.example.kalendo.R
 import com.example.kalendo.domain.model.AssignmentWithCourseColorModel
 import com.example.kalendo.ui.viewmodel.CalendarViewModel
@@ -139,7 +140,7 @@ private fun BannerHeader(
     ) {
         if (imageBanner != null) {
             Image(
-                painter = painterResource(id = imageBanner.banner),
+                painter = rememberAsyncImagePainter(model = imageBanner.banner),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier

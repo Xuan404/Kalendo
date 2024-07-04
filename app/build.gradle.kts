@@ -103,6 +103,8 @@ dependencies {
 
     // Splash API
     implementation (libs.androidx.core.splashscreen)
+
+    implementation(libs.coil.compose)
 }
 
 
