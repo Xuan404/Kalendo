@@ -29,8 +29,34 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
         modifier = modifier
     ) {
 
+        val tweenDuration = 400
+
         composable(
             route = NavRoute.HomeScreen.toString(),
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            }
 
         ){
             HomeScreenContent(navController = navController)
@@ -39,23 +65,28 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(
             route = NavRoute.CourseScreen.toString(),
             enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(150)
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
                 )
             },
             exitTransition = {
-                if (navController.currentDestination?.route == NavRoute.HomeScreen.toString()) {
-                    // Closing Course Screen
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(400)
-                    )
-
-                } else {
-                    // Closing Edit Screen
-                    null
-                }
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
             }
         ){
             CourseScreenContent(navController = navController)
@@ -64,15 +95,27 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(
             route = NavRoute.NoteScreen.toString(),
             enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(150)
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
                 )
             },
             exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(400)
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
                 )
             }
         ){
@@ -82,15 +125,27 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(
             route ="edit/{courseJson}",
             enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(150)
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
                 )
             },
             exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(400)
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(tweenDuration)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(tweenDuration)
                 )
             }
 
@@ -110,48 +165,3 @@ fun KalendoNavGraph(navController: NavHostController, modifier: Modifier = Modif
     
 }
 
-
-
-
-
-
-
-
-//        composable(route = NavRoute.HomeScreen.toString()){
-//            HomeScreenContent(navController = navController)
-//        }
-//        composable(route = NavRoute.CourseScreen.toString()){
-//            CourseScreenContent(navController = navController)
-//        }
-//        composable(route = NavRoute.NoteScreen.toString()){
-//            NoteScreenContent(navController = navController)
-//        }
-
-
-
-//        composable(
-//            route = NavRoute.HomeScreen.toString(),
-//            enterTransition = { slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(70)) },
-//            popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(70)) }
-//
-//        ) {
-//            HomeScreenContent(navController = navController)
-//        }
-//        composable(
-//            route = NavRoute.CourseScreen.toString(),
-//            enterTransition = { slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(70)) },
-//            exitTransition = { slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(70)) },
-//            popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(70)) },
-//            popExitTransition = { slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(70)) }
-//        ) {
-//            CourseScreenContent(navController = navController)
-//        }
-//        composable(
-//            route = NavRoute.NoteScreen.toString(),
-//            enterTransition = { slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(70)) },
-//            exitTransition = { slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(70)) },
-//            popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(70)) },
-//            popExitTransition = { slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(70)) }
-//        ) {
-//            NoteScreenContent(navController = navController)
-//        }
